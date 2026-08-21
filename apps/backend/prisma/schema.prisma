@@ -1,0 +1,124 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String?        @map("password_hash")
+  fullName      String         @map("full_name")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  identities    AuthIdentity[]
+  savedPlaces   SavedPlace[]
+  savedJourneys SavedJourney[]
+
+  @@map("users")
+}
+
+model AuthIdentity {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  provider     String   // email, google, facebook
+  providerId   String?  @map("provider_id")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("auth_identities")
+}
+
+model Agency {
+  id              String   @id @default(uuid())
+  name            String
+  shortName       String   @map("short_name")
+  authority       String
+  website         String?
+  sourceUrl       String?  @map("source_url")
+  lastVerifiedAt  DateTime @default(now()) @map("last_verified_at")
+  routes          Route[]
+  stops           Stop[]
+
+  @@map("agencies")
+}
+
+model Route {
+  id              String      @id @default(uuid())
+  agencyId        String      @map("agency_id")
+  shortName       String      @map("short_name")
+  longName        String      @map("long_name")
+  routeType       String      @map("route_type") // rail, brt, mikrotrans
+  serviceType     String      @map("service_type")
+  color           String?
+  agency          Agency      @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  trips           Trip[]
+
+  @@map("routes")
+}
+
+model Stop {
+  id              String     @id @default(uuid())
+  agencyId        String     @map("agency_id")
+  name            String
+  lat             Float
+  lon             Float
+  parentStationId String?    @map("parent_station_id")
+  agency          Agency     @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  stopTimes       StopTime[]
+
+  @@map("stops")
+}
+
+model Trip {
+  id              String     @id @default(uuid())
+  routeId         String     @map("route_id")
+  serviceId       String     @map("service_id")
+  directionId     Int        @map("direction_id")
+  headsign        String
+  route           Route      @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  stopTimes       StopTime[]
+
+  @@map("trips")
+}
+
+model StopTime {
+  tripId          String   @map("trip_id")
+  stopId          String   @map("stop_id")
+  arrivalTime     String   @map("arrival_time")
+  departureTime   String   @map("departure_time")
+  stopSequence    Int      @map("stop_sequence")
+  trip            Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  stop            Stop     @relation(fields: [stopId], references: [id], onDelete: Cascade)
+
+  @@id([tripId, stopSequence])
+  @@map("stop_times")
+}
+
+model SavedPlace {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  name        String   // Rumah, Kantor, etc.
+  address     String
+  lat         Float
+  lon         Float
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("saved_places")
+}
+
+model SavedJourney {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  originName  String   @map("origin_name")
+  destName    String   @map("dest_name")
+  payloadJson String   @map("payload_json")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("saved_journeys")
+}
