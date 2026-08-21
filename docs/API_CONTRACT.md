@@ -1,116 +1,176 @@
-# API Contract
+# Transit API Contract
 
-## Health Endpoint
+## Endpoints
 
-```
-GET /health
-```
+All endpoints are under `/transit`.
 
-Response:
-```json
-{
-  "api": "ok",
-  "database": "ok",
-  "timestamp": "2026-08-21T08:43:57.847Z",
-  "env": "development"
-}
-```
+### GET /transit/operators
 
-## Places Endpoints (Phase 2)
+List all transit operators.
 
-### Search Places
-
-```
-GET /places/search?q={query}
-```
-
-Response:
-```json
-{
-  "query": "Jakarta",
-  "results": [
-    {
-      "id": "12345",
-      "name": "Jakarta Central Station",
-      "address": "Jalan Medan Merdeka Timur, Jakarta",
-      "latitude": -6.1754,
-      "longitude": 106.8272,
-      "type": "station",
-      "source": "openstreetmap_nominatim",
-      "metadata": {}
-    }
-  ]
-}
-```
-
-### Reverse Geocode
-
-```
-GET /places/reverse?lat={lat}&lon={lon}
-```
-
-Response:
-```json
-{
-  "coordinates": {
-    "lat": -6.2088,
-    "lon": 106.8456
-  },
-  "result": {
-    "id": "98765",
-    "name": "Jakarta",
-    "address": "Jakarta, DKI Jakarta, Indonesia",
-    "latitude": -6.2088,
-    "longitude": 106.8456,
-    "type": "generic",
-    "source": "openstreetmap_nominatim",
-    "metadata": {}
-  }
-}
-```
-
-## Transit Endpoints
-
-### Get Routes
-
-```
-GET /transit/routes
-```
-
-Response:
+**Response**: 200 OK
 ```json
 [
   {
-    "id": "uuid",
-    "agencyId": "uuid",
-    "shortName": "KRL Bogor",
-    "longName": "KRL Commuter Line Bogor",
-    "routeType": "rail",
-    "serviceType": "KRL",
-    "color": "#ba1a1a"
+    "id": "transjakarta",
+    "name": "TransJakarta",
+    "shortName": "TJ",
+    "website": "https://transjakarta.co.id"
   }
 ]
 ```
 
-## Auth Endpoints (Foundation)
+### GET /transit/routes
 
-### Login
+List all routes, optionally filtered by agency.
 
+**Query Parameters**:
+- `agencyId` (optional): Filter by operator ID
+
+**Response**: 200 OK
+```json
+[
+  {
+    "id": "TJ-1",
+    "agencyId": "transjakarta",
+    "shortName": "1",
+    "longName": "Blok M - Kota",
+    "routeType": "bus",
+    "serviceType": "TRANSJAKARTA_BRT",
+    "color": "000000",
+    "agency": { "name": "TransJakarta" }
+  }
+]
 ```
-POST /auth/login
-```
 
-Request:
+### GET /transit/routes/:id
+
+Get a single route by ID.
+
+**Response**: 200 OK
 ```json
 {
-  "email": "user@example.com",
-  "password": "password"
+  "id": "TJ-1",
+  "agencyId": "transjakarta",
+  "shortName": "1",
+  "longName": "Blok M - Kota",
+  "routeType": "bus",
+  "serviceType": "TRANSJAKARTA_BRT",
+  "color": "000000",
+  "agency": {
+    "id": "transjakarta",
+    "name": "TransJakarta",
+    "shortName": "TJ"
+  },
+  "trips": [...]
 }
 ```
 
-Response:
+### GET /transit/stops
+
+List all stops, optionally filtered by agency.
+
+**Query Parameters**:
+- `agencyId` (optional): Filter by operator ID
+
+**Response**: 200 OK
+```json
+[
+  {
+    "id": "transjakarta-stop-monas",
+    "agencyId": "transjakarta",
+    "name": "Monumen Nasional",
+    "lat": -6.1751,
+    "lon": 106.8241,
+    "stationId": "station-monas"
+  }
+]
+```
+
+### GET /transit/stops/:id
+
+Get a single stop by ID.
+
+**Response**: 200 OK
 ```json
 {
-  "accessToken": "jwt_token"
+  "id": "transjakarta-stop-monas",
+  "agencyId": "transjakarta",
+  "name": "Monumen Nasional",
+  "lat": -6.1751,
+  "lon": 106.8241,
+  "stopTimes": [...]
+}
+```
+
+### GET /transit/stations
+
+List all stations.
+
+**Response**: 200 OK
+```json
+[
+  {
+    "id": "station-jakarta-kota",
+    "name": "Stasiun Jakarta Kota",
+    "lat": -6.175,
+    "lon": 106.8272,
+    "operator": "KAI Commuter"
+  }
+]
+```
+
+### GET /transit/stations/:id
+
+Get a single station with child stops.
+
+**Response**: 200 OK
+```json
+{
+  "id": "station-jakarta-kota",
+  "name": "Stasiun Jakarta Kota",
+  "lat": -6.175,
+  "lon": 106.8272,
+  "operator": "KAI Commuter",
+  "stops": [...]
+}
+```
+
+### GET /transit/nearby
+
+Find nearby transit stops and stations within a radius.
+
+**Query Parameters**:
+- `lat` (required): Latitude
+- `lon` (required): Longitude
+- `radius` (optional, default: 1): Search radius in kilometers
+
+> **Note**: Distance is calculated using geodesic (haversine) distance, labeled as such.
+
+**Response**: 200 OK
+```json
+{
+  "stops": [
+    {
+      "id": "stop-1",
+      "name": "Stop 1",
+      "lat": -6.2,
+      "lon": 106.8,
+      "agencyId": "transjakarta",
+      "distance": 0.5,
+      "type": "stop"
+    }
+  ],
+  "stations": [
+    {
+      "id": "station-1",
+      "name": "Jakarta Kota",
+      "lat": -6.175,
+      "lon": 106.827,
+      "operator": "KAI",
+      "distance": 0.8,
+      "type": "station"
+    }
+  ]
 }
 ```
