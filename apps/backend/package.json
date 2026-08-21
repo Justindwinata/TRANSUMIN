@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "start": "node dist/main.js",
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "ts-node-dev --respawn src/main.ts",
+    "lint": "eslint src"
   },
   "keywords": [],
   "author": "",
