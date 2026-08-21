@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TRANSUM-IN - Complete System States</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e1e2e8",
+                        "surface-container-low": "#f2f3f9",
+                        "secondary-fixed-dim": "#84d5ca",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#737686",
+                        "on-tertiary-container": "#ffece5",
+                        "primary": "#004ac6",
+                        "transjakarta-blue": "#0053db",
+                        "on-background": "#191c20",
+                        "tertiary": "#943700",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c20",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container": "#eceef3",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005049",
+                        "krl-red": "#ba1a1a",
+                        "surface-dim": "#cbdbf5",
+                        "on-secondary-fixed": "#00201d",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-high": "#e7e8ee",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "secondary-fixed": "#a0f1e6",
+                        "on-tertiary-fixed": "#360f00",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "secondary": "#016a61",
+                        "inverse-on-surface": "#eff0f6",
+                        "surface": "#f8f9ff",
+                        "secondary-container": "#9defe3",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "inverse-surface": "#2e3135",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c3c6d7",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-primary-container": "#eeefff",
+                        "on-secondary-container": "#0d6f66",
+                        "on-surface-variant": "#434655",
+                        "jaklingko-green": "#006a61",
+                        "primary-container": "#2563eb",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#0053db",
+                        "tertiary-container": "#b44e1a",
+                        "surface-variant": "#e1e2e8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "gutter": "12px",
+                        "sm": "8px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .loader {
+            border: 4px solid #f2f3f9;
+            border-top: 4px solid #0053db;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-lg overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface shadow-sm docked full-width top-0 z-50 flex justify-between items-center px-margin-mobile h-[64px] w-full">
+<div class="flex items-center gap-md">
+<button class="hover:bg-surface-container-high transition-colors p-2 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<span class="font-display text-display text-transjakarta-blue">TRANSUM-IN</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="hover:bg-surface-container-high transition-colors p-2 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A small circular avatar image showing a professional, modern illustration of an urban commuter in a light-themed digital art style, using indigo and soft grey tones, suitable for a corporate mobile transit application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE6wFLNMogGyYk8j5lrBQUMm-tEzsi_BgwmVdIkUy18VxP8xG1t6N0XVU4GAbjPWZ8eGwMjEuJuA8RQercVHq3cKmXCDwujo1Nl1rR20TZ-2TZ1718-lKgYdzeisDeD0hqRmR50O6GRfcPJuywty2FwP5KAGi8JtI7I2aRvWChyjVmX5bPiwY3OlSwxs5LaWUok868i_y6h2JCrmcKnqQyI8zULj0EFsrSKivlMNSj1pAbAnRa7RMR"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas (Bento Grid Style) -->
+<main class="flex-grow p-margin-mobile pb-[104px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md max-w-[1200px] mx-auto w-full">
+<!-- State: Loading -->
+<div class="bg-surface border border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center text-center shadow-sm h-64 hover:shadow-md transition-shadow">
+<div class="loader mb-lg"></div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-sm">Mencari Rute Terbaik</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Memproses data dari berbagai mode transportasi publik...</p>
+</div>
+<!-- State: No Route Found -->
+<div class="bg-surface border border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center text-center shadow-sm h-64 hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="absolute inset-0 opacity-5 bg-gradient-to-br from-error to-surface"></div>
+<span class="material-symbols-outlined text-outline-variant text-[48px] mb-md" data-icon="route_off">fitbit_jumping_jacks</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-sm">Rute Tidak Ditemukan</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Coba gunakan halte terdekat atau periksa kembali titik tujuan Anda.</p>
+<button class="bg-primary-container text-on-primary font-label-md text-label-md py-sm px-lg rounded-full flex items-center gap-sm h-[48px] hover:bg-transjakarta-blue transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="search">search</span> Cari Ulang
+            </button>
+</div>
+<!-- State: Offline -->
+<div class="bg-surface border border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center text-center shadow-sm h-64 hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="absolute inset-0 opacity-5 bg-gradient-to-br from-outline to-surface"></div>
+<span class="material-symbols-outlined text-outline-variant text-[48px] mb-md" data-icon="wifi_off">wifi_off</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-sm">Anda Sedang Offline</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Menampilkan jadwal tersimpan dari pembaruan terakhir (12:04 PM).</p>
+<button class="border border-primary-container text-primary-container font-label-md text-label-md py-sm px-lg rounded-full flex items-center gap-sm h-[48px] hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="refresh">refresh</span> Coba Hubungkan
+            </button>
+</div>
+<!-- State: Location Permission -->
+<div class="bg-surface border border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center text-center shadow-sm h-64 hover:shadow-md transition-shadow md:col-span-2 lg:col-span-1">
+<div class="w-16 h-16 bg-surface-container-low rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-primary text-[32px]" data-icon="location_on">location_on</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-sm">Akses Lokasi Dibutuhkan</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md px-sm">Untuk merekomendasikan halte dan rute terdekat secara akurat.</p>
+<div class="flex gap-sm w-full justify-center">
+<button class="border border-outline text-on-surface font-label-md text-label-md py-sm px-md rounded-full flex items-center justify-center h-[48px] hover:bg-surface-container-low transition-colors flex-1 max-w-[120px]">
+                    Nanti
+                </button>
+<button class="bg-primary-container text-on-primary font-label-md text-label-md py-sm px-md rounded-full flex items-center justify-center h-[48px] hover:bg-transjakarta-blue transition-colors flex-1 max-w-[120px]">
+                    Izinkan
+                </button>
+</div>
+</div>
+<!-- State: API Error -->
+<div class="bg-surface border border-error-container rounded-xl p-lg flex flex-col items-center justify-center text-center shadow-sm h-64 hover:shadow-md transition-shadow md:col-span-2 lg:col-span-2 relative overflow-hidden">
+<div class="absolute inset-0 opacity-5 bg-gradient-to-tr from-error to-surface"></div>
+<span class="material-symbols-outlined text-error text-[48px] mb-md" data-icon="error">error</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-sm">Sistem Mengalami Gangguan</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md max-w-md">Kami tidak dapat memuat data jadwal saat ini. Tim kami sedang menanganinya.</p>
+<button class="bg-surface-container-highest text-on-surface font-label-md text-label-md py-sm px-lg rounded-full flex items-center gap-sm h-[48px] hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="bug_report">bug_report</span> Laporkan Masalah
+            </button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface-container-lowest fixed bottom-0 left-0 w-full z-50 h-[80px] pb-safe border-t border-outline-variant shadow-[0_-4px_12px_rgba(11,28,48,0.05)] md:hidden">
+<div class="flex justify-around items-center w-full max-w-md mx-auto h-full px-sm">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg p-2 min-h-[48px]" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Beranda</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg p-2 min-h-[48px]" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="directions_transit">directions_transit</span>
+<span class="font-label-sm text-label-sm">Perjalanan</span>
+</a>
+<!-- Active State -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 hover:bg-surface-container transition-colors min-h-[48px] scale-90 duration-200" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="bookmark">bookmark</span>
+<span class="font-label-sm text-label-sm">Tersimpan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg p-2 min-h-[48px]" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="notifications">notifications</span>
+<span class="font-label-sm text-label-sm">Notifikasi</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg p-2 min-h-[48px]" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profil</span>
+</a>
+</div>
+</nav>
+</body></html>

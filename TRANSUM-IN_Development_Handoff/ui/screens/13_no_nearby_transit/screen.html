@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Tidak Ada Transit - TRANSUM-IN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#360f00",
+                        "on-surface": "#0b1c30",
+                        "surface-container-low": "#eff4ff",
+                        "outline-variant": "#c3c6d7",
+                        "outline": "#737686",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "background": "#f8f9ff",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "surface": "#f8f9ff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#ffede6",
+                        "tertiary-fixed": "#ffdbcd",
+                        "surface-variant": "#d3e4fe",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#0053db",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "secondary": "#006a61",
+                        "primary-fixed": "#dbe1ff",
+                        "secondary-container": "#86f2e4",
+                        "on-primary-container": "#eeefff",
+                        "on-background": "#0b1c30",
+                        "on-secondary-fixed-variant": "#005049",
+                        "on-secondary-container": "#006f66",
+                        "on-primary-fixed": "#00174b",
+                        "tertiary-container": "#bc4800",
+                        "inverse-primary": "#b4c5ff",
+                        "inverse-surface": "#213145",
+                        "on-secondary-fixed": "#00201d",
+                        "tertiary": "#943700",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#cbdbf5",
+                        "surface-container": "#e5eeff",
+                        "primary": "#004ac6",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#89f5e7",
+                        "primary-container": "#2563eb",
+                        "on-surface-variant": "#434655",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface-container-high": "#dce9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-margin": "16px",
+                        "sm": "8px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "gutter": "12px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "safe": "env(safe-area-inset-bottom)"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased md:max-w-md md:mx-auto md:border-x md:border-outline-variant md:shadow-lg relative">
+<!-- Top Navigation Placeholder for completeness, usually hidden or simplified on empty states, but keeping it per standard flow -->
+<header class="bg-surface docked full-width top-0 border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-container-margin py-base max-w-full z-40 sticky">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="account_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+</div>
+<h1 class="text-title-lg font-title-lg font-bold text-primary">TRANSUM-IN</h1>
+</div>
+<button aria-label="Notifikasi" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col items-center justify-center px-container-margin pb-[80px] pt-xl text-center">
+<!-- Illustration -->
+<div class="w-full max-w-[280px] aspect-square mb-lg rounded-2xl overflow-hidden bg-surface-container-lowest shadow-sm border border-outline-variant flex items-center justify-center relative">
+<img alt="Tidak ada transportasi umum ilustrasi" class="w-full h-full object-cover" data-alt="A clean, flat vector illustration in corporate modern style showing a confused commuter looking at a digital map tablet. The scene is illuminated by bright, soft white lighting typical of a modern light-mode aesthetic. A prominent red 'no entry' or 'no transit' symbol floats near the tablet. The background is a stark white void. The color palette relies heavily on pristine whites, deep blacks, and striking red accents, conveying a sense of clean, professional, yet slightly frustrating urban transit experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1zAMdKRMWC-0PZmpgj0T6HQVsgrNo_UQcQbKvqb0btzY8CtgNr4ejmdQbtSLOZIwenZWz_0KYMbp4cajDorv50rSWApz0FVRQatcz_yK-cPyBlmk3l2a4cLPecDI5ieqoRsuoL8kp0vjkHd1miUaBO_ziPoVeHUh210HNTnyyZ-_TqECxhyJvkPSA2a3AAQ_ETlYsUdATYl1Itp3vaNCoKM4GT-UMs1Y-diH1HqkiQcuR4p7m9fk-"/>
+</div>
+<!-- Typography -->
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-on-surface mb-sm px-xs">
+            Tidak ada transportasi umum di dekat lokasi ini.
+        </h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant mb-xl max-w-[90%]">
+            Kami belum menemukan halte atau stasiun dalam radius pencarian.
+        </p>
+<!-- Actions -->
+<div class="w-full flex flex-col gap-md mt-auto mb-lg">
+<button class="w-full h-12 bg-primary-container text-on-primary rounded-[12px] flex items-center justify-center text-body-lg font-body-lg font-semibold shadow-sm hover:opacity-90 transition-opacity active:scale-[0.98]">
+                Perluas Pencarian
+            </button>
+<button class="w-full h-12 bg-transparent border border-primary-container text-primary-container rounded-[12px] flex items-center justify-center text-body-lg font-body-lg font-semibold hover:bg-surface-container-lowest transition-colors active:scale-[0.98]">
+                Pilih Lokasi Lain
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<!-- Note: Following semantic layout rules, an empty state on a main tab might show the nav, 
+         but if it's a dead-end transactional result it might be suppressed. 
+         Assuming this is a main 'Home' or 'Trips' search result view based on user prompt requesting standard bottom nav. -->
+<nav class="bg-surface-container-lowest docked full-width bottom-0 z-50 shadow-sm border-t border-outline-variant shadow-md fixed bottom-0 left-0 w-full flex justify-around items-center px-2 pb-safe pt-2 md:max-w-md md:left-auto">
+<!-- Home (Active) -->
+<a aria-current="page" aria-label="Beranda" class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-4 py-1 hover:bg-surface-variant/50 transition-all duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-label-sm font-label-sm">Beranda</span>
+</a>
+<!-- Trips -->
+<a aria-label="Perjalanan" class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant/50 transition-all duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="directions_transit">directions_transit</span>
+<span class="text-label-sm font-label-sm">Perjalanan</span>
+</a>
+<!-- Saved -->
+<a aria-label="Tersimpan" class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant/50 transition-all duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="bookmark">bookmark</span>
+<span class="text-label-sm font-label-sm">Tersimpan</span>
+</a>
+<!-- Alerts -->
+<a aria-label="Notifikasi" class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant/50 transition-all duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="notifications_active">notifications_active</span>
+<span class="text-label-sm font-label-sm">Notifikasi</span>
+</a>
+<!-- Profile -->
+<a aria-label="Profil" class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant/50 transition-all duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="account_circle">account_circle</span>
+<span class="text-label-sm font-label-sm">Profil</span>
+</a>
+</nav>
+</body></html>

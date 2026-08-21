@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TRANSUM-IN - Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e1e2e8",
+                    "surface-container-low": "#f2f3f9",
+                    "secondary-fixed-dim": "#84d5ca",
+                    "on-primary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#737686",
+                    "on-tertiary-container": "#ffece5",
+                    "primary": "#004ac6",
+                    "transjakarta-blue": "#0053db",
+                    "on-background": "#191c20",
+                    "tertiary": "#943700",
+                    "on-error": "#ffffff",
+                    "on-surface": "#191c20",
+                    "primary-fixed": "#dbe1ff",
+                    "on-primary-fixed": "#00174b",
+                    "surface-container": "#eceef3",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#005049",
+                    "krl-red": "#ba1a1a",
+                    "surface-dim": "#cbdbf5",
+                    "on-secondary-fixed": "#00201d",
+                    "inverse-primary": "#b4c5ff",
+                    "surface-container-high": "#e7e8ee",
+                    "surface-bright": "#f8f9ff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "secondary-fixed": "#a0f1e6",
+                    "on-tertiary-fixed": "#360f00",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "on-secondary": "#ffffff",
+                    "background": "#f8f9ff",
+                    "secondary": "#016a61",
+                    "inverse-on-surface": "#eff0f6",
+                    "surface": "#f8f9ff",
+                    "secondary-container": "#9defe3",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "inverse-surface": "#2e3135",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c3c6d7",
+                    "tertiary-fixed": "#ffdbcd",
+                    "on-primary-container": "#eeefff",
+                    "on-secondary-container": "#0d6f66",
+                    "on-surface-variant": "#434655",
+                    "jaklingko-green": "#006a61",
+                    "primary-container": "#2563eb",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#0053db",
+                    "tertiary-container": "#b44e1a",
+                    "surface-variant": "#e1e2e8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "xs": "4px",
+                    "md": "16px",
+                    "xl": "32px",
+                    "gutter": "12px",
+                    "sm": "8px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "title-lg": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .carousel-container {
+            scroll-snap-type: x mandatory;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        .carousel-slide {
+            scroll-snap-align: center;
+        }
+        /* Custom scrollbar to hide it */
+        .carousel-container::-webkit-scrollbar {
+            display: none;
+        }
+        .carousel-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col items-center justify-center font-sans overflow-hidden">
+<!-- Mobile Container -->
+<main class="w-full max-w-[400px] h-[100dvh] bg-surface relative flex flex-col shadow-lg">
+<!-- Top Nav (Skip) -->
+<header class="w-full flex justify-end p-margin-mobile absolute top-0 z-10">
+<button class="font-label-md text-label-md text-primary px-sm py-xs hover:bg-surface-container-low rounded-full transition-colors" id="skipBtn">
+                Lewati
+            </button>
+</header>
+<!-- Carousel Content -->
+<div class="carousel-container flex w-full h-full flex-grow relative" id="onboardingCarousel">
+<!-- Slide 1 -->
+<section class="carousel-slide min-w-full h-full flex flex-col items-center justify-center px-lg pt-xl pb-[120px]">
+<div class="w-full h-[300px] mb-lg rounded-2xl overflow-hidden relative bg-surface-container-lowest flex items-center justify-center">
+<img class="w-full h-full object-contain p-lg" data-alt="A clean, minimalist 3D illustration of a city map with a glowing destination pin. The style is modern corporate, using a light mode aesthetic with soft shadows, deep blue accents, and a pristine white background. The composition is balanced and inviting, emphasizing ease of navigation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClMdC-IPg1YMvtW1mM4Ifi--fkLqNjUrWQrXp9giJFsyWh_b_MGSfRfrnRH4VnH3GAuo5Xi02rT8qY9oynLpw298qUbRJu49LIKh1yj2dWAWHpN_Vbiz4jCLYfI6vVbOGnZtUoFiGa9s-Gvkbj9BAVzk6J4TW7TdImxmvqtkRh-HyaiKXfAmyEW5Wh5SuggXCmgHfd1xWjoMCxrn5pjFLGA7Cf3oraPPODWktouqP9KHW_7hMx02Gt"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-center text-on-surface mb-sm">
+                    Masukkan tujuanmu
+                </h1>
+<p class="font-body-lg text-body-lg text-center text-on-surface-variant max-w-[280px]">
+                    Ketik lokasi tujuan dan kami akan mencarikan halte atau stasiun terdekat.
+                </p>
+</section>
+<!-- Slide 2 -->
+<section class="carousel-slide min-w-full h-full flex flex-col items-center justify-center px-lg pt-xl pb-[120px]">
+<div class="w-full h-[300px] mb-lg rounded-2xl overflow-hidden relative bg-surface-container-lowest flex items-center justify-center">
+<img class="w-full h-full object-contain p-lg" data-alt="A clean, minimalist 3D illustration showing multiple transit route lines converging. The style is modern corporate, using a light mode aesthetic with soft shadows, deep blue, jaklingko green, and krl red accents on a pristine white background. The composition is structured and clear, emphasizing choice and efficiency." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEKEpu6k_uI5D_B1jhYBpozKmsLrsZ1EnI8MnE9IzwlBNV20jTdvkUybNnV9oSVqbiURi7JiXSiyisMMWaFZnsDpDKzTIzU24MyoBUAw4xQ-ik26R7WamSHZpSnySU4H2nNw_GJPLdMq1OoUEKLJuNQiCUH8mkWnzpBc3uDs9dzVIVcqbpjNDyY4s46B9dNbnOsB5b1Y8vk05XWzxpPLfrM0D8ts9UWr7aUdzo8TH9DBKobKtsvb80"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-center text-on-surface mb-sm">
+                    Pilih rute yang paling cocok
+                </h1>
+<p class="font-body-lg text-body-lg text-center text-on-surface-variant max-w-[280px]">
+                    Pilih rute tercepat, paling murah, atau minim transit sesuai kebutuhanmu.
+                </p>
+</section>
+<!-- Slide 3 -->
+<section class="carousel-slide min-w-full h-full flex flex-col items-center justify-center px-lg pt-xl pb-[120px]">
+<div class="w-full h-[300px] mb-lg rounded-2xl overflow-hidden relative bg-surface-container-lowest flex items-center justify-center">
+<img class="w-full h-full object-contain p-lg" data-alt="A clean, minimalist 3D illustration of a smartphone displaying a dynamic transit journey with real-time updates. The style is modern corporate, using a light mode aesthetic with soft shadows, bright deep blue accents, and a pristine white background. The composition is focused on the screen, emphasizing control and ease." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdm3ebb6wJRkr4iR1I0G2DRsUamzMhEpYWPChsiIomakJFzYB3uq09ajXeQ2a8NhfPXgckLtwJOBtMBQ96zopZHUIzIVitV2K1ySuovwwF2Q4O9exhb77RBKr0xcVwnY-b28SSv5qBSdELCbHhT770ndeqU2z9c1aI1XguwldEPObIVbsWc0BQGDRb4Nl3t2g8z9Sjs_YyhbhbHrNZBHg8g0YTef6F_lyEyN6anGra8o3gI99zi3zV"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-center text-on-surface mb-sm">
+                    Ikuti perjalananmu dengan mudah
+                </h1>
+<p class="font-body-lg text-body-lg text-center text-on-surface-variant max-w-[280px]">
+                    Dapatkan panduan langkah demi langkah saat kamu sedang dalam perjalanan.
+                </p>
+</section>
+</div>
+<!-- Bottom Controls -->
+<div class="absolute bottom-0 w-full px-margin-mobile pb-lg pt-md bg-gradient-to-t from-surface via-surface to-transparent flex flex-col items-center">
+<!-- Indicators -->
+<div class="flex gap-sm mb-lg" id="indicators">
+<div class="w-8 h-2 rounded-full bg-primary transition-all duration-300 indicator active"></div>
+<div class="w-2 h-2 rounded-full bg-surface-variant transition-all duration-300 indicator"></div>
+<div class="w-2 h-2 rounded-full bg-surface-variant transition-all duration-300 indicator"></div>
+</div>
+<!-- Action Button -->
+<button class="w-full h-[48px] bg-primary text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:bg-primary-fixed-variant transition-colors flex items-center justify-center gap-xs" id="nextBtn">
+<span>Lanjut</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</main>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.getElementById('onboardingCarousel');
+            const nextBtn = document.getElementById('nextBtn');
+            const skipBtn = document.getElementById('skipBtn');
+            const indicators = document.querySelectorAll('.indicator');
+            const slides = document.querySelectorAll('.carousel-slide');
+            
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            const updateUI = () => {
+                // Update Indicators
+                indicators.forEach((ind, index) => {
+                    if (index === currentSlide) {
+                        ind.classList.remove('w-2', 'bg-surface-variant');
+                        ind.classList.add('w-8', 'bg-primary');
+                    } else {
+                        ind.classList.remove('w-8', 'bg-primary');
+                        ind.classList.add('w-2', 'bg-surface-variant');
+                    }
+                });
+
+                // Update Button Text
+                if (currentSlide === totalSlides - 1) {
+                    nextBtn.innerHTML = `
+                        <span>Mulai Sekarang</span>
+                    `;
+                } else {
+                    nextBtn.innerHTML = `
+                        <span>Lanjut</span>
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    `;
+                }
+            };
+
+            const scrollToSlide = (index) => {
+                const slideWidth = carousel.clientWidth;
+                carousel.scrollTo({
+                    left: slideWidth * index,
+                    behavior: 'smooth'
+                });
+            };
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    scrollToSlide(currentSlide);
+                } else {
+                    // Action to finish onboarding
+                    console.log('Onboarding Complete');
+                    // window.location.href = '/home'; // Example redirect
+                    document.body.innerHTML = '<div class="flex items-center justify-center min-h-screen"><h1 class="text-2xl text-primary font-bold">Welcome to Transum-in!</h1></div>';
+                }
+            });
+
+            skipBtn.addEventListener('click', () => {
+                currentSlide = totalSlides - 1;
+                scrollToSlide(currentSlide);
+            });
+
+            // Listen for scroll events to update indicators (if user swipes)
+            carousel.addEventListener('scroll', () => {
+                const scrollPosition = carousel.scrollLeft;
+                const slideWidth = carousel.clientWidth;
+                // Add a small threshold to avoid flicker
+                const newSlide = Math.round(scrollPosition / slideWidth);
+                
+                if (newSlide !== currentSlide && newSlide >= 0 && newSlide < totalSlides) {
+                    currentSlide = newSlide;
+                    updateUI();
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                scrollToSlide(currentSlide);
+            });
+        });
+    </script>
+</body></html>

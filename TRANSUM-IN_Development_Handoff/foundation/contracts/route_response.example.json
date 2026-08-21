@@ -1,0 +1,54 @@
+{
+  "id": "journey_demo_001",
+  "duration_s": 2520,
+  "departure_at": "2026-08-21T08:15:00+07:00",
+  "arrival_at": "2026-08-21T08:57:00+07:00",
+  "fare": {
+    "amount": 3500,
+    "currency": "IDR",
+    "status": "ESTIMATE"
+  },
+  "walking_distance_m": 650,
+  "transfer_count": 1,
+  "primary_badge": "FASTEST",
+  "data_freshness": {
+    "status": "SCHEDULED",
+    "checked_at": "2026-08-21T07:45:00+07:00"
+  },
+  "segments": [
+    {
+      "type": "WALK",
+      "distance_m": 450,
+      "duration_s": 330,
+      "to": {
+        "type": "STATION",
+        "name": "Stasiun UI"
+      }
+    },
+    {
+      "type": "TRANSIT",
+      "service_type": "KRL",
+      "route_id": "KRL-BGR-JKTKOTA",
+      "headsign": "Jakarta Kota",
+      "board_at": "Stasiun UI",
+      "alight_at": "Stasiun Juanda",
+      "duration_s": 1500
+    },
+    {
+      "type": "TRANSFER",
+      "distance_m": 180,
+      "duration_s": 180,
+      "from": "Stasiun Juanda",
+      "to": "Halte Juanda"
+    },
+    {
+      "type": "TRANSIT",
+      "service_type": "TRANSJAKARTA_BRT",
+      "route_id": "TJ-1",
+      "headsign": "Blok M - Kota",
+      "board_at": "Halte Juanda",
+      "alight_at": "Destination Area",
+      "duration_s": 300
+    }
+  ]
+}

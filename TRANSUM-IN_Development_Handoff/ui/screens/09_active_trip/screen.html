@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Active Trip - TRANSUM-IN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e1e2e8",
+                        "surface-container-low": "#f2f3f9",
+                        "secondary-fixed-dim": "#84d5ca",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#737686",
+                        "on-tertiary-container": "#ffece5",
+                        "primary": "#2563eb",
+                        "transjakarta-blue": "#0053db",
+                        "on-background": "#191c20",
+                        "tertiary": "#943700",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c20",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container": "#eceef3",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005049",
+                        "krl-red": "#ba1a1a",
+                        "surface-dim": "#cbdbf5",
+                        "on-secondary-fixed": "#00201d",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-high": "#e7e8ee",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "secondary-fixed": "#a0f1e6",
+                        "on-tertiary-fixed": "#360f00",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "secondary": "#016a61",
+                        "inverse-on-surface": "#eff0f6",
+                        "surface": "#f8f9ff",
+                        "secondary-container": "#9defe3",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "inverse-surface": "#2e3135",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c3c6d7",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-primary-container": "#eeefff",
+                        "on-secondary-container": "#0d6f66",
+                        "on-surface-variant": "#434655",
+                        "jaklingko-green": "#006a61",
+                        "primary-container": "#dbeafe",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#2563eb",
+                        "tertiary-container": "#b44e1a",
+                        "surface-variant": "#e1e2e8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "gutter": "12px",
+                        "sm": "8px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "title-lg": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .map-gradient {
+            background: linear-gradient(180deg, rgba(248, 249, 255, 0.00) 0%, #F8F9FF 100%);
+        }
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-sans antialiased overflow-x-hidden selection:bg-primary-fixed selection:text-on-primary-fixed pb-[72px]">
+<!-- Top Navigation (Mobile Header equivalent for Task-Focused screen) -->
+<header class="bg-surface shadow-sm sticky top-0 z-40">
+<div class="flex justify-between items-center px-margin-mobile h-[64px] w-full max-w-md mx-auto">
+<button aria-label="Kembali" class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md-mobile text-primary font-bold">TRANSUM-IN</h1>
+<button aria-label="Tutup" class="w-12 h-12 flex items-center justify-center rounded-full text-error hover:bg-error-container hover:text-on-error-container transition-colors">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-md mx-auto relative flex flex-col">
+<!-- Map Canvas Area -->
+<div class="relative w-full h-[397px] bg-surface-container overflow-hidden shrink-0">
+<!-- Simulated Map Image -->
+<div class="absolute inset-0 bg-cover bg-center opacity-90" data-alt="A clean, modern top-down map interface showing urban transit routes in a light corporate design style. The map features subtle gray and white roads, small green parks, and sharp indigo and transjakarta blue route lines. Soft shadows add depth to layered map elements. The style is pristine and functional." data-location="Jakarta" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtoSi8HwGRReXqDnD4MWzjxx8j-nzM0_BgEO35YFl--xNVcWI0zRl3RQsxnakKM1kWS8QAkfguRktzbXGojB8FJzrQ7BtWl-0yLvq4TKTDDTBf3fu75bM9kvv7gkYxcvZu8a8T0k89GwWUFwHZGga2kOgAFZ5nyXDRwZ5A9lpwIyYY8toAql55TuklvJxvkcx0-dhCj9aFsezLEjXL6xMTX8BDaxfyA9Jjuk2m3SmQC4BT-7Aw8us1TwA')"></div>
+<!-- Map Overlay Gradients & Controls -->
+<div class="absolute inset-0 map-gradient pointer-events-none"></div>
+<div class="absolute bottom-md right-md flex flex-col gap-sm pointer-events-auto">
+<button aria-label="Lokasi Saya" class="w-12 h-12 bg-surface rounded-full shadow-[0_4px_12px_rgba(11,28,48,0.05)] flex items-center justify-center text-primary border border-outline-variant hover:bg-surface-container-high transition-colors z-20">
+<span class="material-symbols-outlined" data-icon="my_location">my_location</span>
+</button>
+<button aria-label="Lapisan Peta" class="w-12 h-12 bg-surface rounded-full shadow-[0_4px_12px_rgba(11,28,48,0.05)] flex items-center justify-center text-on-surface-variant border border-outline-variant hover:bg-surface-container-high transition-colors z-20">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+</button>
+</div>
+<!-- Route Nodes Overlay (Simulated) -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none">
+<svg class="absolute w-full h-full" style="z-index: 10;">
+<path d="M 150 250 C 200 200, 250 150, 300 100" fill="transparent" stroke="#2563eb" stroke-dasharray="8 8" stroke-linecap="round" stroke-width="6"></path>
+</svg>
+<div class="absolute top-[250px] left-[150px] w-4 h-4 bg-primary rounded-full border-2 border-white transform -translate-x-1/2 -translate-y-1/2 z-20 shadow-md"></div>
+<div class="absolute top-[100px] left-[300px] w-6 h-6 bg-surface rounded-full border-2 border-primary flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 z-20 shadow-md">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="directions_bus">directions_bus</span>
+</div>
+<!-- Current Location Marker -->
+<div class="absolute top-[200px] left-[200px] transform -translate-x-1/2 -translate-y-1/2 z-30">
+<div class="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center pulse-dot">
+<div class="w-4 h-4 bg-primary rounded-full border-2 border-white shadow-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Trip Information Panel -->
+<div class="flex-1 bg-surface rounded-t-[24px] -mt-6 z-30 relative px-margin-mobile pt-lg pb-lg shadow-[0_-8px_24px_rgba(11,28,48,0.08)] flex flex-col gap-md">
+<!-- Handle -->
+<div class="w-12 h-1.5 bg-outline-variant rounded-full mx-auto absolute top-3 left-1/2 transform -translate-x-1/2"></div>
+<!-- Header: ETA & Status -->
+<div class="flex justify-between items-start mb-sm mt-2">
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">14 Menit</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Tiba pukul 08:45 • Jarak tersisa 2.1 km</p>
+</div>
+<div class="bg-primary text-on-primary px-3 py-1.5 rounded-full font-label-sm text-label-sm flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="directions_walk" data-weight="fill">directions_walk</span>
+<span>Jalan Kaki</span>
+</div>
+</div>
+<hr class="border-t border-outline-variant"/>
+<!-- Current Instruction Card -->
+<div class="bg-surface-container-lowest border-2 border-primary rounded-[24px] p-md shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-primary"></div>
+<div class="flex gap-md">
+<div class="flex flex-col items-center pt-1">
+<div class="w-10 h-10 bg-primary-fixed rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]" data-icon="directions_walk">directions_walk</span>
+</div>
+<div class="w-0.5 h-16 bg-outline-variant my-1"></div>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<div class="font-label-md text-label-md text-primary uppercase mb-1">SEKARANG</div>
+<div class="flex justify-between items-start">
+<h3 class="font-title-lg text-title-lg text-on-surface font-bold leading-tight">Jalan 200 m menuju Halte Juanda</h3>
+<span class="font-title-lg text-title-lg text-on-surface font-bold ml-2 shrink-0">2 Min</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Next Step Preview -->
+<div class="bg-surface-container rounded-[24px] p-md flex gap-md opacity-80">
+<div class="flex flex-col items-center pt-1">
+<div class="w-8 h-8 bg-surface border border-outline-variant rounded-full flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="directions_bus">directions_bus</span>
+</div>
+<div class="w-0.5 h-10 bg-outline-variant my-1"></div>
+</div>
+<div class="flex-1 flex justify-between items-center">
+<div>
+<div class="font-label-md text-label-md text-on-surface-variant uppercase mb-1">BERIKUTNYA</div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Naik TransJakarta Koridor 1 arah Kota</p>
+</div>
+</div>
+</div>
+<!-- Destination Preview -->
+<div class="bg-surface-container rounded-[24px] p-md flex gap-md opacity-80">
+<div class="flex flex-col items-center pt-1">
+<div class="w-8 h-8 bg-surface border border-outline-variant rounded-full flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="location_on">location_on</span>
+</div>
+</div>
+<div class="flex-1 flex justify-between items-center">
+<div>
+<div class="font-label-md text-label-md text-on-surface-variant uppercase mb-1">DESTINATION</div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Monas</p>
+</div>
+<div class="text-right">
+<span class="block font-label-md text-label-md text-on-surface-variant font-bold">ETA: 08:45</span>
+</div>
+</div>
+</div>
+<!-- Contextual Action Buttons -->
+<div class="mt-auto pt-md flex gap-sm">
+<button aria-label="Akhiri Perjalanan" class="flex-1 bg-white border border-error text-error font-label-md text-label-md py-3 rounded-2xl flex items-center justify-center gap-2 hover:bg-error-container transition-colors min-h-[48px]">
+<span class="material-symbols-outlined text-[18px]" data-icon="cancel">cancel</span>
+                     Akhiri Perjalanan
+                 </button>
+<button aria-label="Lihat Peta Penuh" class="flex-[2] bg-primary text-white font-label-md text-label-md py-3 rounded-2xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors shadow-sm min-h-[48px]">
+<span class="material-symbols-outlined text-[18px]" data-icon="map">map</span>
+                     Lihat Peta
+                 </button>
+</div>
+<div class="text-center mt-2">
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-70">Contoh perjalanan</p>
+</div>
+</div>
+</main>
+<!-- Navigation Shell -->
+<nav class="bg-surface border-t border-surface-variant pb-safe pt-2 px-4 fixed bottom-0 w-full max-w-md mx-auto left-1/2 transform -translate-x-1/2 z-50 flex justify-between items-center h-[72px]">
+<button aria-label="Beranda" class="flex flex-col items-center justify-center w-16 text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px] mb-1">home</span>
+<span class="font-label-sm text-label-sm">Beranda</span>
+</button>
+<button aria-label="Perjalanan" class="flex flex-col items-center justify-center w-16 text-primary">
+<div class="w-12 h-8 rounded-full bg-primary-container flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[24px]" data-weight="fill">route</span>
+</div>
+<span class="font-label-sm text-label-sm font-bold">Perjalanan</span>
+</button>
+<button aria-label="Tersimpan" class="flex flex-col items-center justify-center w-16 text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px] mb-1">bookmark</span>
+<span class="font-label-sm text-label-sm">Tersimpan</span>
+</button>
+<button aria-label="Notifikasi" class="flex flex-col items-center justify-center w-16 text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px] mb-1">notifications</span>
+<span class="font-label-sm text-label-sm">Notifikasi</span>
+</button>
+<button aria-label="Profil" class="flex flex-col items-center justify-center w-16 text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px] mb-1">person</span>
+<span class="font-label-sm text-label-sm">Profil</span>
+</button>
+</nav>
+<script>
+        // Simple script to update current time if needed for realism
+        // document.getElementById('current-time').innerText = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    </script>
+</body></html>

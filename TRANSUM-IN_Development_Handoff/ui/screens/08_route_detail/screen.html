@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Route Detail - TRANSUM-IN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e1e2e8",
+                        "surface-container-low": "#f2f3f9",
+                        "secondary-fixed-dim": "#84d5ca",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#737686",
+                        "on-tertiary-container": "#ffece5",
+                        "primary": "#004ac6",
+                        "transjakarta-blue": "#0053db",
+                        "on-background": "#191c20",
+                        "tertiary": "#943700",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c20",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container": "#eceef3",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005049",
+                        "krl-red": "#ba1a1a",
+                        "surface-dim": "#cbdbf5",
+                        "on-secondary-fixed": "#00201d",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-high": "#e7e8ee",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "secondary-fixed": "#a0f1e6",
+                        "on-tertiary-fixed": "#360f00",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "secondary": "#016a61",
+                        "inverse-on-surface": "#eff0f6",
+                        "surface": "#f8f9ff",
+                        "secondary-container": "#9defe3",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "inverse-surface": "#2e3135",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c3c6d7",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-primary-container": "#eeefff",
+                        "on-secondary-container": "#0d6f66",
+                        "on-surface-variant": "#434655",
+                        "jaklingko-green": "#006a61",
+                        "primary-container": "#2563eb",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#0053db",
+                        "tertiary-container": "#b44e1a",
+                        "surface-variant": "#e1e2e8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "gutter": "12px",
+                        "sm": "8px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .map-bg {
+            background-color: #e5e5f7;
+            background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #e5e5f7 10px ), repeating-linear-gradient( #ffffff55, #ffffff );
+        }
+        
+        /* Draggable Bottom Sheet Animation */
+        .bottom-sheet {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .dashed-line {
+            border-left: 2px dashed #737686;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg h-screen overflow-hidden flex flex-col relative antialiased">
+<!-- App Bar (Floating over map) -->
+<header class="absolute top-0 w-full z-40 bg-surface/80 backdrop-blur-md shadow-sm">
+<div class="flex justify-between items-center px-margin-mobile h-[64px] w-full z-50">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="flex flex-col items-center">
+<h1 class="font-headline-md text-headline-md text-on-background font-bold">Detail Rute</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</header>
+<!-- Interactive Map Area -->
+<main class="flex-grow relative w-full z-0 map-bg">
+<!-- Pseudo Map Content (Image Placeholder) -->
+<div class="absolute inset-0 w-full h-full bg-surface-container-low" data-alt="A detailed map visualization of a dense urban area like Jakarta, showing transit lines, stations, and street layouts. The map uses a clean, modern aesthetic with a light background, highlighting a specific route in vibrant indigo. Minimalist design, high contrast for usability, corporate modernism style." data-location="Jakarta" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBIYkIb8hQN_iNe-tcD7tZo3WgsyMDnzmVB4vy8HLePZ-GusmfNiMeV4-g1ntZtYjxEktF38fvgQw4U8dA8PgoO1p8wDBZ6NwxZ9Pkr6qBrUTEfDxWOKh3OwHr5lYvSxu69GSu7E-Po-MW1pqB3-4giVsoe2R_3dQ4RAhMEfXvytCIjfCcz4kbPPfu_cA41tHlbpJz8GuM_QAd9yk96bIXnZxebJzYpEy7bcetq9hzrshOcpPITaF1y'); background-size: cover; background-position: center;">
+<!-- Map Markers -->
+<div class="absolute top-1/3 left-1/4 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="bg-primary text-on-primary rounded-full p-2 shadow-sm border-2 border-white">
+<span class="material-symbols-outlined" data-icon="directions_bus" style="font-size: 20px;">directions_bus</span>
+</div>
+<div class="mt-1 bg-surface px-2 py-1 rounded-md shadow-sm text-xs font-label-sm font-semibold text-on-surface">Halte Bundaran HI</div>
+</div>
+<div class="absolute top-2/3 left-3/4 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="bg-krl-red text-on-error rounded-full p-2 shadow-sm border-2 border-white">
+<span class="material-symbols-outlined" data-icon="train" style="font-size: 20px;">train</span>
+</div>
+<div class="mt-1 bg-surface px-2 py-1 rounded-md shadow-sm text-xs font-label-sm font-semibold text-on-surface">Stasiun Sudirman</div>
+</div>
+<!-- Route Line SVG Placeholder -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" preserveaspectratio="none">
+<path d="M 25% 33% Q 50% 33% 50% 50% T 75% 66%" fill="none" stroke="#004ac6" stroke-dasharray="8,8" stroke-width="4"></path>
+</svg>
+<!-- Floating Actions -->
+<div class="absolute bottom-[400px] right-margin-mobile flex flex-col gap-2 z-10 md:bottom-[100px]">
+<button class="bg-surface p-3 rounded-full shadow-[0_4px_12px_rgba(11,28,48,0.05)] text-on-surface-variant hover:bg-surface-container-high transition-colors border border-outline-variant">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+<button class="bg-surface p-3 rounded-full shadow-[0_4px_12px_rgba(11,28,48,0.05)] text-on-surface-variant hover:bg-surface-container-high transition-colors border border-outline-variant">
+<span class="material-symbols-outlined">layers</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Draggable Bottom Sheet (Journey Timeline) -->
+<div class="bottom-sheet absolute bottom-0 left-0 w-full bg-surface rounded-t-xl shadow-[0_-4px_24px_rgba(11,28,48,0.1)] z-30 flex flex-col border-t border-outline-variant h-[60vh] md:h-[100vh] md:w-96 md:right-0 md:left-auto md:rounded-none md:border-l md:border-t-0 transform translate-y-0" id="bottom-sheet">
+<!-- Drag Handle (Mobile Only) -->
+<div class="w-full flex justify-center py-3 cursor-grab md:hidden" id="drag-handle">
+<div class="w-12 h-1.5 bg-outline-variant rounded-full"></div>
+</div>
+<!-- Summary Header -->
+<div class="px-margin-mobile py-4 border-b border-outline-variant flex flex-col gap-2 bg-surface">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-title-lg text-title-lg text-on-surface font-bold">45 Menit</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Tiba pukul 08:45 • Rp 7.500</p>
+</div>
+<div class="bg-primary text-on-primary px-3 py-1 rounded-full font-label-md text-label-md">
+                    Tercepat
+                </div>
+</div>
+<!-- Quick Mode Overview -->
+<div class="flex items-center gap-2 mt-2">
+<div class="flex items-center gap-1 bg-surface-container py-1 px-2 rounded-md">
+<span class="material-symbols-outlined text-primary text-sm" style="font-size: 16px;">directions_walk</span>
+</div>
+<span class="text-outline text-lg font-bold">›</span>
+<div class="flex items-center gap-1 bg-primary-fixed py-1 px-2 rounded-md">
+<span class="material-symbols-outlined text-on-primary-fixed text-sm" style="font-size: 16px;">directions_bus</span>
+<span class="font-label-sm text-label-sm text-on-primary-fixed font-bold">1</span>
+</div>
+<span class="text-outline text-lg font-bold">›</span>
+<div class="flex items-center gap-1 bg-surface-container py-1 px-2 rounded-md">
+<span class="material-symbols-outlined text-outline text-sm" style="font-size: 16px;">directions_walk</span>
+</div>
+<span class="text-outline text-lg font-bold">›</span>
+<div class="flex items-center gap-1 bg-error-container py-1 px-2 rounded-md">
+<span class="material-symbols-outlined text-on-error-container text-sm" style="font-size: 16px;">train</span>
+<span class="font-label-sm text-label-sm text-on-error-container font-bold">C</span>
+</div>
+</div>
+</div>
+<!-- Scrollable Vertical Journey Timeline -->
+<div class="flex-grow overflow-y-auto px-margin-mobile py-4 bg-surface-bright">
+<!-- Start Point -->
+<div class="flex gap-4 relative mb-2">
+<div class="flex flex-col items-center w-8">
+<div class="w-4 h-4 rounded-full border-4 border-primary bg-surface z-10 mt-1"></div>
+<div class="w-0.5 h-full bg-outline-variant -mt-2"></div>
+</div>
+<div class="pb-6 w-full">
+<h3 class="font-title-lg text-title-lg text-on-surface">Lokasi Saat Ini</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">08:00</p>
+</div>
+</div>
+<!-- Walk Segment -->
+<div class="flex gap-4 relative mb-2">
+<div class="flex flex-col items-center w-8">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center z-10 border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-size: 18px;">directions_walk</span>
+</div>
+<div class="w-0.5 h-full dashed-line -mt-2"></div>
+</div>
+<div class="pb-6 pt-1 w-full">
+<p class="font-body-md text-body-md text-on-surface font-medium">Jalan kaki ke Halte Bundaran HI</p>
+<p class="font-body-md text-body-md text-on-surface-variant">5 mnt (400m)</p>
+</div>
+</div>
+<!-- Transit Segment 1 (Bus) -->
+<div class="flex gap-4 relative mb-2">
+<div class="flex flex-col items-center w-8">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center z-10 shadow-sm text-on-primary">
+<span class="font-label-md text-label-md font-bold">1</span>
+</div>
+<div class="w-1 h-full bg-primary -mt-2 rounded-b-sm"></div>
+</div>
+<div class="pb-2 pt-1 w-full">
+<div class="bg-surface rounded-lg border border-outline-variant p-3 shadow-sm mb-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Halte Bundaran HI</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Berangkat 08:08</p>
+</div>
+<span class="bg-primary-container text-on-primary-container px-2 py-1 rounded text-xs font-bold">TransJakarta</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-medium mb-1">Arah: Blok M</p>
+<p class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">more_vert</span>
+                            Melewati 3 perhentian (12 mnt)
+                        </p>
+<div class="mt-3 pt-3 border-t border-outline-variant">
+<h3 class="font-title-lg text-title-lg text-on-surface">Halte Dukuh Atas 1</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Tiba 08:20</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Transfer UX Card -->
+<div class="flex gap-4 relative mb-2">
+<div class="flex flex-col items-center w-8">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center z-10 border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-size: 18px;">transfer_within_a_station</span>
+</div>
+<div class="w-0.5 h-full dashed-line -mt-2"></div>
+</div>
+<div class="pb-6 pt-1 w-full">
+<div class="bg-secondary-container rounded-lg p-3 shadow-sm border border-secondary">
+<h4 class="font-title-lg text-title-lg text-on-secondary-container flex items-center gap-2">
+<span class="material-symbols-outlined">info</span>
+                            Lanjut ke moda berikutnya
+                        </h4>
+<p class="font-body-md text-body-md text-on-secondary-container mt-1">Jalan kaki ke Stasiun Sudirman. Ikuti rambu integrasi KRL.</p>
+<p class="font-body-md text-body-md text-on-secondary-container font-bold mt-2">Waktu tunggu: ~5 mnt</p>
+</div>
+</div>
+</div>
+<!-- Transit Segment 2 (Train) -->
+<div class="flex gap-4 relative mb-2">
+<div class="flex flex-col items-center w-8">
+<div class="w-8 h-8 rounded-full bg-krl-red flex items-center justify-center z-10 shadow-sm text-on-error">
+<span class="font-label-md text-label-md font-bold">C</span>
+</div>
+<div class="w-1 h-full bg-krl-red -mt-2 rounded-b-sm"></div>
+</div>
+<div class="pb-2 pt-1 w-full">
+<div class="bg-surface rounded-lg border border-outline-variant p-3 shadow-sm mb-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Stasiun Sudirman</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Berangkat 08:30</p>
+</div>
+<span class="bg-error-container text-on-error-container px-2 py-1 rounded text-xs font-bold">KRL Commuter</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-medium mb-1">Arah: Bogor</p>
+<p class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">more_vert</span>
+                            Melewati 2 stasiun (10 mnt)
+                        </p>
+<div class="mt-3 pt-3 border-t border-outline-variant">
+<h3 class="font-title-lg text-title-lg text-on-surface">Stasiun Manggarai</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Tiba 08:40</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Walk to End -->
+<div class="flex gap-4 relative mb-2">
+<div class="flex flex-col items-center w-8">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center z-10 border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-size: 18px;">directions_walk</span>
+</div>
+<div class="w-0.5 h-full dashed-line -mt-2"></div>
+</div>
+<div class="pb-6 pt-1 w-full">
+<p class="font-body-md text-body-md text-on-surface font-medium">Jalan kaki ke Tujuan</p>
+<p class="font-body-md text-body-md text-on-surface-variant">5 mnt (350m)</p>
+</div>
+</div>
+<!-- End Point -->
+<div class="flex gap-4 relative">
+<div class="flex flex-col items-center w-8">
+<div class="w-4 h-4 rounded-full bg-error z-10 mt-1 shadow-sm border-2 border-white"></div>
+</div>
+<div class="w-full pb-8">
+<h3 class="font-title-lg text-title-lg text-on-surface">Tujuan Anda</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">08:45</p>
+</div>
+</div>
+</div>
+<!-- Sticky Action Footer -->
+<div class="p-margin-mobile border-t border-outline-variant bg-surface mt-auto pb-safe">
+<button class="w-full bg-primary text-on-primary font-headline-md text-headline-md h-12 rounded-lg flex items-center justify-center gap-2 hover:bg-primary-fixed-variant transition-colors shadow-sm">
+<span class="material-symbols-outlined">navigation</span>
+                Mulai Navigasi
+            </button>
+</div>
+</div>
+<!-- Script for basic interaction (BottomSheet drag simulation for desktop view logic) -->
+<script>
+        // Simple script to handle bottom sheet state on mobile
+        // In a real app this would use touch events for actual dragging
+        const bottomSheet = document.getElementById('bottom-sheet');
+        const dragHandle = document.getElementById('drag-handle');
+        let isExpanded = false;
+
+        if(dragHandle) {
+            dragHandle.addEventListener('click', () => {
+                if(!isExpanded) {
+                    bottomSheet.style.transform = 'translateY(10%)'; // Just a visual cue, usually would go full screen
+                    bottomSheet.classList.add('h-[90vh]');
+                    bottomSheet.classList.remove('h-[60vh]');
+                } else {
+                    bottomSheet.style.transform = 'translateY(0)';
+                    bottomSheet.classList.remove('h-[90vh]');
+                    bottomSheet.classList.add('h-[60vh]');
+                }
+                isExpanded = !isExpanded;
+            });
+        }
+    </script>
+</body></html>

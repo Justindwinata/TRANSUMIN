@@ -1,0 +1,23 @@
+{
+  "type": "TRANSIT",
+  "mode": "KRL",
+  "route": {
+    "id": "KRL-BGR-JKTKOTA",
+    "short_name": null,
+    "long_name": "Bogor / Depok - Manggarai - Jakarta Kota"
+  },
+  "board": {
+    "name": "Stasiun UI",
+    "lat": -6.3605,
+    "lon": 106.831
+  },
+  "alight": {
+    "name": "Stasiun Juanda",
+    "lat": -6.1668,
+    "lon": 106.8304
+  },
+  "headsign": "Jakarta Kota",
+  "stops_in_between": [],
+  "scheduled": true,
+  "source_status": "REFERENCE_ONLY"
+}

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pencarian Lokasi - Transum-IN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e1e2e8",
+                      "surface-container-low": "#f2f3f9",
+                      "secondary-fixed-dim": "#84d5ca",
+                      "on-primary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "outline": "#737686",
+                      "on-tertiary-container": "#ffece5",
+                      "primary": "#004ac6",
+                      "transjakarta-blue": "#0053db",
+                      "on-background": "#191c20",
+                      "tertiary": "#943700",
+                      "on-error": "#ffffff",
+                      "on-surface": "#191c20",
+                      "primary-fixed": "#dbe1ff",
+                      "on-primary-fixed": "#00174b",
+                      "surface-container": "#eceef3",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#005049",
+                      "krl-red": "#ba1a1a",
+                      "surface-dim": "#cbdbf5",
+                      "on-secondary-fixed": "#00201d",
+                      "inverse-primary": "#b4c5ff",
+                      "surface-container-high": "#e7e8ee",
+                      "surface-bright": "#f8f9ff",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "secondary-fixed": "#a0f1e6",
+                      "on-tertiary-fixed": "#360f00",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "on-secondary": "#ffffff",
+                      "background": "#f8f9ff",
+                      "secondary": "#016a61",
+                      "inverse-on-surface": "#eff0f6",
+                      "surface": "#f8f9ff",
+                      "secondary-container": "#9defe3",
+                      "on-tertiary-fixed-variant": "#7d2d00",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "inverse-surface": "#2e3135",
+                      "error-container": "#ffdad6",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#c3c6d7",
+                      "tertiary-fixed": "#ffdbcd",
+                      "on-primary-container": "#eeefff",
+                      "on-secondary-container": "#0d6f66",
+                      "on-surface-variant": "#434655",
+                      "jaklingko-green": "#006a61",
+                      "primary-container": "#2563eb",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#0053db",
+                      "tertiary-container": "#b44e1a",
+                      "surface-variant": "#e1e2e8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "xs": "4px",
+                      "md": "16px",
+                      "xl": "32px",
+                      "gutter": "12px",
+                      "sm": "8px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "title-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "22px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-sm": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+          .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+          }
+          .material-symbols-outlined.fill-icon {
+            font-variation-settings: 'FILL' 1;
+          }
+          /* Custom Scrollbar for better UI */
+          ::-webkit-scrollbar {
+              width: 6px;
+              height: 6px;
+          }
+          ::-webkit-scrollbar-track {
+              background: transparent;
+          }
+          ::-webkit-scrollbar-thumb {
+              background: #c3c6d7;
+              border-radius: 9999px;
+          }
+          ::-webkit-scrollbar-thumb:hover {
+              background: #737686;
+          }
+      </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md relative overflow-x-hidden">
+<!-- Top Navigation (Mobile/Tablet Top Bar) - From JSON -->
+<header class="bg-surface dark:bg-on-background shadow-sm docked full-width top-0 z-50 transition-colors">
+<div class="flex justify-between items-center px-margin-mobile h-[64px] w-full z-50">
+<!-- Leading: Avatar -->
+<button aria-label="User Profile Avatar" class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden flex items-center justify-center hover:bg-surface-container-high transition-colors focus:outline-none focus:ring-2 focus:ring-primary">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+</button>
+<!-- Headline: Brand -->
+<div class="font-display text-display text-transjakarta-blue dark:text-primary-fixed-dim text-center flex-1">
+                TRANSUM-IN
+            </div>
+<!-- Trailing: Icon -->
+<button aria-label="notifications" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 w-full max-w-md mx-auto pt-4 px-margin-mobile pb-[104px] flex flex-col gap-6 relative z-10">
+<!-- Search Input Container - Level 1 Elevation -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(11,28,48,0.05)] border border-outline-variant focus-within:border-primary focus-within:ring-2 focus-within:ring-primary-fixed transition-all duration-200 p-2 flex items-center gap-3 relative z-20">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors focus:outline-none">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-body-lg font-body-lg text-on-surface placeholder:text-outline p-0 h-[40px]" id="searchInput" placeholder="Mau ke mana hari ini?" type="text" value="Monas"/>
+<button class="p-2 text-on-surface-variant hover:text-error transition-colors focus:outline-none" id="clearSearchBtn">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Search Results Section (Active State) -->
+<section class="flex flex-col gap-4 animate-fade-in-up" id="searchResultsArea">
+<div class="flex justify-between items-center mb-2">
+<h2 class="font-title-lg text-title-lg text-on-surface">Hasil Pencarian</h2>
+<span class="font-label-md text-label-md text-outline">3 ditemukan</span>
+</div>
+<!-- Result Card 1: Landmark -->
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-start gap-4 border border-outline-variant hover:border-primary cursor-pointer transition-all duration-200 hover:shadow-md group">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0 group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="location_on">location_on</span>
+</div>
+<div class="flex-1 min-w-0 flex flex-col justify-center h-12">
+<h3 class="font-headline-md text-headline-md text-on-surface truncate">Monas (Monumen Nasional)</h3>
+<p class="font-body-md text-body-md text-on-surface-variant truncate">Gambir, Jakarta Pusat</p>
+</div>
+<div class="self-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-md text-label-md bg-surface-variant text-on-surface-variant">
+                        Landmark
+                    </span>
+</div>
+</div>
+<!-- Result Card 2: KRL Station -->
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-start gap-4 border border-outline-variant hover:border-krl-red cursor-pointer transition-all duration-200 hover:shadow-md group relative overflow-hidden">
+<!-- Subtle brand accent strip -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-krl-red opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="w-12 h-12 rounded-full bg-error-container/30 flex items-center justify-center flex-shrink-0 group-hover:bg-error-container transition-colors">
+<span class="material-symbols-outlined text-krl-red" data-icon="train">train</span>
+</div>
+<div class="flex-1 min-w-0 flex flex-col justify-center h-12">
+<h3 class="font-headline-md text-headline-md text-on-surface truncate">Stasiun UI</h3>
+<p class="font-body-md text-body-md text-on-surface-variant truncate">KRL Commuter Line - Bogor Line</p>
+</div>
+<div class="self-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-md text-label-md bg-error-container text-krl-red">
+                        Stasiun KRL
+                    </span>
+</div>
+</div>
+<!-- Result Card 3: TransJakarta Shelter -->
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-start gap-4 border border-outline-variant hover:border-transjakarta-blue cursor-pointer transition-all duration-200 hover:shadow-md group relative overflow-hidden">
+<!-- Subtle brand accent strip -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-transjakarta-blue opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-transjakarta-blue group-hover:text-on-primary transition-colors" data-icon="directions_bus">directions_bus</span>
+</div>
+<div class="flex-1 min-w-0 flex flex-col justify-center h-12">
+<h3 class="font-headline-md text-headline-md text-on-surface truncate">Halte Harmoni</h3>
+<p class="font-body-md text-body-md text-on-surface-variant truncate">Koridor 1, 2, 3, 8</p>
+</div>
+<div class="self-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-md text-label-md bg-primary-fixed-dim text-on-primary-fixed-variant">
+                        TransJakarta
+                    </span>
+</div>
+</div>
+<button class="w-full mt-4 py-3 border border-outline-variant rounded-lg font-title-lg text-title-lg text-primary hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+                Lihat di Peta
+            </button>
+</section>
+<!-- Empty / Recent State (Hidden by default in this demo, but structured for logic) -->
+<section class="hidden flex-col gap-6 animate-fade-in" id="emptyStateArea">
+<!-- Map Preview (Ambient) -->
+<div class="w-full h-48 rounded-xl overflow-hidden relative shadow-sm border border-outline-variant">
+<div class="bg-cover bg-center w-full h-full opacity-60" data-alt="A clean, modern, light-mode minimalist map illustration showing a top-down view of a city grid. The map uses soft pastel blues, subtle greys, and crisp white roads. A prominent, glowing indigo location pin marks a central transit hub. The style is highly corporate, vector-based, and highly legible, reflecting a premium urban navigation app aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBkbEtSJMDxAHO0mpp-NMTpAk89VKv314r7DI9W5it-9qlJQ0VP_p4IcsTxq2YHmzNbpfT6jUiFxi_UvraLaZAfGn3ILAVAO5Rt4Sk-G2ll8CBO6GW5oIrzlrC75tViBapx_Hq8fqGQwNG0Hs1g_PASSqB8bJlmPBXYIU9Br3e3Kdv9nlqPV_6GCSG5OcfuxkBXo4gT5GSRhqvnx91CqTiHdcfN1y4qroq9AeDmJAW-qMvzIW8BgxFz')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-bright/80 to-transparent flex items-end p-4">
+<button class="w-full bg-surface-container-lowest/90 backdrop-blur-sm border border-outline-variant py-2.5 rounded-lg flex items-center justify-center gap-2 text-on-surface font-title-lg text-title-lg hover:bg-primary hover:text-on-primary transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="my_location">my_location</span>
+                         Gunakan Lokasi Saat Ini
+                     </button>
+</div>
+</div>
+<!-- Recent Searches -->
+<div>
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-title-lg text-title-lg text-on-surface">Pencarian Terakhir</h2>
+<button class="font-label-md text-label-md text-primary hover:underline focus:outline-none">Hapus Semua</button>
+</div>
+<div class="flex flex-col gap-0 border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest">
+<!-- Recent 1 -->
+<div class="flex items-center gap-4 p-4 border-b border-outline-variant hover:bg-surface-container-low cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-outline" data-icon="history">history</span>
+<div class="flex-1">
+<p class="font-body-md text-body-md text-on-surface font-medium">Stasiun Sudirman</p>
+</div>
+<span class="material-symbols-outlined text-outline hover:text-error transition-colors p-1" data-icon="close">close</span>
+</div>
+<!-- Recent 2 -->
+<div class="flex items-center gap-4 p-4 hover:bg-surface-container-low cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-outline" data-icon="history">history</span>
+<div class="flex-1">
+<p class="font-body-md text-body-md text-on-surface font-medium">Bundaran HI</p>
+</div>
+<span class="material-symbols-outlined text-outline hover:text-error transition-colors p-1" data-icon="close">close</span>
+</div>
+</div>
+</div>
+<!-- Quick Categories (Bento style) -->
+<div>
+<h2 class="font-title-lg text-title-lg text-on-surface mb-4 mt-2">Kategori Cepat</h2>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-outline-variant bg-surface-container-lowest hover:border-primary hover:bg-primary-fixed transition-colors">
+<div class="w-10 h-10 rounded-full bg-primary-fixed-dim flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="train">train</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Stasiun KRL</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-outline-variant bg-surface-container-lowest hover:border-transjakarta-blue hover:bg-primary-fixed transition-colors">
+<div class="w-10 h-10 rounded-full bg-primary-fixed-dim flex items-center justify-center text-transjakarta-blue">
+<span class="material-symbols-outlined" data-icon="directions_bus">directions_bus</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Halte TJ</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar - From JSON -->
+<nav class="fixed bottom-0 left-0 w-full z-50 h-[80px] pb-safe border-t border-outline-variant dark:border-outline shadow-[0_-4px_12px_rgba(11,28,48,0.05)] bg-surface-container-lowest dark:bg-inverse-surface">
+<div class="flex justify-around items-center w-full max-w-md mx-auto h-full">
+<!-- Tab 1: Beranda -->
+<button aria-label="Beranda" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant transition-colors w-16 h-full gap-1">
+<div class="w-12 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+</div>
+<span class="font-label-sm text-label-sm">Beranda</span>
+</button>
+<!-- Tab 2: Perjalanan (ACTIVE - Since we are searching for routes/locations) -->
+<button aria-label="Perjalanan" class="flex flex-col items-center justify-center text-on-primary-container dark:text-primary-fixed transition-colors w-16 h-full gap-1 Active: scale-90 transition-transform duration-200">
+<div class="w-16 h-8 rounded-full flex items-center justify-center bg-primary-container dark:bg-primary-fixed-variant">
+<span class="material-symbols-outlined fill-icon" data-icon="directions_transit">directions_transit</span>
+</div>
+<span class="font-label-sm text-label-sm font-semibold">Perjalanan</span>
+</button>
+<!-- Tab 3: Tersimpan -->
+<button aria-label="Tersimpan" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant transition-colors w-16 h-full gap-1">
+<div class="w-12 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+</div>
+<span class="font-label-sm text-label-sm">Tersimpan</span>
+</button>
+<!-- Tab 4: Notifikasi -->
+<button aria-label="Notifikasi" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant transition-colors w-16 h-full gap-1">
+<div class="w-12 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</div>
+<span class="font-label-sm text-label-sm">Notifikasi</span>
+</button>
+<!-- Tab 5: Profil -->
+<button aria-label="Profil" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant transition-colors w-16 h-full gap-1">
+<div class="w-12 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<span class="font-label-sm text-label-sm">Profil</span>
+</button>
+</div>
+</nav>
+<!-- Simple interaction script to toggle states for demonstration -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const searchResults = document.getElementById('searchResultsArea');
+            const emptyState = document.getElementById('emptyStateArea');
+
+            // Handle clear button
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchInput.focus();
+                toggleStates();
+            });
+
+            // Handle input changes
+            searchInput.addEventListener('input', toggleStates);
+
+            function toggleStates() {
+                if (searchInput.value.trim().length > 0) {
+                    searchResults.classList.remove('hidden');
+                    searchResults.classList.add('flex');
+                    emptyState.classList.add('hidden');
+                    emptyState.classList.remove('flex');
+                } else {
+                    searchResults.classList.add('hidden');
+                    searchResults.classList.remove('flex');
+                    emptyState.classList.remove('hidden');
+                    emptyState.classList.add('flex');
+                }
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detail Stasiun & Halte</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e1e2e8",
+                        "surface-container-low": "#f2f3f9",
+                        "secondary-fixed-dim": "#84d5ca",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#737686",
+                        "on-tertiary-container": "#ffece5",
+                        "primary": "#004ac6",
+                        "transjakarta-blue": "#0053db",
+                        "on-background": "#191c20",
+                        "tertiary": "#943700",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c20",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container": "#eceef3",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005049",
+                        "krl-red": "#ba1a1a",
+                        "surface-dim": "#cbdbf5",
+                        "on-secondary-fixed": "#00201d",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-high": "#e7e8ee",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "secondary-fixed": "#a0f1e6",
+                        "on-tertiary-fixed": "#360f00",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "secondary": "#016a61",
+                        "inverse-on-surface": "#eff0f6",
+                        "surface": "#f8f9ff",
+                        "secondary-container": "#9defe3",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "inverse-surface": "#2e3135",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c3c6d7",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-primary-container": "#eeefff",
+                        "on-secondary-container": "#0d6f66",
+                        "on-surface-variant": "#434655",
+                        "jaklingko-green": "#006a61",
+                        "primary-container": "#2563eb",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#0053db",
+                        "tertiary-container": "#b44e1a",
+                        "surface-variant": "#e1e2e8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "gutter": "12px",
+                        "sm": "8px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "title-lg": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-safe">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-on-background shadow-sm flex justify-between items-center px-margin-mobile h-[64px] w-full z-50 sticky top-0">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors flex items-center justify-center w-10 h-10">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md-mobile text-primary dark:text-primary-fixed-dim font-bold">TRANSUM-IN</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-primary dark:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors p-2 rounded-full flex items-center justify-center w-10 h-10">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto pt-md px-margin-mobile space-y-xl pb-32">
+<!-- KRL Station Details Section -->
+<section class="space-y-md">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="h-48 w-full bg-cover bg-center" data-alt="A modern urban train station facade during daytime. The architecture features clean lines, expansive glass windows, and a wide welcoming entrance. The scene is bright and airy, reflecting a well-maintained and efficient public transport hub. The mood is bustling yet orderly, with a clean corporate modern aesthetic in high-key lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcKTvhiPgG6FsJs4cllf5Da7O1f5aHnlsZa0uefzYRNHSuQzZXUst5rE3aHw9LwTJ46vFu0td31wJeJbzrrzV7oYQW38eCwdm2w9rb-EpvHHUo1RIsMkIM2NvpvJD1FQsTrVqohoiAgKA_wVn6vjnme1W34RvqO2_zLfKhfIrARQG9AgFpNpE6ZMD_lbXKnl1FHPaSWbp2G99B9c2E5MXm-4pwmcbBwezv-bGUuZKAMgFo1CQ4fvHy')"></div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<span class="inline-block px-2 py-1 bg-krl-red text-on-error rounded-DEFAULT font-label-sm text-label-sm mb-xs">KRL Commuter Line</span>
+<h2 class="font-title-lg text-title-lg text-on-surface">Stasiun Sudirman</h2>
+</div>
+<button class="text-primary p-2 rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Jl. Jend. Sudirman, RT.1/RW.3, Menteng, Kota Jakarta Pusat.</p>
+<div class="flex gap-4">
+<button class="flex-1 bg-primary text-on-primary py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 shadow-sm hover:bg-on-primary-fixed-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="directions">directions</span>
+                            Petunjuk Arah
+                        </button>
+<button class="flex-1 border border-primary text-primary py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+                            Lihat Peta
+                        </button>
+</div>
+</div>
+</div>
+<!-- Facilities Grid -->
+<div>
+<h3 class="font-headline-md text-headline-md mb-sm text-on-surface">Fasilitas</h3>
+<div class="grid grid-cols-4 gap-sm">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-sm flex flex-col items-center justify-center text-center gap-1 shadow-sm aspect-square">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="wc">wc</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Toilet</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-sm flex flex-col items-center justify-center text-center gap-1 shadow-sm aspect-square">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="accessible_forward">accessible_forward</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Aksesibel</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-sm flex flex-col items-center justify-center text-center gap-1 shadow-sm aspect-square">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="local_parking">local_parking</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Parkir</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-sm flex flex-col items-center justify-center text-center gap-1 shadow-sm aspect-square">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="restaurant">restaurant</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Kantin</span>
+</div>
+</div>
+</div>
+<!-- Routes -->
+<div>
+<h3 class="font-headline-md text-headline-md mb-sm text-on-surface">Rute Tersedia</h3>
+<div class="space-y-sm">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-[#E52B20] flex items-center justify-center text-white font-bold font-label-md">C</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Cikarang Line</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Menuju Kp. Bandan / Cikarang</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<hr class="border-outline-variant my-xl"/>
+<!-- TransJakarta Stop Details Section -->
+<section class="space-y-md">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-sm">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<span class="inline-block px-2 py-1 bg-transjakarta-blue text-on-primary rounded-DEFAULT font-label-sm text-label-sm mb-xs">TransJakarta</span>
+<h2 class="font-title-lg text-title-lg text-on-surface">Halte Harmoni</h2>
+</div>
+<span class="material-symbols-outlined text-transjakarta-blue" data-icon="directions_bus">directions_bus</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Operator: PT Transportasi Jakarta</p>
+<div class="bg-surface-container rounded-lg p-sm mb-md flex items-start gap-sm">
+<span class="material-symbols-outlined text-outline mt-1" data-icon="info">info</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Halte Harmoni Sentral sementara direlokasi karena pembangunan MRT Fase 2. Harap perhatikan petunjuk arah baru.</p>
+</div>
+</div>
+<!-- TJ Routes Grid -->
+<div>
+<h3 class="font-headline-md text-headline-md mb-sm text-on-surface">Koridor & Arah</h3>
+<div class="grid grid-cols-1 gap-sm">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-[#E52B20] flex items-center justify-center text-white font-bold font-label-md text-center">1</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-on-surface">Blok M - Kota</h4>
+<div class="flex justify-between mt-1">
+<span class="font-label-sm text-label-sm text-outline">Arah Kota</span>
+<span class="font-label-sm text-label-sm text-jaklingko-green font-bold">5 mnt</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-[#0066B3] flex items-center justify-center text-white font-bold font-label-md text-center">2</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-on-surface">Pulo Gadung - Harmoni</h4>
+<div class="flex justify-between mt-1">
+<span class="font-label-sm text-label-sm text-outline">Arah Pulo Gadung</span>
+<span class="font-label-sm text-label-sm text-jaklingko-green font-bold">12 mnt</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-sm flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-[#FDB813] flex items-center justify-center text-[#1A1A1A] font-bold font-label-md text-center">3</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-on-surface">Kalideres - Bundaran HI</h4>
+<div class="flex justify-between mt-1">
+<span class="font-label-sm text-label-sm text-outline">Arah Bundaran HI</span>
+<span class="font-label-sm text-label-sm text-jaklingko-green font-bold">2 mnt</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Map Preview -->
+<div>
+<h3 class="font-headline-md text-headline-md mb-sm text-on-surface">Lokasi Sekitar</h3>
+<div class="rounded-xl overflow-hidden border border-outline-variant shadow-sm relative h-48 bg-surface-container-highest flex items-center justify-center" data-location="Jakarta" style="">
+<img class="absolute inset-0 w-full h-full object-cover opacity-80" data-alt="A stylized overhead map of a dense urban area in a modern corporate style. The map features clean lines, light background colors with subtle blue and grey accents for roads and transit lines. Several circular nodes indicate stations and stops. The lighting is soft and neutral, typical of a high-end map interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcRdIsLqD4TisI7n1ty-SB1v6c-uNvTT6iZ3rkQLk-wVaseD8xrAp2HHEX3oembVPLnS5qynGZgeQslg9SHR07cNj3JCLuW-97aEFQJnXeWrOxc0kYEQLpEVZO_I6ur5SyE9PPrZIj1FpSs2W6LpwWYb2wrtlqECDOfritVw7oh2IAvMPSiAy_eODgTMCvolRRfHgsYwR8PYZl2g1A6FyGda_KLZ3fIPthIwE1rVZXfx5U4DCuUd4v"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent"></div>
+<button class="relative z-10 bg-surface text-primary px-4 py-2 rounded-full font-label-md text-label-md shadow-md border border-outline-variant flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="my_location">my_location</span>
+                        Buka Peta Penuh
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-[0_-4px_12px_rgba(11,28,48,0.05)] fixed bottom-0 left-0 w-full z-50 h-[80px] pb-safe hidden md:hidden">
+<div class="flex justify-around items-center w-full max-w-md mx-auto h-full px-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant w-16 rounded-xl transition-colors py-1" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Beranda</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-xl px-4 py-1 scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="directions_transit">directions_transit</span>
+<span class="font-label-sm text-label-sm">Perjalanan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant w-16 rounded-xl transition-colors py-1" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="bookmark">bookmark</span>
+<span class="font-label-sm text-label-sm">Tersimpan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant w-16 rounded-xl transition-colors py-1" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="notifications">notifications</span>
+<span class="font-label-sm text-label-sm">Notifikasi</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant w-16 rounded-xl transition-colors py-1" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profil</span>
+</a>
+</div>
+</nav>
+<!-- Desktop Navigation Stand-in (Since Bottom Nav is hidden on md+) -->
+<nav class="hidden md:flex bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-[0_-4px_12px_rgba(11,28,48,0.05)] fixed bottom-0 left-0 w-full z-50 h-[80px] pb-safe justify-center">
+<div class="flex justify-center gap-8 items-center w-full max-w-4xl mx-auto h-full px-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant w-20 rounded-xl transition-colors py-1" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Beranda</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-xl px-6 py-2 scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="directions_transit">directions_transit</span>
+<span class="font-label-sm text-label-sm">Perjalanan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant w-20 rounded-xl transition-colors py-1" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="bookmark">bookmark</span>
+<span class="font-label-sm text-label-sm">Tersimpan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant w-20 rounded-xl transition-colors py-1" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="notifications">notifications</span>
+<span class="font-label-sm text-label-sm">Notifikasi</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant w-20 rounded-xl transition-colors py-1" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profil</span>
+</a>
+</div>
+</nav>
+</body></html>

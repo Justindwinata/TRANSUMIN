@@ -1,0 +1,331 @@
+{
+  "metadata": {
+    "name": "TRANSUM-IN transit reference seed",
+    "scope": "Jabodetabek MVP",
+    "generated_at": "2026-08-21",
+    "status": "reference_only",
+    "note": "Route facts must be revalidated from official operator sources before production use."
+  },
+  "sources": [
+    {
+      "name": "TransJakarta route directory",
+      "url": "https://transjakarta.co.id/rute",
+      "checked_at": "2026-08-21",
+      "authority": "official",
+      "scope": [
+        "TransJakarta",
+        "Mikrotrans",
+        "Transjabodetabek"
+      ]
+    },
+    {
+      "name": "KAI Commuter service information",
+      "url": "https://www.commuterline.id/",
+      "checked_at": "2026-08-21",
+      "authority": "official",
+      "scope": [
+        "KRL"
+      ]
+    },
+    {
+      "name": "KAI Commuter route map / guide",
+      "url": "https://commuterline.id/files/download/documents/Pedoman-Naik-KRL-KAI-Commuter_compressed.pdf",
+      "checked_at": "2026-08-21",
+      "authority": "official",
+      "scope": [
+        "KRL"
+      ]
+    },
+    {
+      "name": "Jakarta Government — JakLingko",
+      "url": "https://www.jakarta.go.id/jaklingko",
+      "checked_at": "2026-08-21",
+      "authority": "official",
+      "scope": [
+        "integration_branding",
+        "payment_integration"
+      ]
+    },
+    {
+      "name": "TransJakarta GTFS feed endpoint",
+      "url": "https://gtfs.transjakarta.co.id/files/file_gtfs.zip",
+      "checked_at": "2026-08-21",
+      "authority": "official_operator_endpoint",
+      "scope": [
+        "TransJakarta GTFS"
+      ],
+      "note": "Use the feed itself as an ingestion source; validate feed contents and validity dates at ingestion time."
+    }
+  ],
+  "service_types": [
+    {
+      "id": "KRL",
+      "name": "KRL Commuter Line Jabodetabek",
+      "operator": "KAI Commuter",
+      "mvp": true
+    },
+    {
+      "id": "TRANSJAKARTA_BRT",
+      "name": "TransJakarta BRT",
+      "operator": "PT Transportasi Jakarta",
+      "mvp": true
+    },
+    {
+      "id": "TRANSJAKARTA_FEEDER",
+      "name": "TransJakarta feeder",
+      "operator": "PT Transportasi Jakarta",
+      "mvp": true
+    },
+    {
+      "id": "MIKROTRANS",
+      "name": "Mikrotrans",
+      "operator": "PT Transportasi Jakarta",
+      "integration_brand": "JakLingko ecosystem",
+      "mvp": true
+    },
+    {
+      "id": "WALK",
+      "name": "Jalan Kaki",
+      "operator": null,
+      "mvp": true
+    }
+  ],
+  "transjakarta_reference_routes": [
+    {
+      "route_id": "TJ-1",
+      "service_type": "TRANSJAKARTA_BRT",
+      "name": "Blok M - Kota",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "TJ-2",
+      "service_type": "TRANSJAKARTA_BRT",
+      "name": "Pulo Gadung - Monumen Nasional",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "TJ-3",
+      "service_type": "TRANSJAKARTA_BRT",
+      "name": "Kalideres - Monumen Nasional via Veteran",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "TJ-5C",
+      "service_type": "TRANSJAKARTA_BRT",
+      "name": "Cililitan - Juanda",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "TJ-6A",
+      "service_type": "TRANSJAKARTA_FEEDER",
+      "name": "Ragunan - Balai Kota via Kuningan",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "TJ-6B",
+      "service_type": "TRANSJAKARTA_FEEDER",
+      "name": "Ragunan - Balai Kota via Semanggi",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "TJ-7F",
+      "service_type": "TRANSJAKARTA_FEEDER",
+      "name": "Kampung Rambutan - Juanda via Cempaka Putih",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "TJ-D21",
+      "service_type": "TRANSJAKARTA_FEEDER",
+      "name": "Universitas Indonesia - Lebak Bulus",
+      "source": "official_transjakarta",
+      "cross_jabodetabek": true
+    },
+    {
+      "route_id": "TJ-B25",
+      "service_type": "TRANSJAKARTA_FEEDER",
+      "name": "Bekasi - Dukuh Atas",
+      "source": "official_transjakarta",
+      "cross_jabodetabek": true
+    },
+    {
+      "route_id": "TJ-B51",
+      "service_type": "TRANSJAKARTA_FEEDER",
+      "name": "Cikarang - Cawang",
+      "source": "official_transjakarta",
+      "cross_jabodetabek": true
+    }
+  ],
+  "mikrotrans_reference_routes": [
+    {
+      "route_id": "JAK01",
+      "name": "Tanjung Priok - Plumpang",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "JAK02",
+      "name": "Kampung Melayu - Duren Sawit",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "JAK03",
+      "name": "Lebak Bulus - Andara",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "JAK04",
+      "name": "Grogol - Tubagus Angke",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "JAK05",
+      "name": "Semper - Rorotan",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "JAK06",
+      "name": "Kampung Rambutan - Pondok Gede",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "JAK18",
+      "name": "Kalibata - Kuningan",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "JAK33",
+      "name": "Pulo Gadung - Kota",
+      "source": "official_transjakarta"
+    },
+    {
+      "route_id": "JAK44",
+      "name": "Andara - Stasiun Universitas Pancasila",
+      "source": "official_transjakarta"
+    }
+  ],
+  "krl_service_patterns": [
+    {
+      "pattern_id": "KRL-BGR-JKTKOTA",
+      "name": "Bogor / Depok - Manggarai - Jakarta Kota",
+      "source": "official_kai_commuter_route_map"
+    },
+    {
+      "pattern_id": "KRL-CKR-JKTKOTA",
+      "name": "Cikarang - Bekasi - Jatinegara - Manggarai - Jakarta Kota",
+      "source": "official_kai_commuter_route_map"
+    },
+    {
+      "pattern_id": "KRL-TNG-DURI",
+      "name": "Tangerang - Duri",
+      "source": "official_kai_commuter_route_map"
+    },
+    {
+      "pattern_id": "KRL-BGR-JTG",
+      "name": "Bogor / Depok - Tanah Abang - Pasar Senen - Jatinegara",
+      "source": "official_kai_commuter_route_map"
+    },
+    {
+      "pattern_id": "KRL-RKS-TNA",
+      "name": "Rangkasbitung / Maja / Parung Panjang / Serpong - Tanah Abang",
+      "source": "official_kai_commuter_route_map"
+    },
+    {
+      "pattern_id": "KRL-TJP-JKTKOTA",
+      "name": "Tanjung Priok - Jakarta Kota",
+      "source": "official_kai_commuter_route_map"
+    }
+  ],
+  "important_hubs": [
+    {
+      "name": "Manggarai",
+      "type": "station",
+      "role": "major_rail_interchange",
+      "seed": true
+    },
+    {
+      "name": "Jakarta Kota",
+      "type": "station",
+      "role": "rail_and_transit_hub",
+      "seed": true
+    },
+    {
+      "name": "Tanah Abang",
+      "type": "station",
+      "role": "rail_hub",
+      "seed": true
+    },
+    {
+      "name": "Duri",
+      "type": "station",
+      "role": "rail_hub",
+      "seed": true
+    },
+    {
+      "name": "Juanda",
+      "type": "station",
+      "role": "rail_and_transit_connection",
+      "seed": true
+    },
+    {
+      "name": "Stasiun Universitas Indonesia",
+      "type": "station",
+      "role": "rail_and_jabodetabek_connection",
+      "seed": true
+    },
+    {
+      "name": "Blok M",
+      "type": "transit_hub",
+      "role": "TransJakarta_hub",
+      "seed": true
+    },
+    {
+      "name": "Monumen Nasional",
+      "type": "transit_hub",
+      "role": "destination_reference",
+      "seed": true
+    },
+    {
+      "name": "Bundaran HI",
+      "type": "transit_hub",
+      "role": "destination_reference",
+      "seed": true
+    },
+    {
+      "name": "Kampung Melayu",
+      "type": "transit_hub",
+      "role": "TransJakarta_hub",
+      "seed": true
+    },
+    {
+      "name": "Kuningan",
+      "type": "transit_hub",
+      "role": "TransJakarta_hub",
+      "seed": true
+    }
+  ],
+  "integration_scenarios": [
+    {
+      "id": "S1",
+      "name": "KRL only",
+      "example": "station_to_station",
+      "status": "test_scenario_only"
+    },
+    {
+      "id": "S2",
+      "name": "KRL + TransJakarta",
+      "example": "rail_to_bus",
+      "status": "test_scenario_only"
+    },
+    {
+      "id": "S3",
+      "name": "KRL + Mikrotrans",
+      "example": "rail_to_mikrotrans",
+      "status": "test_scenario_only"
+    },
+    {
+      "id": "S4",
+      "name": "Walking + transit + walking",
+      "example": "first_mile_last_mile",
+      "status": "test_scenario_only"
+    }
+  ]
+}

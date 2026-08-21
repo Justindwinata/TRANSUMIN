@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html lang="id" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profil &amp; Pengaturan - TRANSUM-IN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e1e2e8",
+                        "surface-container-low": "#f2f3f9",
+                        "secondary-fixed-dim": "#84d5ca",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#737686",
+                        "on-tertiary-container": "#ffece5",
+                        "primary": "#2563eb",
+                        "transjakarta-blue": "#0053db",
+                        "on-background": "#191c20",
+                        "tertiary": "#943700",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c20",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container": "#eceef3",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005049",
+                        "krl-red": "#ba1a1a",
+                        "surface-dim": "#cbdbf5",
+                        "on-secondary-fixed": "#00201d",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-high": "#e7e8ee",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "secondary-fixed": "#a0f1e6",
+                        "on-tertiary-fixed": "#360f00",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "secondary": "#016a61",
+                        "inverse-on-surface": "#eff0f6",
+                        "surface": "#f8f9ff",
+                        "secondary-container": "#9defe3",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "inverse-surface": "#2e3135",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c3c6d7",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-primary-container": "#eeefff",
+                        "on-secondary-container": "#0d6f66",
+                        "on-surface-variant": "#434655",
+                        "jaklingko-green": "#006a61",
+                        "primary-container": "#2563eb",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#0053db",
+                        "tertiary-container": "#b44e1a",
+                        "surface-variant": "#e1e2e8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "16px",
+                        "3xl": "24px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "gutter": "12px",
+                        "sm": "8px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9ff; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
+        .toggle-checkbox:checked { right: 0; border-color: #2563eb; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #2563eb; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-[104px]">
+<!-- TopAppBar -->
+<header class="bg-surface shadow-sm sticky top-0 z-40 w-full">
+<div class="flex justify-between items-center px-margin-mobile h-[64px] w-full z-50">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">TRANSUM-IN</h1>
+<div class="h-10 w-10 rounded-full overflow-hidden bg-surface-container-high border-2 border-surface flex items-center justify-center">
+<span aria-hidden="true" class="material-symbols-outlined text-outline">person</span>
+</div>
+</div>
+</header>
+<main class="max-w-md mx-auto p-margin-mobile space-y-md md:max-w-2xl md:mt-lg">
+<!-- Profile Summary Card -->
+<section class="bg-surface-container-lowest rounded-3xl p-md border border-outline-variant shadow-sm flex items-center gap-md relative overflow-hidden">
+<!-- Background Graphic -->
+<div aria-hidden="true" class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 pointer-events-none"></div>
+<img alt="Budi Santoso profil" class="w-16 h-16 rounded-full object-cover border border-outline-variant shadow-sm z-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDB2wUM4PEbmVxOqQ7thD4nT0DPFwSkdITA3VuClXRhxF-dzor63hU8_qxQUy1rwOWfmvOIUKNRahgLucljW9AXrwYNMGQ2XHaC_K1ou570IsxwFnUakBXeldjUCTD-E9MjVuibb5EWmQcQvhtkr2yNHmIGZ6jPZzy40kIQSaMw-Jwoflcx2J-g3tHpXoH3aj_kuwRy-DKKYOUuFRs4_O9mmHlM2OFW0OvxL-XsrUbKWmHcwUMyw5o0"/>
+<div class="z-10 flex-1">
+<h2 class="font-title-lg text-title-lg text-on-surface">Budi Santoso</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">budi.santoso@email.com</p>
+<div class="mt-xs inline-flex items-center gap-xs bg-primary-fixed text-on-primary-fixed px-sm py-xs rounded-full">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]">stars</span>
+<span class="font-label-sm text-label-sm">Commuter Pro</span>
+</div>
+</div>
+<button aria-label="Edit Profil" class="z-10 p-sm text-primary hover:bg-surface-container rounded-full transition-colors min-w-[48px] min-h-[48px] flex items-center justify-center">
+<span aria-hidden="true" class="material-symbols-outlined">edit</span>
+</button>
+</section>
+<!-- Akun Settings -->
+<section class="bg-surface-container-lowest rounded-3xl border border-outline-variant shadow-sm overflow-hidden">
+<h3 class="font-label-md text-label-md text-primary uppercase px-md pt-md pb-xs">Akun</h3>
+<ul class="divide-y divide-surface-variant">
+<li class="">
+<a aria-label="Buka Informasi Pribadi" class="flex items-center justify-between p-md hover:bg-surface-container-low transition-colors group min-h-[48px]" href="#">
+<div class="flex items-center gap-md">
+<span aria-hidden="true" class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">account_circle</span>
+<span class="font-body-lg text-body-lg text-on-surface">Informasi Pribadi</span>
+</div>
+<span aria-hidden="true" class="material-symbols-outlined text-outline-variant group-hover:text-primary">chevron_right</span>
+</a>
+</li>
+</ul>
+</section>
+<!-- Preferensi Perjalanan -->
+<section class="bg-surface-container-lowest rounded-3xl border border-outline-variant shadow-sm overflow-hidden">
+<h3 class="font-label-md text-label-md text-primary uppercase px-md pt-md pb-xs">Preferensi Perjalanan</h3>
+<!-- Optimization Preference -->
+<div class="p-md border-b border-surface-variant">
+<label class="font-body-lg text-body-lg text-on-surface block mb-sm">Optimasi Rute Default</label>
+<div class="grid grid-cols-2 gap-sm">
+<label class="flex flex-col p-sm border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all min-h-[48px]">
+<input checked="" class="sr-only" name="route_opt" type="radio" value="tercepat"/>
+<span class="font-label-md text-label-md text-primary mb-xs">Tercepat</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Waktu tempuh tersingkat</span>
+</label>
+<label class="flex flex-col p-sm border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all min-h-[48px]">
+<input class="sr-only" name="route_opt" type="radio" value="minim_jalan"/>
+<span class="font-label-md text-label-md text-jaklingko-green mb-xs">Minim Jalan</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Kurangi jalan kaki</span>
+</label>
+<label class="flex flex-col p-sm border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all min-h-[48px]">
+<input class="sr-only" name="route_opt" type="radio" value="minim_transit"/>
+<span class="font-label-md text-label-md text-transjakarta-blue mb-xs">Minim Transit</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Paling sedikit ganti mode</span>
+</label>
+<label class="flex flex-col p-sm border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all min-h-[48px]">
+<input class="sr-only" name="route_opt" type="radio" value="paling_murah"/>
+<span class="font-label-md text-label-md text-tertiary mb-xs">Paling Murah</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Biaya paling rendah</span>
+</label>
+</div>
+</div>
+<!-- Mode Selection -->
+<div class="p-md border-b border-surface-variant">
+<label class="font-body-lg text-body-lg text-on-surface block mb-sm">Mode Transportasi</label>
+<div class="flex flex-wrap gap-xs">
+<label class="inline-flex items-center gap-xs px-sm py-xs border border-outline-variant rounded-full cursor-pointer has-[:checked]:bg-surface-tint has-[:checked]:text-on-primary has-[:checked]:border-surface-tint transition-colors min-h-[48px]">
+<input checked="" class="sr-only" type="checkbox"/>
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">directions_bus</span>
+<span class="font-label-sm text-label-sm">TransJakarta</span>
+</label>
+<label class="inline-flex items-center gap-xs px-sm py-xs border border-outline-variant rounded-full cursor-pointer has-[:checked]:bg-krl-red has-[:checked]:text-on-primary has-[:checked]:border-krl-red transition-colors min-h-[48px]">
+<input checked="" class="sr-only" type="checkbox"/>
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">train</span>
+<span class="font-label-sm text-label-sm">KRL</span>
+</label>
+<label class="inline-flex items-center gap-xs px-sm py-xs border border-outline-variant rounded-full cursor-pointer has-[:checked]:bg-jaklingko-green has-[:checked]:text-on-primary has-[:checked]:border-jaklingko-green transition-colors min-h-[48px]">
+<input checked="" class="sr-only" type="checkbox"/>
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">directions_car</span>
+<span class="font-label-sm text-label-sm">Mikrotrans</span>
+</label>
+</div>
+</div>
+<!-- Walking Tolerance -->
+<div class="p-md min-h-[48px]">
+<div class="flex justify-between items-center mb-sm">
+<label class="font-body-lg text-body-lg text-on-surface" for="walk-range">Toleransi Jalan Kaki</label>
+<span class="font-label-md text-label-md text-primary" id="walk-range-val">800m</span>
+</div>
+<input aria-labelledby="walk-range walk-range-val" class="w-full accent-primary h-2 bg-surface-variant rounded-lg appearance-none cursor-pointer" id="walk-range" max="2000" min="100" step="100" type="range" value="800"/>
+<div aria-hidden="true" class="flex justify-between mt-xs font-label-sm text-label-sm text-outline">
+<span class="">100m</span>
+<span class="">2km</span>
+</div>
+</div>
+</section>
+<!-- Pengaturan Umum -->
+<section class="bg-surface-container-lowest rounded-3xl border border-outline-variant shadow-sm overflow-hidden">
+<h3 class="font-label-md text-label-md text-primary uppercase px-md pt-md pb-xs">Umum</h3>
+<ul class="divide-y divide-surface-variant">
+<!-- Notifikasi Toggle -->
+<li class="flex items-center justify-between p-md min-h-[48px]">
+<div class="flex items-center gap-md">
+<span aria-hidden="true" class="material-symbols-outlined text-outline">notifications</span>
+<div>
+<span class="font-body-lg text-body-lg text-on-surface block" id="label-notif">Notifikasi</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Pembaruan jadwal &amp; gangguan rute</span>
+</div>
+</div>
+<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+<input aria-labelledby="label-notif" checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-outline-variant right-0 z-10 transition-all duration-300" id="toggle_notif" name="toggle_notif" type="checkbox"/>
+<label aria-hidden="true" class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-colors duration-300" for="toggle_notif"></label>
+</div>
+</li>
+<!-- Aksesibilitas Toggle -->
+<li class="flex items-center justify-between p-md min-h-[48px]">
+<div class="flex items-center gap-md">
+<span aria-hidden="true" class="material-symbols-outlined text-outline">accessible</span>
+<div>
+<span class="font-body-lg text-body-lg text-on-surface block" id="label-access">Aksesibilitas</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Prioritaskan rute ramah kursi roda</span>
+</div>
+</div>
+<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+<input aria-labelledby="label-access" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-outline-variant -left-1 z-10 transition-all duration-300" id="toggle_access" name="toggle_access" type="checkbox"/>
+<label aria-hidden="true" class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-colors duration-300" for="toggle_access"></label>
+</div>
+</li>
+<!-- Bahasa -->
+<li class="">
+<a aria-label="Ubah Bahasa" class="flex items-center justify-between p-md hover:bg-surface-container-low transition-colors group min-h-[48px]" href="#">
+<div class="flex items-center gap-md">
+<span aria-hidden="true" class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">language</span>
+<span class="font-body-lg text-body-lg text-on-surface">Bahasa</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="font-body-md text-body-md text-on-surface-variant">Bahasa Indonesia</span>
+<span aria-hidden="true" class="material-symbols-outlined text-outline-variant group-hover:text-primary">chevron_right</span>
+</div>
+</a>
+</li>
+<!-- Keamanan -->
+<li class="">
+<a aria-label="Pengaturan Keamanan" class="flex items-center justify-between p-md hover:bg-surface-container-low transition-colors group min-h-[48px]" href="#">
+<div class="flex items-center gap-md">
+<span aria-hidden="true" class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">security</span>
+<span class="font-body-lg text-body-lg text-on-surface">Keamanan</span>
+</div>
+<span aria-hidden="true" class="material-symbols-outlined text-outline-variant group-hover:text-primary">chevron_right</span>
+</a>
+</li>
+<!-- Privasi -->
+<li class="">
+<a aria-label="Pengaturan Privasi" class="flex items-center justify-between p-md hover:bg-surface-container-low transition-colors group min-h-[48px]" href="#">
+<div class="flex items-center gap-md">
+<span aria-hidden="true" class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">privacy_tip</span>
+<span class="font-body-lg text-body-lg text-on-surface">Privasi</span>
+</div>
+<span aria-hidden="true" class="material-symbols-outlined text-outline-variant group-hover:text-primary">chevron_right</span>
+</a>
+</li>
+</ul>
+</section>
+<!-- Logout Action -->
+<button aria-label="Keluar dari akun" class="w-full flex items-center justify-center gap-sm p-md rounded-2xl border border-error text-error hover:bg-error-container/50 transition-colors bg-surface-container-lowest font-headline-md text-headline-md min-h-[48px]">
+<span aria-hidden="true" class="material-symbols-outlined" data-weight="fill">logout</span>
+            Keluar
+        </button>
+<p class="text-center font-label-sm text-label-sm text-outline mt-lg">TRANSUM-IN v2.4.1</p>
+</main>
+<!-- BottomNavBar JSON Render -->
+<nav class="fixed bottom-0 left-0 w-full z-50 h-[80px] pb-safe bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-[0_-4px_12px_rgba(11,28,48,0.05)] md:hidden">
+<div class="flex justify-around items-center w-full max-w-md mx-auto h-full px-sm">
+<a aria-label="Beranda" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant rounded-xl p-2 transition-colors w-16 min-h-[48px]" href="#">
+<span aria-hidden="true" class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm mt-1">Beranda</span>
+</a>
+<a aria-label="Perjalanan" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant rounded-xl p-2 transition-colors w-16 min-h-[48px]" href="#">
+<span aria-hidden="true" class="material-symbols-outlined">directions_transit</span>
+<span class="font-label-sm text-label-sm mt-1">Perjalanan</span>
+</a>
+<a aria-label="Tersimpan" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant rounded-xl p-2 transition-colors w-16 min-h-[48px]" href="#">
+<span aria-hidden="true" class="material-symbols-outlined">bookmark</span>
+<span class="font-label-sm text-label-sm mt-1">Tersimpan</span>
+</a>
+<a aria-label="Notifikasi" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-variant rounded-xl p-2 transition-colors w-16 min-h-[48px]" href="#">
+<span aria-hidden="true" class="material-symbols-outlined">notifications</span>
+<span class="font-label-sm text-label-sm mt-1">Notifikasi</span>
+</a>
+<!-- Active State Profile -->
+<a aria-label="Profil saat ini aktif" class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-full px-4 py-1 scale-90 transition-transform duration-200 min-h-[48px]" href="#">
+<span aria-hidden="true" class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profil</span>
+</a>
+</div>
+</nav>
+<script>
+        // Checkbox interaction script for visual feedback
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if(this.id.startsWith('toggle')) {
+                    const label = this.nextElementSibling;
+                    if(this.checked) {
+                        this.style.right = '0';
+                        this.style.left = 'auto';
+                        this.style.borderColor = '#2563eb';
+                        label.style.backgroundColor = '#2563eb';
+                    } else {
+                        this.style.left = '-0.25rem';
+                        this.style.right = 'auto';
+                        this.style.borderColor = '#c3c6d7';
+                        label.style.backgroundColor = '#e1e2e8';
+                    }
+                }
+            });
+        });
+    </script>
+</body></html>

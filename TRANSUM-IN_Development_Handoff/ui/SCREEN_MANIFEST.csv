@@ -1,0 +1,15 @@
+id,source_folder,html,image,dimensions,status
+01_welcome,welcome_splash_revised,screens/01_welcome/screen.html,screens/01_welcome/screen.png,706x1600,canonical visual reference
+02_auth_login,login_register_revised,screens/02_auth_login/screen.html,screens/02_auth_login/screen.png,706x1600,canonical visual reference
+03_onboarding,onboarding_revised,screens/03_onboarding/screen.html,screens/03_onboarding/screen.png,706x1600,canonical visual reference
+04_home,beranda_final_source_of_truth,screens/04_home/screen.html,screens/04_home/screen.png,780x1580,canonical visual reference
+05_search,location_search_results,screens/05_search/screen.html,screens/05_search/screen.png,706x1600,canonical visual reference
+06_map_picker,pilih_di_peta,screens/06_map_picker/screen.html,screens/06_map_picker/screen.png,706x1600,canonical visual reference
+07_route_options,opsi_rute_final_source_of_truth,screens/07_route_options/screen.html,screens/07_route_options/screen.png,780x2116,canonical visual reference
+08_route_detail,route_detail_map_revised,screens/08_route_detail/screen.html,screens/08_route_detail/screen.png,706x1600,canonical visual reference
+09_active_trip,perjalanan_aktif_final_source_of_truth,screens/09_active_trip/screen.html,screens/09_active_trip/screen.png,780x2172,canonical visual reference
+10_trips,perjalanan_final_standard,screens/10_trips/screen.html,screens/10_trips/screen.png,567x1600,canonical visual reference
+11_station_stop_detail,station_stop_details,screens/11_station_stop_detail/screen.html,screens/11_station_stop_detail/screen.png,369x1600,canonical visual reference
+12_profile,profil_final_source_of_truth,screens/12_profile/screen.html,screens/12_profile/screen.png,780x2516,canonical visual reference
+13_no_nearby_transit,no_nearby_transit_final_source_of_truth,screens/13_no_nearby_transit/screen.html,screens/13_no_nearby_transit/screen.png,706x1600,canonical visual reference
+14_system_states,system_error_states_revised,screens/14_system_states/screen.html,screens/14_system_states/screen.png,408x1600,canonical visual reference

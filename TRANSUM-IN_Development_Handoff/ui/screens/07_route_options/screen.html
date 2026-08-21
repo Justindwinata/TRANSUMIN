@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html lang="id" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Opsi Rute - TRANSUM-IN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e1e2e8",
+                      "surface-container-low": "#f2f3f9",
+                      "secondary-fixed-dim": "#84d5ca",
+                      "on-primary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "outline": "#737686",
+                      "on-tertiary-container": "#ffece5",
+                      "primary": "#2563EB",
+                      "transjakarta-blue": "#0053db",
+                      "on-background": "#191c20",
+                      "tertiary": "#943700",
+                      "on-error": "#ffffff",
+                      "on-surface": "#191c20",
+                      "primary-fixed": "#dbe1ff",
+                      "on-primary-fixed": "#00174b",
+                      "surface-container": "#eceef3",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#005049",
+                      "krl-red": "#ba1a1a",
+                      "surface-dim": "#cbdbf5",
+                      "on-secondary-fixed": "#00201d",
+                      "inverse-primary": "#b4c5ff",
+                      "surface-container-high": "#e7e8ee",
+                      "surface-bright": "#f8f9ff",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "secondary-fixed": "#a0f1e6",
+                      "on-tertiary-fixed": "#360f00",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "on-secondary": "#ffffff",
+                      "background": "#f8f9ff",
+                      "secondary": "#016a61",
+                      "inverse-on-surface": "#eff0f6",
+                      "surface": "#f8f9ff",
+                      "secondary-container": "#9defe3",
+                      "on-tertiary-fixed-variant": "#7d2d00",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "inverse-surface": "#2e3135",
+                      "error-container": "#ffdad6",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#c3c6d7",
+                      "tertiary-fixed": "#ffdbcd",
+                      "on-primary-container": "#eeefff",
+                      "on-secondary-container": "#0d6f66",
+                      "on-surface-variant": "#434655",
+                      "jaklingko-green": "#006a61",
+                      "primary-container": "#2563eb",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#0053db",
+                      "tertiary-container": "#b44e1a",
+                      "surface-variant": "#e1e2e8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "2xl": "1.5rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "xs": "4px",
+                      "md": "16px",
+                      "xl": "32px",
+                      "gutter": "12px",
+                      "sm": "8px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "title-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "22px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-sm": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #f8f9ff;
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="text-on-background font-body-md antialiased pb-[104px]">
+<!-- Header (Search Context) -->
+<header class="bg-surface shadow-sm sticky top-0 z-40"><div class="px-margin-mobile pt-2 text-center"><span class="font-label-md text-label-md text-primary tracking-widest uppercase">TRANSUM-IN</span></div>
+<div class="px-margin-mobile pt-lg pb-md flex items-center gap-md">
+<button aria-label="Kembali" class="w-12 h-12 flex items-center justify-center -ml-2 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">arrow_back</span>
+</button>
+<div class="flex-1">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px] text-transjakarta-blue">my_location</span>
+<span class="font-title-lg text-title-lg text-on-surface truncate">Stasiun Sudirman</span>
+</div>
+<div class="flex items-center gap-sm mt-1">
+<span class="material-symbols-outlined text-[16px] text-krl-red">location_on</span>
+<span class="font-title-lg text-title-lg text-on-surface truncate">Blok M Plaza</span>
+</div>
+</div>
+<button aria-label="Tukar Rute" class="w-12 h-12 flex items-center justify-center -mr-2 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">swap_vert</span>
+</button>
+</div>
+<!-- Time Filter -->
+<div class="px-margin-mobile pb-md flex gap-sm overflow-x-auto no-scrollbar">
+<button class="flex items-center gap-2 px-4 h-12 bg-primary-container text-on-primary-container rounded-[16px] font-label-md text-label-md whitespace-nowrap">
+                Berangkat Sekarang <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<button aria-label="Opsi Filter" class="flex items-center gap-2 px-4 h-12 border border-outline-variant rounded-[16px] font-label-md text-label-md text-on-surface whitespace-nowrap">
+                Opsi <span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+</div><div class="px-margin-mobile pb-md flex gap-sm overflow-x-auto no-scrollbar border-t border-outline-variant pt-4"><button class="px-4 py-2 bg-surface-container-high text-on-surface rounded-full text-label-sm font-label-sm whitespace-nowrap">Semua</button><button class="px-4 py-2 border border-outline-variant text-on-surface-variant rounded-full text-label-sm font-label-sm whitespace-nowrap">KRL</button><button class="px-4 py-2 border border-outline-variant text-on-surface-variant rounded-full text-label-sm font-label-sm whitespace-nowrap">TransJakarta</button><button class="px-4 py-2 border border-outline-variant text-on-surface-variant rounded-full text-label-sm font-label-sm whitespace-nowrap">JakLingko</button></div>
+</header>
+<main class="p-margin-mobile space-y-md">
+<div class="text-center font-body-md text-body-md text-on-surface-variant mb-4">Contoh perjalanan</div>
+<!-- Route Card 1: Tercepat -->
+<div class="bg-surface rounded-2xl p-md border border-outline-variant shadow-[0_2px_8px_rgba(11,28,48,0.04)] relative overflow-hidden">
+<div class="mb-2">
+<div class="bg-primary text-on-primary px-2 py-1 rounded-[4px] inline-block font-label-sm text-label-sm mb-2">
+            Tercepat
+        </div>
+</div>
+<div class="flex justify-between items-start mb-2">
+<div>
+<div class="font-headline-md text-headline-md text-on-surface">32 mnt</div>
+</div>
+<div class="text-right">
+<div class="font-title-lg text-title-lg text-on-surface"><span class="text-label-sm font-label-sm text-outline block">Estimasi</span>Rp 3.500</div>
+</div>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md text-on-surface-variant mb-4">
+<span>Mulai 10:15</span>
+<span>10:47 tiba</span>
+</div>
+<div class="flex items-center gap-xs py-sm mb-4 overflow-x-auto no-scrollbar">
+<!-- Walk -->
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[20px] text-outline">directions_walk</span>
+</div>
+<div class="w-4 border-t-2 border-dashed border-outline mx-1"></div>
+<!-- TransJakarta -->
+<div class="flex items-center border border-transjakarta-blue text-transjakarta-blue px-2 py-1 rounded">
+<span class="material-symbols-outlined text-[16px] mr-1">directions_bus</span>
+<span class="font-label-md text-label-md">TJ: 1</span>
+</div>
+<div class="w-4 border-t-2 border-dashed border-outline mx-1"></div>
+<!-- Walk -->
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[20px] text-outline">directions_walk</span>
+</div>
+</div>
+<div class="flex gap-4 text-on-surface-variant font-body-md text-body-md">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">directions_walk</span>
+<span class="">800m</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">sync_alt</span>
+<span class="">0 Transit</span>
+</div>
+</div>
+</div>
+<!-- Route Card 2: Minim Jalan -->
+<div class="bg-surface rounded-2xl p-md border border-outline-variant shadow-[0_2px_8px_rgba(11,28,48,0.04)] relative overflow-hidden">
+<div class="mb-2">
+<div class="bg-jaklingko-green text-on-primary px-2 py-1 rounded-[4px] inline-block font-label-sm text-label-sm mb-2">
+            Minim Jalan
+        </div>
+</div>
+<div class="flex justify-between items-start mb-2">
+<div>
+<div class="font-headline-md text-headline-md text-on-surface">45 mnt</div>
+</div>
+<div class="text-right">
+<div class="font-title-lg text-title-lg text-on-surface"><span class="text-label-sm font-label-sm text-outline block">Estimasi</span>Rp 3.500</div>
+</div>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md text-on-surface-variant mb-4">
+<span>Mulai 10:20</span>
+<span>11:05 tiba</span>
+</div>
+<div class="flex items-center gap-xs py-sm mb-4 overflow-x-auto no-scrollbar">
+<!-- Walk -->
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[20px] text-outline">directions_walk</span>
+</div>
+<div class="w-4 border-t-2 border-dashed border-outline mx-1"></div>
+<!-- TransJakarta -->
+<div class="flex items-center border border-transjakarta-blue text-transjakarta-blue px-2 py-1 rounded">
+<span class="material-symbols-outlined text-[16px] mr-1">directions_bus</span>
+<span class="font-label-md text-label-md">TJ: 1</span>
+</div>
+<div class="w-4 border-t-2 border-dashed border-outline mx-1"></div>
+<!-- Walk -->
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[20px] text-outline">directions_walk</span>
+</div>
+</div>
+<div class="flex gap-4 text-on-surface-variant font-body-md text-body-md">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">directions_walk</span>
+<span class="">350m</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">sync_alt</span>
+<span class="">0 Transit</span>
+</div>
+</div>
+</div>
+<!-- Route Card 3: Paling Murah -->
+<div class="bg-surface rounded-2xl p-md border border-outline-variant shadow-[0_2px_8px_rgba(11,28,48,0.04)] relative overflow-hidden">
+<div class="mb-2">
+<div class="bg-tertiary text-on-tertiary px-2 py-1 rounded-[4px] inline-block font-label-sm text-label-sm mb-2">
+            Paling Murah
+        </div>
+</div>
+<div class="flex justify-between items-start mb-2">
+<div>
+<div class="font-headline-md text-headline-md text-on-surface">55 mnt</div>
+</div>
+<div class="text-right">
+<div class="font-title-lg text-title-lg text-on-surface"><span class="text-label-sm font-label-sm text-outline block">Estimasi</span>Tarif tidak tersedia</div>
+</div>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md text-on-surface-variant mb-4">
+<span>Mulai 10:10</span>
+<span>11:05 tiba</span>
+</div>
+<div class="flex items-center gap-xs py-sm mb-4 overflow-x-auto no-scrollbar">
+<!-- Walk -->
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[20px] text-outline">directions_walk</span>
+</div>
+<div class="w-4 border-t-2 border-dashed border-outline mx-1"></div>
+<!-- MikroTrans -->
+<div class="flex items-center bg-surface-container-highest text-on-surface px-2 py-1 rounded border border-outline-variant">
+<span class="material-symbols-outlined text-[16px] mr-1 text-transjakarta-blue">directions_bus</span>
+<span class="font-label-md text-label-md">JAK43</span>
+</div>
+<div class="w-4 border-t-2 border-dashed border-outline mx-1"></div>
+<!-- MikroTrans -->
+<div class="flex items-center bg-surface-container-highest text-on-surface px-2 py-1 rounded border border-outline-variant">
+<span class="material-symbols-outlined text-[16px] mr-1 text-transjakarta-blue">directions_bus</span>
+<span class="font-label-md text-label-md">JAK11</span>
+</div>
+<div class="w-4 border-t-2 border-dashed border-outline mx-1"></div>
+<!-- Walk -->
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[20px] text-outline">directions_walk</span>
+</div>
+</div>
+<div class="flex gap-4 text-on-surface-variant font-body-md text-body-md">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">directions_walk</span>
+<span class="">1.2km</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">sync_alt</span>
+<span class="">1 Transit</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 h-[80px] pb-safe border-t border-outline-variant bg-surface-container-lowest shadow-[0_-4px_12px_rgba(11,28,48,0.05)] md:hidden">
+<div class="flex justify-around items-center w-full max-w-md mx-auto h-full px-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container w-16 h-14 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-label-sm text-label-sm">Beranda</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 w-20 h-14" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">directions_transit</span>
+<span class="font-label-sm text-label-sm">Perjalanan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container w-16 h-14 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">bookmark</span>
+<span class="font-label-sm text-label-sm">Tersimpan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container w-16 h-14 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">notifications</span>
+<span class="font-label-sm text-label-sm">Notifikasi</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container w-16 h-14 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-sm text-label-sm">Profil</span>
+</a>
+</div>
+</nav>
+</body></html>
