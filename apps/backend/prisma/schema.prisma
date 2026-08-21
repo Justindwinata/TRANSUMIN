@@ -32,6 +32,29 @@ model AuthIdentity {
   @@map("auth_identities")
 }
 
+// Transit Data Foundation
+model DataSource {
+  id             String   @id @default(uuid())
+  name           String
+  url            String
+  license        String?
+  lastFetchedAt  DateTime @map("last_fetched_at")
+  datasets       DatasetVersion[]
+
+  @@map("data_sources")
+}
+
+model DatasetVersion {
+  id             String   @id @default(uuid())
+  sourceId       String   @map("source_id")
+  version        String
+  isActive       Boolean  @default(false) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  source         DataSource @relation(fields: [sourceId], references: [id])
+
+  @@map("dataset_versions")
+}
+
 model Agency {
   id              String   @id @default(uuid())
   name            String
@@ -51,7 +74,7 @@ model Route {
   agencyId        String      @map("agency_id")
   shortName       String      @map("short_name")
   longName        String      @map("long_name")
-  routeType       String      @map("route_type") // rail, brt, mikrotrans
+  routeType       String      @map("route_type") 
   serviceType     String      @map("service_type")
   color           String?
   agency          Agency      @relation(fields: [agencyId], references: [id], onDelete: Cascade)
@@ -60,13 +83,25 @@ model Route {
   @@map("routes")
 }
 
+model Station {
+  id              String   @id @default(uuid())
+  name            String
+  lat             Float
+  lon             Float
+  operator        String?
+  stops           Stop[]
+
+  @@map("stations")
+}
+
 model Stop {
   id              String     @id @default(uuid())
   agencyId        String     @map("agency_id")
   name            String
   lat             Float
   lon             Float
-  parentStationId String?    @map("parent_station_id")
+  stationId       String?    @map("station_id")
+  station         Station?   @relation(fields: [stationId], references: [id])
   agency          Agency     @relation(fields: [agencyId], references: [id], onDelete: Cascade)
   stopTimes       StopTime[]
 
@@ -98,10 +133,35 @@ model StopTime {
   @@map("stop_times")
 }
 
+model ServiceCalendar {
+  serviceId       String   @id @map("service_id")
+  monday          Boolean
+  tuesday         Boolean
+  wednesday       Boolean
+  thursday        Boolean
+  friday          Boolean
+  saturday        Boolean
+  sunday          Boolean
+  startDate       DateTime @map("start_date")
+  endDate         DateTime @map("end_date")
+
+  @@map("service_calendars")
+}
+
+model Transfer {
+  id              String   @id @default(uuid())
+  fromStopId      String   @map("from_stop_id")
+  toStopId        String   @map("to_stop_id")
+  transferType    Int      @map("transfer_type")
+  minTransferTime Int?     @map("min_transfer_time")
+
+  @@map("transfers")
+}
+
 model SavedPlace {
   id          String   @id @default(uuid())
   userId      String   @map("user_id")
-  name        String   // Rumah, Kantor, etc.
+  name        String
   address     String
   lat         Float
   lon         Float
