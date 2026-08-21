@@ -15,13 +15,11 @@ class ApiClient {
     return response.data as Map<String, dynamic>;
   }
 
-  /// Search for places matching query text
   Future<List<Map<String, dynamic>>> searchPlaces(String query) async {
     final response = await get('/places/search', queryParameters: {'q': query});
     return List<Map<String, dynamic>>.from(response['results'] ?? []);
   }
 
-  /// Reverse geocode coordinates
   Future<Map<String, dynamic>?> reverseGeocode(double lat, double lon) async {
     final response = await get('/places/reverse', queryParameters: {
       'lat': lat.toString(),
