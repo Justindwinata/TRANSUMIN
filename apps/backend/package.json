@@ -9,6 +9,7 @@
     "build": "tsc -p tsconfig.build.json",
     "dev": "ts-node-dev --respawn src/main.ts",
     "lint": "eslint src",
+  "transit:seed": "ts-node-dev --respawn prisma/seed.ts",
     "transit:ingest": "ts-node-dev src/modules/transit/ingestion/cli/ingest.ts"
   },
   "keywords": [],
