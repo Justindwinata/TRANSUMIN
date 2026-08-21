@@ -1,0 +1,3 @@
+route_id,agency_id,route_short_name,route_long_name,route_type
+TJ-1,transjakarta,1,Blok M - Kota,bus
+TJ-3,transjakarta,3,Kalideres - Monumen Nasional,bus

@@ -1,0 +1,3 @@
+trip_id,arrival_time,departure_time,stop_id,stop_sequence
+TRIP-01,06:00:00,06:00:00,STOP-A1,1
+TRIP-ORPHAN,06:00:00,06:00:00,STOP-NONEXISTENT,1

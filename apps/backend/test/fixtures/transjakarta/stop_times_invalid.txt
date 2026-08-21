@@ -1,0 +1,2 @@
+trip_id,arrival_time,departure_time,stop_id,stop_sequence
+TRIP-INVALID,25:61:61,25:62:99,STOP-A1,1

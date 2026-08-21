@@ -1,0 +1,5 @@
+stop_id,stop_name,stop_lat,stop_lon,parent_station
+STOP-A1,Monumen Nasional,-6.1751,106.8241,
+STOP-A2,Masjid Agung,-6.1700,106.8230,
+STOP-B1,Bundaran HI,-6.1912,106.8245,
+STOP-B2,Blok M,-6.2435,106.8000,

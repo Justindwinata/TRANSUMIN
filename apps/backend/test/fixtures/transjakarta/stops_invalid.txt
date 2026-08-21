@@ -1,0 +1,2 @@
+stop_id,stop_name,stop_lat,stop_lon,parent_station
+STOP-INV,Invalid Stop,99.999,199.999,
