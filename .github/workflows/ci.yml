@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: cd apps/backend && npm ci
+      - run: cd apps/backend && npx prisma generate
+      - run: cd apps/backend && npm test -- --passWithNoTests
+
+  flutter-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v8
+        with:
+          channel: stable
+      - run: cd apps/mobile && flutter pub get
+      - run: cd apps/mobile && flutter test --no-pub --coverage
