@@ -1,8 +1,8 @@
 import * as fs from 'fs';
-import * as path from 'path';
 
 export class CsvParser {
   static parse<T extends Record<string, string>>(filePath: string): T[] {
+    if (!fs.existsSync(filePath)) return [];
     const content = fs.readFileSync(filePath, 'utf8');
     return CsvParser.parseString<T>(content);
   }
