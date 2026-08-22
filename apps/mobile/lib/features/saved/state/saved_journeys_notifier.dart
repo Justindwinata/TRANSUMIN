@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'saved_journeys_repository.dart';
+import 'package:mobile/features/saved/data/saved_journeys_repository.dart';
 
 class SavedJourneysState {
   final bool isLoading;
@@ -29,7 +29,7 @@ class SavedJourneysNotifier extends StateNotifier<SavedJourneysState> {
   final SavedJourneysRepository repository;
 
   SavedJourneysNotifier(this.repository)
-      : super(const SavedJourneysState(journeys: []));
+    : super(const SavedJourneysState(journeys: []));
 
   Future<void> load() async {
     state = state.copyWith(isLoading: true);
@@ -82,5 +82,5 @@ class SavedJourneysNotifier extends StateNotifier<SavedJourneysState> {
 
 final savedJourneysProvider =
     StateNotifierProvider<SavedJourneysNotifier, SavedJourneysState>((ref) {
-  return SavedJourneysNotifier(ref.read(savedJourneysRepositoryProvider));
-});
+      return SavedJourneysNotifier(ref.read(savedJourneysRepositoryProvider));
+    });
