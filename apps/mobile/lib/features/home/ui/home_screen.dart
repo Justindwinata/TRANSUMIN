@@ -8,6 +8,8 @@ import 'package:mobile/shared/widgets/app_button.dart';
 import 'package:mobile/features/routing/domain/models.dart';
 import 'package:mobile/features/routing/state/route_options_notifier.dart';
 import 'package:mobile/features/routing/ui/route_options_screen.dart';
+import 'package:mobile/features/saved/ui/saved_places_screen.dart';
+import 'package:mobile/features/history/ui/journey_history_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -35,10 +37,27 @@ class HomeScreen extends ConsumerWidget {
             AppButton(
               label: 'Cari Rute',
               isLoading: false,
-              onPressed:
-                  journey.isComplete
-                      ? () => _searchRoute(context, ref, journey)
-                      : null,
+              onPressed: journey.isComplete
+                  ? () => _searchRoute(context, ref, journey)
+                  : null,
+            ),
+            const SizedBox(height: 16),
+            const Divider(),
+            ListTile(
+              title: const Text('Lokasi Tersimpan'),
+              leading: const Icon(Icons.bookmark),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SavedPlacesScreen()),
+              ),
+            ),
+            ListTile(
+              title: const Text('Riwayat Perjalanan'),
+              leading: const Icon(Icons.history),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const JourneyHistoryScreen()),
+              ),
             ),
           ],
         ),
