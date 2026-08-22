@@ -84,34 +84,34 @@ class ProfileScreen extends ConsumerWidget {
             onTap: () => _confirmLogout(context, ref),
           ),
         ],
-      );
-    }
+      ),
+    );
+  }
 
-    void _confirmLogout(BuildContext context, WidgetRef ref) {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Keluar?'),
-          content: const Text('Anda yakin ingin keluar dari akun ini?'),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
-            TextButton(
-              onPressed: () {
-                ref.read(authProvider.notifier).logout();
-                Navigator.pop(ctx);
-              },
-              child: const Text('Keluar'),
-            ),
-          ],
-        ),
-      );
-    }
+  void _confirmLogout(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Keluar?'),
+        content: const Text('Anda yakin ingin keluar dari akun ini?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
+          TextButton(
+            onPressed: () {
+              ref.read(authProvider.notifier).logout();
+              Navigator.pop(ctx);
+            },
+            child: const Text('Keluar'),
+          ),
+        ],
+      ),
+    );
+  }
 
-    void _showComingSoon(BuildContext context) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Fitur ini akan segera hadir')),
-      );
-    }
+  void _showComingSoon(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Fitur ini akan segera hadir')),
+    );
   }
 }
 

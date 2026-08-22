@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mobile/features/saved/state/saved_journeys_notifier.dart';
+import 'package:mobile/features/saved/data/saved_journeys_repository.dart';
 import 'package:mobile/features/routing/domain/models.dart';
 import 'package:mobile/features/routing/state/route_options_notifier.dart';
 import 'package:mobile/features/routing/ui/route_options_screen.dart';
