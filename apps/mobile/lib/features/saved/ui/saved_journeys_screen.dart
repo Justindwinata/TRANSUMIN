@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/features/saved/state/saved_journeys_notifier.dart';
+import 'package:mobile/features/saved/ui/saved_journey_replan_screen.dart';
 
 class SavedJourneysScreen extends ConsumerStatefulWidget {
   const SavedJourneysScreen({Key? key}) : super(key: key);
@@ -82,7 +83,12 @@ class _SavedJourneysScreenState extends ConsumerState<SavedJourneysScreen> {
                               onPressed: () => _confirmDelete(journey.id, journey.label ?? journey.originName),
                             ),
                             onTap: () {
-                              Navigator.of(context).pop(journey);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => SavedJourneyReplanScreen(journey: journey),
+                                ),
+                              );
                             },
                           ),
                         );
