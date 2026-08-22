@@ -3,19 +3,14 @@ import 'package:dio/dio.dart';
 import 'api_client.dart';
 import 'auth_interceptor.dart';
 import 'package:mobile/features/auth/auth_provider.dart';
-
-String resolveApiBaseUrl() {
-  const fromEnv = String.fromEnvironment('API_BASE_URL', defaultValue: '');
-  if (fromEnv.isNotEmpty) return fromEnv;
-  return 'http://10.0.2.2:3000';
-}
+import 'package:mobile/core/config/environment.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
     BaseOptions(
-      baseUrl: resolveApiBaseUrl(),
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 30),
+      baseUrl: AppConfig.apiBaseUrl,
+      connectTimeout: AppConfig.connectTimeout,
+      receiveTimeout: AppConfig.receiveTimeout,
     ),
   );
 
@@ -23,9 +18,11 @@ final dioProvider = Provider<Dio>((ref) {
     return ref.read(authProvider).accessToken;
   }));
 
-  dio.interceptors.add(
-    LogInterceptor(requestBody: true, responseBody: true, error: true),
-  );
+  if (AppConfig.enableLogging) {
+    dio.interceptors.add(
+      LogInterceptor(requestBody: true, responseBody: true, error: true),
+    );
+  }
 
   return dio;
 });
