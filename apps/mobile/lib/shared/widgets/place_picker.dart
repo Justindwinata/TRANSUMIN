@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mobile/features/saved/state/saved_places_notifier.dart';
+import 'package:mobile/features/location/state/place_search_notifier.dart';
 import 'package:mobile/features/location/domain/models.dart';
+import 'package:mobile/features/saved/state/saved_places_notifier.dart';
+import 'package:mobile/features/history/state/journey_history_notifier.dart';
 import 'package:mobile/features/location/ui/search_screen.dart';
 
 class PlacePicker extends ConsumerWidget {
@@ -17,6 +19,7 @@ class PlacePicker extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final savedPlaces = ref.watch(savedPlacesProvider);
+    final history = ref.watch(journeyHistoryProvider);
 
     return Card(
       child: Padding(
@@ -81,7 +84,7 @@ class PlacePicker extends ConsumerWidget {
                 children: savedPlaces.places.map((sp) {
                   return ActionChip(
                     avatar: Icon(
-                      sp.name == 'Rumah' ? Icons.home : sp.name == 'Kampus' ? Icons.school : Icons.work,
+                      _getPlaceIcon(sp.name),
                       size: 18,
                     ),
                     label: Text(sp.name, style: const TextStyle(fontSize: 13)),
@@ -90,9 +93,41 @@ class PlacePicker extends ConsumerWidget {
                 }).toList(),
               ),
             ],
+            if (history.isNotEmpty) ...[
+              const Divider(),
+              const Text('Riwayat', style: TextStyle(fontSize: 12, color: Colors.grey)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: history.take(5).map((h) {
+                  return ActionChip(
+                    avatar: const Icon(Icons.history, size: 18),
+                    label: Text('${h.originName} → ${h.destName}', style: const TextStyle(fontSize: 13)),
+                    onPressed: () => onSelect(Place(
+                      name: h.originName,
+                      latitude: double.tryParse(h.originLat ?? '') ?? -6.2,
+                      longitude: double.tryParse(h.originLon ?? '') ?? 106.8,
+                      type: PlaceType.generic,
+                      source: 'history',
+                    )),
+                  );
+                }).toList(),
+              ),
+            ],
           ],
         ),
       ),
     );
+  }
+
+  IconData _getPlaceIcon(String name) {
+    final lower = name.toLowerCase();
+    if (lower.contains('rumah') || lower.contains('home')) return Icons.home;
+    if (lower.contains('kantor') || lower.contains('office')) return Icons.work;
+    if (lower.contains('kampus') || lower.contains('university') || lower.contains('sekolah')) return Icons.school;
+    if (lower.contains('stasiun') || lower.contains('station')) return Icons.train;
+    if (lower.contains('halte') || lower.contains('bus')) return Icons.directions_bus;
+    return Icons.place;
   }
 }

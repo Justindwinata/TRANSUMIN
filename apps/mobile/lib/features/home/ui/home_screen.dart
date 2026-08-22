@@ -5,6 +5,7 @@ import 'package:mobile/features/location/ui/search_screen.dart';
 import 'package:mobile/features/location/state/journey_notifier.dart';
 import 'package:mobile/shared/widgets/location_input.dart';
 import 'package:mobile/shared/widgets/app_button.dart';
+import 'package:mobile/shared/widgets/place_picker.dart';
 import 'package:mobile/features/routing/domain/models.dart';
 import 'package:mobile/features/routing/state/route_options_notifier.dart';
 import 'package:mobile/features/routing/ui/route_options_screen.dart';
@@ -66,22 +67,46 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Future<void> _pickOrigin(BuildContext context, WidgetRef ref) async {
-    final result = await Navigator.push<JourneyLocation?>(
-      context,
-      MaterialPageRoute(builder: (_) => const SearchScreen()),
+    final result = await showModalBottomSheet<Place>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.5,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) => SingleChildScrollView(
+          controller: scrollController,
+          child: PlacePicker(
+            label: 'Pilih Lokasi Asal',
+            onSelect: (place) => Navigator.pop(context, place),
+          ),
+        ),
+      ),
     );
     if (result != null) {
-      ref.read(journeyProvider.notifier).setOrigin(result);
+      ref.read(journeyProvider.notifier).setOrigin(JourneyLocation.fromPlace(result));
     }
   }
 
   Future<void> _pickDestination(BuildContext context, WidgetRef ref) async {
-    final result = await Navigator.push<JourneyLocation?>(
-      context,
-      MaterialPageRoute(builder: (_) => const SearchScreen()),
+    final result = await showModalBottomSheet<Place>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.5,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) => SingleChildScrollView(
+          controller: scrollController,
+          child: PlacePicker(
+            label: 'Pilih Lokasi Tujuan',
+            onSelect: (place) => Navigator.pop(context, place),
+          ),
+        ),
+      ),
     );
     if (result != null) {
-      ref.read(journeyProvider.notifier).setDestination(result);
+      ref.read(journeyProvider.notifier).setDestination(JourneyLocation.fromPlace(result));
     }
   }
 
