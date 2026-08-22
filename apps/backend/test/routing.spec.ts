@@ -48,14 +48,24 @@ jest.mock('@prisma/client', () => {
       stop: { findMany: jest.fn().mockResolvedValue(stops) },
       trip: {
         findMany: jest.fn().mockImplementation(({ where }) => {
-          if (where?.stopTimes?.some?.stopId) {
-            const stopId = where.stopTimes.some.stopId;
-            return Promise.resolve(trips.filter(t => t.stopTimes.some(st => st.stopId === stopId)));
+          let result = trips;
+          if (where?.serviceId?.in) {
+            result = result.filter(t => where.serviceId.in.includes(t.serviceId));
           }
-          return Promise.resolve(trips);
+          if (where?.stopTimes?.some?.stopId) {
+            const stopIdFilter = where.stopTimes.some.stopId;
+            if (typeof stopIdFilter === 'string') {
+              result = result.filter(t => t.stopTimes.some(st => st.stopId === stopIdFilter));
+            } else if (stopIdFilter?.in) {
+              result = result.filter(t => t.stopTimes.some(st => stopIdFilter.in.includes(st.stopId)));
+            }
+          }
+          return Promise.resolve(result);
         }),
-        findUnique: jest.fn().mockImplementation(({ where: { id } }) => {
-          return Promise.resolve(trips.find(t => t.id === id) ?? null);
+        findUnique: jest.fn().mockImplementation(({ where }) => {
+          let result = trips;
+          if (where?.id) result = result.filter(t => t.id === where.id);
+          return Promise.resolve(result[0] ?? null);
         }),
       },
       serviceCalendar: { findMany: jest.fn().mockResolvedValue(calendar) },
@@ -99,11 +109,11 @@ describe('RoutingEngine', () => {
     expect(result.journeys.length).toBeGreaterThan(0);
   });
 
-  it('should respect service calendar - weekend request', async () => {
+  it('should respect service calendar - weekend request yields no weekday trips', async () => {
     const result = await engine.plan({
       origin: { latitude: -6.363, longitude: 106.828, name: 'UI' },
       destination: { latitude: -6.197, longitude: 106.852, name: 'Manggarai' },
-      departureTime: '2024-08-17T08:00:00', // Saturday
+      departureTime: '2024-08-17T08:00:00', // Saturday, calendar is weekday only
       preference: OptimizationProfile.FASTEST,
     });
 

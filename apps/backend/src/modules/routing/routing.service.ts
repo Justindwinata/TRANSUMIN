@@ -306,7 +306,6 @@ export class RoutingEngine {
 
       for (const st of altTrip.stopTimes) {
         if (st.stopId === boardST.stopId) continue;
-        if (st.stopSequence <= boardST.stopSequence) continue;
 
         for (const destST of altTrip.stopTimes) {
           if (destST.stopId !== destStop.stop.id) continue;
@@ -527,11 +526,11 @@ export class RoutingEngine {
   }
 
   private async getActiveServiceIds(date: Date): Promise<string[]> {
-    const dayOfWeek = date.getDay();
+    const dayOfWeek = date.getDay(); // 0 = Sunday, 1 = Monday, ...
     const dateObj = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
-    // Prisma boolean field name for day of week
-    const dayField = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'][(dayOfWeek + 6) % 7];
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const dayField = days[dayOfWeek];
 
     const calendars = await this.prisma.serviceCalendar.findMany({
       where: {
@@ -540,7 +539,6 @@ export class RoutingEngine {
       },
     });
 
-    // Filter by day of week in application layer
     return calendars
       .filter(c => c[dayField as keyof ServiceCalendar] === true)
       .map(c => c.serviceId);
