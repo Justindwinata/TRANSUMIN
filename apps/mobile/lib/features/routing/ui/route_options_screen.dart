@@ -136,6 +136,11 @@ class _SuccessView extends StatelessWidget {
           route: route,
           index: index,
           onTap: () => onSelect(route),
+          onSave: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Perjalanan disimpan')),
+            );
+          },
         );
       },
     );
@@ -146,11 +151,13 @@ class _RouteCard extends StatelessWidget {
   final RouteAlternative route;
   final int index;
   final VoidCallback onTap;
+  final VoidCallback? onSave;
 
   const _RouteCard({
     required this.route,
     required this.index,
     required this.onTap,
+    this.onSave,
   });
 
   @override
@@ -203,9 +210,7 @@ class _RouteCard extends StatelessWidget {
               Text(
                 route.fareText,
                 style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+                    fontSize: 14, fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -230,6 +235,14 @@ class _RouteCard extends StatelessWidget {
                 '${route.transferCount} transit',
                 style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
+              const Spacer(),
+              if (index == 0)
+                IconButton(
+                  icon:
+                      const Icon(Icons.bookmark_add_outlined, size: 20),
+                  tooltip: 'Simpan perjalanan ini',
+                  onPressed: onSave,
+                ),
             ],
           ),
         ],
