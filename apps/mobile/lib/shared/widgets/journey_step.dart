@@ -22,6 +22,7 @@ class JourneyStepWidget extends StatelessWidget {
 
     return Semantics(
       button: false,
+      label: _accessibilityLabel,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -66,6 +67,32 @@ class JourneyStepWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String get _accessibilityLabel {
+    final stepType = _labelFor(iconType);
+    return '$stepType. $title. $subtitle';
+  }
+
+  String _labelFor(String type) {
+    switch (type) {
+      case 'walk':
+        return 'Berjalan';
+      case 'board':
+        return 'Naik';
+      case 'ride':
+        return 'Dalam perjalanan';
+      case 'transfer':
+        return 'Transfer';
+      case 'alight':
+        return 'Turun';
+      case 'wait':
+        return 'Menunggu';
+      case 'arrive':
+        return 'Tiba';
+      default:
+        return 'Langkah';
+    }
   }
 
   Color _colorFor(String type, bool isDark) {
