@@ -17,6 +17,7 @@ model User {
   identities    AuthIdentity[]
   savedPlaces   SavedPlace[]
   savedJourneys SavedJourney[]
+  journeyHistory JourneyHistory[]
 
   @@map("users")
 }
@@ -181,4 +182,16 @@ model SavedJourney {
   createdAt   DateTime @default(now()) @map("created_at")
 
   @@map("saved_journeys")
+}
+
+model JourneyHistory {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  originName  String   @map("origin_name")
+  destName    String   @map("dest_name")
+  summaryJson String   @map("summary_json")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("journey_history")
 }

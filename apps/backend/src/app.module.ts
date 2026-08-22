@@ -7,6 +7,9 @@ import { UsersModule } from './modules/users/users.module';
 import { PlacesModule } from './modules/places/places.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RoutingModule } from './modules/routing/routing.module';
+import { SavedPlacesModule } from './modules/saved-places/saved-places.module';
+import { SavedJourneysModule } from './modules/saved-journeys/saved-journeys.module';
+import { HistoryModule } from './modules/history/history.module';
 
 @Module({
   imports: [
@@ -17,10 +20,13 @@ import { RoutingModule } from './modules/routing/routing.module';
     PrismaModule,
     HealthModule,
     AuthModule,
-     TransitModule,
-     UsersModule,
-     PlacesModule,
-     RoutingModule,
+    TransitModule,
+    UsersModule,
+    PlacesModule,
+    RoutingModule,
+    SavedPlacesModule,
+    SavedJourneysModule,
+    HistoryModule,
   ],
 })
 export class AppModule {}
