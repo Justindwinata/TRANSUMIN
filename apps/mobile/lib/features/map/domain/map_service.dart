@@ -15,7 +15,12 @@ abstract class MapService {
   void centerOnCoordinates(double latitude, double longitude);
 
   /// Add a marker at the given coordinates.
-  void addMarker(double latitude, double longitude, {String? title, Color? color});
+  void addMarker(
+    double latitude,
+    double longitude, {
+    String? title,
+    Color? color,
+  });
 
   /// Remove all markers.
   void clearMarkers();
