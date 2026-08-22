@@ -1,22 +1,26 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mobile/shared/widgets/app_card.dart';
 import 'package:mobile/shared/widgets/journey_step.dart';
+import 'package:mobile/features/saved/state/saved_journeys_notifier.dart';
 import '../domain/models.dart';
 import '../presentation/journey_instruction_mapper.dart';
 import '../../map/presentation/journey_map_model.dart';
 
-class JourneyDetailScreen extends StatelessWidget {
+class JourneyDetailScreen extends ConsumerWidget {
   final RouteAlternative route;
 
   const JourneyDetailScreen({Key? key, required this.route}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final instructions = JourneyInstructionMapper.fromJourney(route);
     final mapModel = JourneyMapBuilder.fromJourney(route);
+    final savedJourneys = ref.watch(savedJourneysProvider);
+    final alreadySaved = savedJourneys.journeys.any((j) => j.originName == (route.origin.name ?? '') && j.destName == (route.destination.name ?? ''));
 
     return Scaffold(
       appBar: AppBar(
@@ -31,6 +35,27 @@ class JourneyDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _Header(route: route),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: alreadySaved
+                        ? OutlinedButton.icon(
+                            onPressed: null,
+                            icon: const Icon(Icons.bookmark_added),
+                            label: const Text('Sudah Disimpan'),
+                          )
+                        : ElevatedButton.icon(
+                            onPressed: () => _saveJourney(context, ref),
+                            icon: const Icon(Icons.bookmark_add),
+                            label: const Text('Simpan Perjalanan'),
+                          ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
             _Summary(route: route),
             _MapPreview(mapModel: mapModel),
             const Padding(
@@ -277,6 +302,27 @@ class _MapPreview extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+void _saveJourney(BuildContext context, WidgetRef ref) {
+    final payload = {
+      'originLat': route.origin.latitude,
+      'originLon': route.origin.longitude,
+      'destLat': route.destination.latitude,
+      'destLon': route.destination.longitude,
+    };
+
+    ref.read(savedJourneysProvider.notifier).addJourney(
+      originName: route.origin.name ?? 'Origin',
+      destName: route.destination.name ?? 'Destination',
+      payloadJson: jsonEncode(payload),
+      label: '${route.origin.name ?? 'Origin'} → ${route.destination.name ?? 'Destination'}',
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Perjalanan disimpan')),
     );
   }
 }
