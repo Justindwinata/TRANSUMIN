@@ -16,47 +16,97 @@ class JourneyStepWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAlignment.start,
-      children: [
-        Column(
-          children: [
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: const Color(0xFF2563EB),
-              child: Icon(
-                iconType == 'walk' ? Icons.directions_walk : Icons.directions_transit,
-                size: 16,
-                color: Colors.white,
-              ),
-            ),
-            if (!isLast)
-              Container(
-                width: 2,
-                height: 40,
-                color: const Color(0xFF737686),
-              ),
-          ],
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAlignment.start,
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final color = _colorFor(iconType, isDark);
+    final icon = _iconFor(iconType);
+
+    return Semantics(
+      button: false,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
             children: [
-              Text(
-                title,
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              CircleAvatar(
+                radius: 16,
+                backgroundColor: color,
+                child: Icon(
+                  icon,
+                  size: 16,
+                  color: Colors.white,
+                ),
               ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              const SizedBox(height: 16),
+              if (!isLast)
+                Container(
+                  width: 2,
+                  height: 40,
+                  color: const Color(0xFF737686),
+                ),
             ],
           ),
-        ),
-      ],
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  Color _colorFor(String type, bool isDark) {
+    switch (type) {
+      case 'walk':
+        return const Color(0xFF737686);
+      case 'board':
+        return const Color(0xFF2563EB);
+      case 'ride':
+        return const Color(0xFF006A61);
+      case 'transfer':
+        return const Color(0xFF943700);
+      case 'alight':
+        return const Color(0xFF0053DB);
+      case 'wait':
+        return const Color(0xFF737686);
+      case 'arrive':
+        return const Color(0xFFBA1A1A);
+      default:
+        return const Color(0xFF2563EB);
+    }
+  }
+
+  IconData _iconFor(String type) {
+    switch (type) {
+      case 'walk':
+        return Icons.directions_walk;
+      case 'board':
+        return Icons.directions_bus;
+      case 'ride':
+        return Icons.directions_transit;
+      case 'transfer':
+        return Icons.swap_horiz;
+      case 'alight':
+        return Icons.directions_transit_filled;
+      case 'wait':
+        return Icons.schedule;
+      case 'arrive':
+        return Icons.flag;
+      default:
+        return Icons.circle;
+    }
   }
 }
