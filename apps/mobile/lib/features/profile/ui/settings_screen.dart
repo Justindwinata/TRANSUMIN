@@ -1,17 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mobile/core/theme/app_theme.dart';
+import 'package:mobile/features/auth/auth_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Pengaturan')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          _SettingsSection(
+            title: 'Akun & Keamanan',
+            children: [
+              _SettingsTile(
+                title: 'Ubah Kata Sandi',
+                subtitle: 'Perbarui kata sandi akun',
+                leading: Icons.lock,
+                onTap: () => _showComingSoon(context),
+              ),
+              _SettingsTile(
+                title: 'Verifikasi Email',
+                subtitle: 'Konfirmasi alamat email',
+                leading: Icons.email,
+                onTap: () => _showComingSoon(context),
+              ),
+              _SettingsTile(
+                title: 'Keluar',
+                subtitle: 'Akun: ${authState.email ?? '-'}',
+                leading: Icons.logout,
+                isDestructive: true,
+                onTap: () => _confirmLogout(context, ref),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
           _SettingsSection(
             title: 'Tampilan',
             children: [
@@ -55,25 +82,50 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           _SettingsSection(
-            title: 'Lokasi & Privasi',
+            title: 'Rute & Navigasi',
             children: [
               _SettingsTile(
-                title: 'Lokasi Saat Ini',
-                subtitle: 'Izinkan akses lokasi untuk pencarian',
-                leading: Icons.my_location,
+                title: 'Preferensi Rute Default',
+                subtitle: 'Cepat / Minim Transit / Minim Jalan',
+                leading: Icons.route,
                 onTap: () => _showComingSoon(context),
               ),
               _SettingsTile(
-                title: 'Data Perjalanan',
-                subtitle: 'Kelola riwayat & data tersimpan',
-                leading: Icons.privacy_tip,
+                title: 'Jarak Jalan Kaki Maksimal',
+                subtitle: 'Batas pencarian halte terdekat',
+                leading: Icons.directions_walk,
                 onTap: () => _showComingSoon(context),
               ),
               _SettingsTile(
-                title: 'Hapus Semua Data',
+                title: 'Mode Aksesibilitas',
+                subtitle: 'Rute ramah disabilitas',
+                leading: Icons.accessibility,
+                onTap: () => _showComingSoon(context),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _SettingsSection(
+            title: 'Data & Privasi',
+            children: [
+              _SettingsTile(
+                title: 'Hapus Riwayat Pencarian',
+                subtitle: 'Bersihkan riwayat lokal & server',
+                leading: Icons.history,
+                isDestructive: true,
+                onTap: () => _confirmClearHistory(context),
+              ),
+              _SettingsTile(
+                title: 'Hapus Semua Data Tersimpan',
                 subtitle: 'Reset aplikasi ke kondisi awal',
                 leading: Icons.delete_forever,
                 isDestructive: true,
+                onTap: () => _showComingSoon(context),
+              ),
+              _SettingsTile(
+                title: 'Ekspor Data Saya',
+                subtitle: 'Unduh data pribadi (GDPR)',
+                leading: Icons.download,
                 onTap: () => _showComingSoon(context),
               ),
             ],
@@ -103,7 +155,51 @@ class SettingsScreen extends ConsumerWidget {
                 leading: Icons.code,
                 onTap: () => _showComingSoon(context),
               ),
+              _SettingsTile(
+                title: 'Laporkan Masalah',
+                leading: Icons.bug_report,
+                onTap: () => _showComingSoon(context),
+              ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmLogout(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Keluar?'),
+        content: const Text('Anda yakin ingin keluar dari akun ini?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
+          TextButton(
+            onPressed: () {
+              ref.read(authProvider.notifier).logout();
+              Navigator.pop(ctx);
+            },
+            child: const Text('Keluar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmClearHistory(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Hapus Riwayat?'),
+        content: const Text('Hapus seluruh riwayat pencarian lokal dan server?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+            },
+            child: const Text('Hapus'),
           ),
         ],
       ),
@@ -185,7 +281,7 @@ class _SettingsTile extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 }
