@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
+import 'features/home/ui/home_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: TransumInApp()));
 }
 
-class TransumInApp extends StatelessWidget {
+class TransumInApp extends ConsumerWidget {
   const TransumInApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'TRANSUM-IN',
       theme: AppTheme.lightTheme,
-      home: const Scaffold(
-        body: Center(
-          child: Text('TRANSUM-IN — Biar Naik Transum Nggak Bingung'),
-        ),
-      ),
+      home: const HomeScreen(),
     );
   }
 }

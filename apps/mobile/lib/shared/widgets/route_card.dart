@@ -37,7 +37,7 @@ class RouteCard extends StatelessWidget {
           border: Border.all(color: const Color(0xFFC3C6D7)),
         ),
         child: Column(
-          crossAxisAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,7 +51,10 @@ class RouteCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFF2563EB),
                     borderRadius: BorderRadius.circular(4),
@@ -70,17 +73,32 @@ class RouteCard extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               children: [
-                Text('$departureTime - $arrivalTime', style: const TextStyle(fontSize: 14)),
+                Text(
+                  '$departureTime - $arrivalTime',
+                  style: const TextStyle(fontSize: 14),
+                ),
                 const Spacer(),
-                Text(fareText, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                Text(
+                  fareText,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ],
             ),
             const Divider(height: 24),
             Row(
               children: [
-                Text('Moda: ${modes.join(" → ")}', style: const TextStyle(fontSize: 12)),
+                Text(
+                  'Moda: ${modes.join(" → ")}',
+                  style: const TextStyle(fontSize: 12),
+                ),
                 const Spacer(),
-                Text('$walkDistanceText • $transferCount transit', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                Text(
+                  '$walkDistanceText • $transferCount transit',
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
               ],
             ),
           ],

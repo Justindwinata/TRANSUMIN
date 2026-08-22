@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../location/state/place_search_notifier.dart';
-import '../location/domain/models.dart';
+import 'package:mobile/features/location/state/place_search_notifier.dart';
+import 'package:mobile/features/location/domain/models.dart';
 
 class SearchScreen extends ConsumerWidget {
   const SearchScreen({Key? key}) : super(key: key);

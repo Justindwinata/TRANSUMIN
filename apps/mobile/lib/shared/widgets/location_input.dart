@@ -5,17 +5,15 @@ import '../../features/location/state/location_notifier.dart';
 
 class LocationInputWidget extends ConsumerWidget {
   final String hint;
-  final ValueChanged<JourneyLocation>? onSelected;
+  final VoidCallback? onTap;
 
-  const LocationInputWidget({Key? key, required this.hint, this.onSelected})
-      : super(key: key);
+  const LocationInputWidget({Key? key, required this.hint, this.onTap})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () {
-        // Navigate to search screen
-      },
+      onTap: onTap,
       child: Container(
         height: 48,
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -28,8 +26,13 @@ class LocationInputWidget extends ConsumerWidget {
           children: [
             const Icon(Icons.search, color: Colors.grey),
             const SizedBox(width: 8),
-            Text(hint, style: const TextStyle(color: Colors.grey)),
-            const Spacer(),
+            Expanded(
+              child: Text(
+                hint,
+                style: const TextStyle(color: Colors.grey),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             IconButton(
               icon: const Icon(Icons.my_location),
               onPressed: () {
