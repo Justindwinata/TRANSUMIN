@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'api_client.dart';
+import 'auth_interceptor.dart';
+import 'package:mobile/features/auth/auth_provider.dart';
 
 String resolveApiBaseUrl() {
   const fromEnv = String.fromEnvironment('API_BASE_URL', defaultValue: '');
@@ -16,6 +18,10 @@ final dioProvider = Provider<Dio>((ref) {
       receiveTimeout: const Duration(seconds: 30),
     ),
   );
+
+  dio.interceptors.add(AuthInterceptor(() {
+    return ref.read(authProvider).accessToken;
+  }));
 
   dio.interceptors.add(
     LogInterceptor(requestBody: true, responseBody: true, error: true),
