@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import { PrismaClient } from '@prisma/client';
-import { DatasetRegistry } from './dataset.registry';
+import { DatasetRegistry } from '../dataset.registry';
 import * as fs from 'fs';
 
 const program = new Command();
