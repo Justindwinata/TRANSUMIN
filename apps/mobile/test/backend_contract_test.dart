@@ -27,7 +27,7 @@ void main() {
       };
 
       final journeys = (json['journeys'] as List?)
-              ?.map((j) => RouteAlternative.fromJson(j as Map<String, dynamic>))
+              ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];
 
@@ -116,7 +116,7 @@ void main() {
       };
 
       final journeys = (json['journeys'] as List?)
-              ?.map((j) => RouteAlternative.fromJson(j as Map<String, dynamic>))
+              ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];
 
@@ -143,7 +143,7 @@ void main() {
       final json = {'journeys': []};
 
       final journeys = (json['journeys'] as List?)
-              ?.map((j) => RouteAlternative.fromJson(j as Map<String, dynamic>))
+              ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];
 
@@ -154,7 +154,7 @@ void main() {
       final json = {'journeys': null};
 
       final journeys = (json['journeys'] as List?)
-              ?.map((j) => RouteAlternative.fromJson(j as Map<String, dynamic>))
+              ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];
 
@@ -204,7 +204,7 @@ void main() {
       };
 
       final journeys = (json['journeys'] as List?)
-              ?.map((j) => RouteAlternative.fromJson(j as Map<String, dynamic>))
+              ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];
 
@@ -260,7 +260,7 @@ void main() {
       };
 
       final journeys = (json['journeys'] as List?)
-              ?.map((j) => RouteAlternative.fromJson(j as Map<String, dynamic>))
+              ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];
 
