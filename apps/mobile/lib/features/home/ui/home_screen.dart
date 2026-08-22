@@ -11,6 +11,7 @@ import 'package:mobile/features/routing/state/route_options_notifier.dart';
 import 'package:mobile/features/routing/ui/route_options_screen.dart';
 import 'package:mobile/features/saved/ui/saved_places_screen.dart';
 import 'package:mobile/features/history/ui/journey_history_screen.dart';
+import 'package:mobile/features/history/state/journey_history_notifier.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -123,6 +124,19 @@ class HomeScreen extends ConsumerWidget {
         name: journey.destination!.name,
       ),
     );
+
+    // Add to history
+    final historyEntry = JourneyHistoryEntry(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      originName: journey.origin!.name ?? 'Unknown',
+      destName: journey.destination!.name ?? 'Unknown',
+      originLat: journey.origin!.latitude.toString(),
+      originLon: journey.origin!.longitude.toString(),
+      destLat: journey.destination!.latitude.toString(),
+      destLon: journey.destination!.longitude.toString(),
+      searchedAt: DateTime.now(),
+    );
+    ref.read(journeyHistoryProvider.notifier).addEntry(historyEntry);
 
     ref.read(routeOptionsProvider.notifier).searchRoutes(request);
 

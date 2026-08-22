@@ -19,7 +19,7 @@ class PlacePicker extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final savedPlaces = ref.watch(savedPlacesProvider);
-    final history = ref.watch(journeyHistoryProvider);
+    final historyState = ref.watch(journeyHistoryProvider);
 
     return Card(
       child: Padding(
@@ -93,14 +93,14 @@ class PlacePicker extends ConsumerWidget {
                 }).toList(),
               ),
             ],
-            if (history.isNotEmpty) ...[
+            if (historyState.entries.isNotEmpty) ...[
               const Divider(),
               const Text('Riwayat', style: TextStyle(fontSize: 12, color: Colors.grey)),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: history.take(5).map((h) {
+                children: historyState.entries.take(5).map((h) {
                   return ActionChip(
                     avatar: const Icon(Icons.history, size: 18),
                     label: Text('${h.originName} → ${h.destName}', style: const TextStyle(fontSize: 13)),

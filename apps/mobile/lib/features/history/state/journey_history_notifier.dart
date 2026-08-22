@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile/features/history/data/history_persistence.dart';
 
 class JourneyHistoryEntry {
   final String id;
@@ -24,16 +25,16 @@ class JourneyHistoryEntry {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'originName': originName,
-        'destName': destName,
-        if (originLat != null) 'originLat': originLat,
-        if (originLon != null) 'originLon': originLon,
-        if (destLat != null) 'destLat': destLat,
-        if (destLon != null) 'destLon': destLon,
-        if (summary != null) 'summary': summary,
-        'searchedAt': searchedAt.toIso8601String(),
-      };
+    'id': id,
+    'originName': originName,
+    'destName': destName,
+    if (originLat != null) 'originLat': originLat,
+    if (originLon != null) 'originLon': originLon,
+    if (destLat != null) 'destLat': destLat,
+    if (destLon != null) 'destLon': destLon,
+    if (summary != null) 'summary': summary,
+    'searchedAt': searchedAt.toIso8601String(),
+  };
 
   factory JourneyHistoryEntry.fromJson(Map<String, dynamic> json) {
     return JourneyHistoryEntry(
@@ -50,26 +51,108 @@ class JourneyHistoryEntry {
   }
 }
 
-class JourneyHistoryNotifier extends StateNotifier<List<JourneyHistoryEntry>> {
-  static const int maxEntries = 20;
+class JourneyHistoryState {
+  final List<JourneyHistoryEntry> entries;
+  final bool isLoading;
+  final String? error;
+  final bool isSyncing;
 
-  JourneyHistoryNotifier() : super(const []);
+  const JourneyHistoryState({
+    required this.entries,
+    this.isLoading = false,
+    this.error,
+    this.isSyncing = false,
+  });
+
+  JourneyHistoryState copyWith({
+    List<JourneyHistoryEntry>? entries,
+    bool? isLoading,
+    String? error,
+    bool? isSyncing,
+  }) {
+    return JourneyHistoryState(
+      entries: entries ?? this.entries,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
+      isSyncing: isSyncing ?? this.isSyncing,
+    );
+  }
+}
+
+class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
+  static const int maxEntries = 50;
+  final HistoryPersistence _persistence;
+
+  JourneyHistoryNotifier(this._persistence)
+    : super(const JourneyHistoryState(entries: []));
+
+  Future<void> load() async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final localEntries = await _persistence.load();
+      state = state.copyWith(isLoading: false, entries: localEntries);
+      await _syncWithBackend();
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
+
+  Future<void> _syncWithBackend() async {
+    state = state.copyWith(isSyncing: true);
+    try {
+      // Backend sync would be implemented here
+      // For now, we just persist locally
+      await _persistence.save(state.entries);
+      state = state.copyWith(isSyncing: false);
+    } catch (e) {
+      state = state.copyWith(isSyncing: false, error: 'Gagal sinkronisasi: $e');
+    }
+  }
 
   void addEntry(JourneyHistoryEntry entry) {
-    final filtered = state.where((e) => !(e.originName == entry.originName && e.destName == entry.destName)).toList();
-    state = [entry, ...filtered].take(maxEntries).toList();
+    final filtered =
+        state.entries
+            .where(
+              (e) =>
+                  !(e.originName == entry.originName &&
+                      e.destName == entry.destName),
+            )
+            .toList();
+    final updated =
+        [entry, ...filtered].take(JourneyHistoryNotifier.maxEntries).toList();
+    state = state.copyWith(entries: updated);
+    _persistence.save(updated);
   }
 
   void clear() {
-    state = const [];
+    state = state.copyWith(entries: const []);
+    _persistence.clear();
   }
 
   void removeById(String id) {
-    state = state.where((e) => e.id != id).toList();
+    state = state.copyWith(
+      entries: state.entries.where((e) => e.id != id).toList(),
+    );
+    _persistence.save(state.entries);
   }
 }
 
 final journeyHistoryProvider =
-    StateNotifierProvider<JourneyHistoryNotifier, List<JourneyHistoryEntry>>((ref) {
-  return JourneyHistoryNotifier();
+    StateNotifierProvider<JourneyHistoryNotifier, JourneyHistoryState>((ref) {
+  final persistence = ref.watch(historyPersistenceProvider).asData?.value;
+  if (persistence == null) {
+    return JourneyHistoryNotifier(HistoryPersistenceDummy());
+  }
+  return JourneyHistoryNotifier(persistence);
 });
+
+class HistoryPersistenceDummy implements HistoryPersistence {
+  @override
+  List<JourneyHistoryEntry> load() => [];
+
+  @override
+  Future<void> save(List<JourneyHistoryEntry> entries) async {}
+
+  @override
+  Future<void> clear() async {}
+}

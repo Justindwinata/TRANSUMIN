@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/features/history/state/journey_history_notifier.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryPersistence {
   static const String _key = 'journey_history';
@@ -30,7 +30,9 @@ class HistoryPersistence {
   }
 }
 
-final historyPersistenceProvider = FutureProvider<HistoryPersistence>((ref) async {
+final historyPersistenceProvider = FutureProvider<HistoryPersistence>((
+  ref,
+) async {
   final prefs = await SharedPreferences.getInstance();
   return HistoryPersistence(prefs);
 });

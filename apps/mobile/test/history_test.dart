@@ -1,19 +1,39 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile/features/history/state/journey_history_notifier.dart';
+import 'package:mobile/features/history/data/history_persistence.dart';
+
+class _FakeHistoryPersistence implements HistoryPersistence {
+  List<JourneyHistoryEntry> stored = [];
+
+  @override
+  List<JourneyHistoryEntry> load() => stored;
+
+  @override
+  Future<void> save(List<JourneyHistoryEntry> entries) async {
+    stored = List<JourneyHistoryEntry>.from(entries);
+  }
+
+  @override
+  Future<void> clear() async {
+    stored = [];
+  }
+}
 
 void main() {
   group('JourneyHistoryNotifier', () {
     late JourneyHistoryNotifier notifier;
+    late _FakeHistoryPersistence persistence;
 
     setUp(() {
-      notifier = JourneyHistoryNotifier();
+      persistence = _FakeHistoryPersistence();
+      notifier = JourneyHistoryNotifier(persistence);
     });
 
     test('should start empty', () {
-      expect(notifier.state, isEmpty);
+      expect(notifier.state.entries, isEmpty);
     });
 
-    test('should add entries at the beginning', () {
+    test('should add entries at beginning', () {
       final entry1 = JourneyHistoryEntry(
         id: '1',
         originName: 'Rumah',
@@ -30,9 +50,9 @@ void main() {
       notifier.addEntry(entry1);
       notifier.addEntry(entry2);
 
-      expect(notifier.state.length, 2);
-      expect(notifier.state[0].id, '2');
-      expect(notifier.state[1].id, '1');
+      expect(notifier.state.entries.length, 2);
+      expect(notifier.state.entries[0].id, '2');
+      expect(notifier.state.entries[1].id, '1');
     });
 
     test('should replace duplicate entries', () {
@@ -52,11 +72,11 @@ void main() {
       notifier.addEntry(entry1);
       notifier.addEntry(entry2);
 
-      expect(notifier.state.length, 1);
-      expect(notifier.state[0].id, '2');
+      expect(notifier.state.entries.length, 1);
+      expect(notifier.state.entries[0].id, '2');
     });
 
-    test('should clear all entries', () {
+    test('should clear all entries', () async {
       notifier.addEntry(JourneyHistoryEntry(
         id: '1',
         originName: 'A',
@@ -65,7 +85,7 @@ void main() {
       ));
       notifier.clear();
 
-      expect(notifier.state, isEmpty);
+      expect(notifier.state.entries, isEmpty);
     });
 
     test('should remove entry by id', () {
@@ -84,22 +104,22 @@ void main() {
 
       notifier.removeById('1');
 
-      expect(notifier.state.length, 1);
-      expect(notifier.state[0].id, '2');
+      expect(notifier.state.entries.length, 1);
+      expect(notifier.state.entries[0].id, '2');
     });
 
-    test('should limit entries to 20', () {
-      for (var i = 0; i < 25; i++) {
+    test('should limit entries to max', () {
+      for (var i = 0; i < 60; i++) {
         notifier.addEntry(JourneyHistoryEntry(
           id: '$i',
           originName: 'Origin $i',
           destName: 'Dest $i',
-          searchedAt: DateTime(2024, 8, 19, i),
+          searchedAt: DateTime(2024, 8, 19, 0, i % 60),
         ));
       }
 
-      expect(notifier.state.length, JourneyHistoryNotifier.maxEntries);
-      expect(notifier.state[0].id, '24');
+      expect(notifier.state.entries.length, JourneyHistoryNotifier.maxEntries);
+      expect(notifier.state.entries.first.id, '59');
     });
 
     test('should serialize and deserialize correctly', () {

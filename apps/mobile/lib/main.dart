@@ -28,10 +28,10 @@ class _TransumInAppState extends ConsumerState<TransumInApp> {
     });
   }
 
-  @override
+@override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
-    final networkStatus = ref.watch(networkStatusProvider);
+    final isOnline = ref.watch(networkStatusProvider.notifier).isOnline;
 
     return MaterialApp(
       title: 'TRANSUM-IN',
@@ -42,7 +42,7 @@ class _TransumInAppState extends ConsumerState<TransumInApp> {
               : Stack(
                 children: [
                   const HomeScreen(),
-                  if (!networkStatus.isOnline)
+                  if (!isOnline)
                     Positioned(
                       bottom: 0,
                       left: 0,
@@ -58,10 +58,7 @@ class _TransumInAppState extends ConsumerState<TransumInApp> {
                               SizedBox(width: 8),
                               Text(
                                 'Tidak ada koneksi internet',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
+                                style: TextStyle(color: Colors.white, fontSize: 14),
                               ),
                             ],
                           ),

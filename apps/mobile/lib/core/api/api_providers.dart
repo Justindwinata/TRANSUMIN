@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'api_client.dart';
 import 'auth_interceptor.dart';
+import 'retry_interceptor.dart';
 import 'package:mobile/features/auth/auth_provider.dart';
 import 'package:mobile/core/config/environment.dart';
 
@@ -17,6 +18,11 @@ final dioProvider = Provider<Dio>((ref) {
   dio.interceptors.add(AuthInterceptor(() {
     return ref.read(authProvider).accessToken;
   }));
+
+  dio.interceptors.add(RetryInterceptor(
+    maxRetries: 3,
+    baseDelay: const Duration(seconds: 1),
+  ));
 
   if (AppConfig.enableLogging) {
     dio.interceptors.add(
