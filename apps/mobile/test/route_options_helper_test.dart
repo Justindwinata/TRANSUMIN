@@ -88,9 +88,18 @@ void main() {
     group('getRankingBadgeLabel', () {
       test('should map English badges to Indonesian', () {
         expect(RouteOptionsHelper.getRankingBadgeLabel('fastest'), 'Tercepat');
-        expect(RouteOptionsHelper.getRankingBadgeLabel('fewestTransfers'), 'Minim Transit');
-        expect(RouteOptionsHelper.getRankingBadgeLabel('leastWalking'), 'Minim Jalan');
-        expect(RouteOptionsHelper.getRankingBadgeLabel('simplest'), 'Paling Sederhana');
+        expect(
+          RouteOptionsHelper.getRankingBadgeLabel('fewestTransfers'),
+          'Minim Transit',
+        );
+        expect(
+          RouteOptionsHelper.getRankingBadgeLabel('leastWalking'),
+          'Minim Jalan',
+        );
+        expect(
+          RouteOptionsHelper.getRankingBadgeLabel('simplest'),
+          'Paling Sederhana',
+        );
       });
 
       test('should return original if not in map', () {
@@ -118,8 +127,20 @@ void main() {
           transferCount: 2,
           fareText: '',
           segments: [
-            JourneySegment(type: 'WALK', durationSeconds: 600, instruction: '', fromName: '', toName: ''),
-            JourneySegment(type: 'TRANSIT', durationSeconds: 3000, instruction: '', fromName: '', toName: ''),
+            JourneySegment(
+              type: 'WALK',
+              durationSeconds: 600,
+              instruction: '',
+              fromName: '',
+              toName: '',
+            ),
+            JourneySegment(
+              type: 'TRANSIT',
+              durationSeconds: 3000,
+              instruction: '',
+              fromName: '',
+              toName: '',
+            ),
           ],
         ),
         RouteAlternative(
@@ -136,8 +157,20 @@ void main() {
           transferCount: 0,
           fareText: '',
           segments: [
-            JourneySegment(type: 'WALK', durationSeconds: 300, instruction: '', fromName: '', toName: ''),
-            JourneySegment(type: 'TRANSIT', durationSeconds: 1500, instruction: '', fromName: '', toName: ''),
+            JourneySegment(
+              type: 'WALK',
+              durationSeconds: 300,
+              instruction: '',
+              fromName: '',
+              toName: '',
+            ),
+            JourneySegment(
+              type: 'TRANSIT',
+              durationSeconds: 1500,
+              instruction: '',
+              fromName: '',
+              toName: '',
+            ),
           ],
         ),
       ];
@@ -149,13 +182,19 @@ void main() {
       });
 
       test('should sort by fewest transfers', () {
-        final sorted = RouteOptionsHelper.sortByPreference(routes, 'fewestTransfers');
+        final sorted = RouteOptionsHelper.sortByPreference(
+          routes,
+          'fewestTransfers',
+        );
         expect(sorted[0].transferCount, 0);
         expect(sorted[1].transferCount, 2);
       });
 
       test('should sort by least walking', () {
-        final sorted = RouteOptionsHelper.sortByPreference(routes, 'leastWalking');
+        final sorted = RouteOptionsHelper.sortByPreference(
+          routes,
+          'leastWalking',
+        );
         expect(sorted[0].walkingDistanceMeters, 400);
         expect(sorted[1].walkingDistanceMeters, 800);
       });
@@ -177,7 +216,13 @@ void main() {
           transferCount: 0,
           fareText: '',
           segments: [
-            JourneySegment(type: 'WALK', durationSeconds: 600, instruction: '', fromName: '', toName: ''),
+            JourneySegment(
+              type: 'WALK',
+              durationSeconds: 600,
+              instruction: '',
+              fromName: '',
+              toName: '',
+            ),
           ],
         );
         expect(RouteOptionsHelper.isValidRoute(route), true);
@@ -217,7 +262,13 @@ void main() {
           transferCount: 0,
           fareText: '',
           segments: [
-            JourneySegment(type: 'WALK', durationSeconds: 600, instruction: '', fromName: '', toName: ''),
+            JourneySegment(
+              type: 'WALK',
+              durationSeconds: 600,
+              instruction: '',
+              fromName: '',
+              toName: '',
+            ),
           ],
         );
         expect(RouteOptionsHelper.isValidRoute(route), false);
@@ -238,7 +289,13 @@ void main() {
           transferCount: 0,
           fareText: '',
           segments: [
-            JourneySegment(type: 'WALK', durationSeconds: 600, instruction: '', fromName: '', toName: ''),
+            JourneySegment(
+              type: 'WALK',
+              durationSeconds: 600,
+              instruction: '',
+              fromName: '',
+              toName: '',
+            ),
           ],
         );
         expect(RouteOptionsHelper.isValidRoute(route), false);

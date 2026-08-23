@@ -4,11 +4,8 @@ import '../domain/models.dart';
 class JourneyState {
   final JourneyLocation? origin;
   final JourneyLocation? destination;
-  
-  JourneyState({
-    this.origin,
-    this.destination,
-  });
+
+  JourneyState({this.origin, this.destination});
 
   JourneyState copyWith({
     JourneyLocation? origin,
@@ -46,6 +43,8 @@ class JourneyNotifier extends StateNotifier<JourneyState> {
   }
 }
 
-final journeyProvider = StateNotifierProvider<JourneyNotifier, JourneyState>((ref) {
+final journeyProvider = StateNotifierProvider<JourneyNotifier, JourneyState>((
+  ref,
+) {
   return JourneyNotifier();
 });

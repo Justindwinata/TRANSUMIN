@@ -4,11 +4,8 @@ class TransitBadge extends StatelessWidget {
   final String label;
   final TransitMode mode;
 
-  const TransitBadge({
-    Key? key,
-    required this.label,
-    required this.mode,
-  }) : super(key: key);
+  const TransitBadge({Key? key, required this.label, required this.mode})
+    : super(key: key);
 
   Color get backgroundColor {
     switch (mode) {

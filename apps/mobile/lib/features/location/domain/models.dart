@@ -2,10 +2,7 @@ class Coordinate {
   final double latitude;
   final double longitude;
 
-  Coordinate({
-    required this.latitude,
-    required this.longitude,
-  });
+  Coordinate({required this.latitude, required this.longitude});
 
   @override
   String toString() => 'Coordinate($latitude, $longitude)';

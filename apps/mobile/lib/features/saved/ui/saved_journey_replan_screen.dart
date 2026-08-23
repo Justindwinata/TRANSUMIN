@@ -9,14 +9,13 @@ import 'package:mobile/features/routing/ui/route_options_screen.dart';
 class SavedJourneyReplanScreen extends ConsumerWidget {
   final SavedJourney journey;
 
-  const SavedJourneyReplanScreen({Key? key, required this.journey}) : super(key: key);
+  const SavedJourneyReplanScreen({Key? key, required this.journey})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Rencanakan Ulang'),
-      ),
+      appBar: AppBar(title: const Text('Rencanakan Ulang')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -35,7 +34,10 @@ class SavedJourneyReplanScreen extends ConsumerWidget {
                     const SizedBox(height: 4),
                     Text(
                       journey.label ?? 'Tanpa Label',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     Row(
@@ -72,7 +74,9 @@ class SavedJourneyReplanScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Text('ID Perjalanan: ${journey.id}'),
-            Text('Dibuat: ${journey.createdAt.toLocal().toString().substring(0, 19)}'),
+            Text(
+              'Dibuat: ${journey.createdAt.toLocal().toString().substring(0, 19)}',
+            ),
             const SizedBox(height: 24),
             Row(
               children: [
@@ -99,7 +103,7 @@ class SavedJourneyReplanScreen extends ConsumerWidget {
 
   void _replanJourney(BuildContext context, WidgetRef ref) {
     final payload = _parsePayload(journey.payloadJson);
-    
+
     final request = JourneyRequest(
       origin: JourneyPoint(
         latitude: payload['originLat'] ?? -6.2088,
@@ -114,7 +118,7 @@ class SavedJourneyReplanScreen extends ConsumerWidget {
     );
 
     ref.read(routeOptionsProvider.notifier).searchRoutes(request);
-    
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => RouteOptionsScreen(request: request)),

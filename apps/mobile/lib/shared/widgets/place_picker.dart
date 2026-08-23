@@ -10,11 +10,8 @@ class PlacePicker extends ConsumerWidget {
   final String label;
   final ValueChanged<Place> onSelect;
 
-  const PlacePicker({
-    Key? key,
-    required this.label,
-    required this.onSelect,
-  }) : super(key: key);
+  const PlacePicker({Key? key, required this.label, required this.onSelect})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,7 +28,13 @@ class PlacePicker extends ConsumerWidget {
               children: [
                 const Icon(Icons.place, color: Color(0xFF2563EB)),
                 const SizedBox(width: 8),
-                Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -46,15 +49,17 @@ class PlacePicker extends ConsumerWidget {
                   MaterialPageRoute(builder: (_) => const SearchScreen()),
                 );
                 if (result != null) {
-                  onSelect(Place(
-                    id: result.id,
-                    name: result.name ?? '',
-                    address: result.address,
-                    latitude: result.latitude,
-                    longitude: result.longitude,
-                    type: PlaceType.generic,
-                    source: 'search',
-                  ));
+                  onSelect(
+                    Place(
+                      id: result.id,
+                      name: result.name ?? '',
+                      address: result.address,
+                      latitude: result.latitude,
+                      longitude: result.longitude,
+                      type: PlaceType.generic,
+                      source: 'search',
+                    ),
+                  );
                 }
               },
             ),
@@ -65,54 +70,72 @@ class PlacePicker extends ConsumerWidget {
               title: const Text('Lokasi Saat Ini'),
               subtitle: const Text('Gunakan posisi GPS'),
               onTap: () {
-                onSelect(Place(
-                  name: 'Lokasi Saya',
-                  latitude: -6.2088,
-                  longitude: 106.8456,
-                  type: PlaceType.generic,
-                  source: 'current_location',
-                ));
+                onSelect(
+                  Place(
+                    name: 'Lokasi Saya',
+                    latitude: -6.2088,
+                    longitude: 106.8456,
+                    type: PlaceType.generic,
+                    source: 'current_location',
+                  ),
+                );
               },
             ),
             if (savedPlaces.places.isNotEmpty) ...[
               const Divider(),
-              const Text('Tersimpan', style: TextStyle(fontSize: 12, color: Colors.grey)),
+              const Text(
+                'Tersimpan',
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: savedPlaces.places.map((sp) {
-                  return ActionChip(
-                    avatar: Icon(
-                      _getPlaceIcon(sp.name),
-                      size: 18,
-                    ),
-                    label: Text(sp.name, style: const TextStyle(fontSize: 13)),
-                    onPressed: () => onSelect(sp.toPlace()),
-                  );
-                }).toList(),
+                children:
+                    savedPlaces.places.map((sp) {
+                      return ActionChip(
+                        avatar: Icon(_getPlaceIcon(sp.name), size: 18),
+                        label: Text(
+                          sp.name,
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                        onPressed: () => onSelect(sp.toPlace()),
+                      );
+                    }).toList(),
               ),
             ],
             if (historyState.entries.isNotEmpty) ...[
               const Divider(),
-              const Text('Riwayat', style: TextStyle(fontSize: 12, color: Colors.grey)),
+              const Text(
+                'Riwayat',
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: historyState.entries.take(5).map((h) {
-                  return ActionChip(
-                    avatar: const Icon(Icons.history, size: 18),
-                    label: Text('${h.originName} → ${h.destName}', style: const TextStyle(fontSize: 13)),
-                    onPressed: () => onSelect(Place(
-                      name: h.originName,
-                      latitude: double.tryParse(h.originLat ?? '') ?? -6.2,
-                      longitude: double.tryParse(h.originLon ?? '') ?? 106.8,
-                      type: PlaceType.generic,
-                      source: 'history',
-                    )),
-                  );
-                }).toList(),
+                children:
+                    historyState.entries.take(5).map((h) {
+                      return ActionChip(
+                        avatar: const Icon(Icons.history, size: 18),
+                        label: Text(
+                          '${h.originName} → ${h.destName}',
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                        onPressed:
+                            () => onSelect(
+                              Place(
+                                name: h.originName,
+                                latitude:
+                                    double.tryParse(h.originLat ?? '') ?? -6.2,
+                                longitude:
+                                    double.tryParse(h.originLon ?? '') ?? 106.8,
+                                type: PlaceType.generic,
+                                source: 'history',
+                              ),
+                            ),
+                      );
+                    }).toList(),
               ),
             ],
           ],
@@ -125,9 +148,14 @@ class PlacePicker extends ConsumerWidget {
     final lower = name.toLowerCase();
     if (lower.contains('rumah') || lower.contains('home')) return Icons.home;
     if (lower.contains('kantor') || lower.contains('office')) return Icons.work;
-    if (lower.contains('kampus') || lower.contains('university') || lower.contains('sekolah')) return Icons.school;
-    if (lower.contains('stasiun') || lower.contains('station')) return Icons.train;
-    if (lower.contains('halte') || lower.contains('bus')) return Icons.directions_bus;
+    if (lower.contains('kampus') ||
+        lower.contains('university') ||
+        lower.contains('sekolah'))
+      return Icons.school;
+    if (lower.contains('stasiun') || lower.contains('station'))
+      return Icons.train;
+    if (lower.contains('halte') || lower.contains('bus'))
+      return Icons.directions_bus;
     return Icons.place;
   }
 }

@@ -20,18 +20,18 @@ class AppDimensions {
 class AppStrings {
   static const String appName = 'TRANSUM-IN';
   static const String tagline = 'Biar Naik Transum Nggak Bingung';
-  
+
   static const String placeholderOrigin = 'Pilih titik awal';
   static const String placeholderDestination = 'Pilih tujuan';
-  
+
   static const String btnSearch = 'Cari Rute';
   static const String btnStart = 'Mulai Navigasi';
   static const String btnNext = 'Berikutnya';
   static const String btnNow = 'Sekarang';
-  
+
   static const String fareNotAvailable = 'Tarif tidak tersedia';
   static const String scheduleNotAvailable = 'Jadwal tidak tersedia';
-  
+
   static const String loading = 'Memuat...';
   static const String error = 'Terjadi kesalahan';
 }

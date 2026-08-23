@@ -8,8 +8,11 @@ void main() {
       final route = RouteAlternative(
         id: '1',
         origin: JourneyPoint(latitude: -6.2, longitude: 106.8, name: 'Home'),
-        destination:
-            JourneyPoint(latitude: -6.3, longitude: 106.9, name: 'Office'),
+        destination: JourneyPoint(
+          latitude: -6.3,
+          longitude: 106.9,
+          name: 'Office',
+        ),
         departureTime: '08:00',
         arrivalTime: '09:00',
         totalDurationSeconds: 3600,
@@ -26,12 +29,14 @@ void main() {
 
       expect(model.markers.length, 2);
       expect(
-        model.markers.firstWhere((m) => m.kind == JourneyMapMarkerKind.origin)
+        model.markers
+            .firstWhere((m) => m.kind == JourneyMapMarkerKind.origin)
             .label,
         'Home',
       );
       expect(
-        model.markers.firstWhere((m) => m.kind == JourneyMapMarkerKind.destination)
+        model.markers
+            .firstWhere((m) => m.kind == JourneyMapMarkerKind.destination)
             .label,
         'Office',
       );
@@ -41,8 +46,11 @@ void main() {
       final route = RouteAlternative(
         id: '1',
         origin: JourneyPoint(latitude: -6.2, longitude: 106.8, name: 'Home'),
-        destination:
-            JourneyPoint(latitude: -6.3, longitude: 106.9, name: 'Office'),
+        destination: JourneyPoint(
+          latitude: -6.3,
+          longitude: 106.9,
+          name: 'Office',
+        ),
         departureTime: '08:00',
         arrivalTime: '09:00',
         totalDurationSeconds: 3600,
@@ -71,17 +79,19 @@ void main() {
 
       final model = JourneyMapBuilder.fromJourney(route);
 
-      final transitLine =
-          model.segments.firstWhere((s) => s.kind == JourneySegmentKind.transit);
+      final transitLine = model.segments.firstWhere(
+        (s) => s.kind == JourneySegmentKind.transit,
+      );
       expect(transitLine.points.length, 2);
       expect(transitLine.points[0].lat, -6.2);
       expect(transitLine.points[0].lon, 106.8);
       expect(transitLine.points[1].lat, -6.3);
       expect(transitLine.points[1].lon, 106.9);
 
-      final boardMarkers = model.markers
-          .where((m) => m.kind == JourneyMapMarkerKind.boarding)
-          .toList();
+      final boardMarkers =
+          model.markers
+              .where((m) => m.kind == JourneyMapMarkerKind.boarding)
+              .toList();
       expect(boardMarkers.length, 1);
       expect(boardMarkers[0].label, 'Stasiun UI');
     });
@@ -90,8 +100,11 @@ void main() {
       final route = RouteAlternative(
         id: '1',
         origin: JourneyPoint(latitude: -6.2, longitude: 106.8, name: 'Home'),
-        destination:
-            JourneyPoint(latitude: -6.3, longitude: 106.9, name: 'Office'),
+        destination: JourneyPoint(
+          latitude: -6.3,
+          longitude: 106.9,
+          name: 'Office',
+        ),
         departureTime: '08:00',
         arrivalTime: '09:00',
         totalDurationSeconds: 3600,
@@ -121,8 +134,11 @@ void main() {
       final route = RouteAlternative(
         id: '1',
         origin: JourneyPoint(latitude: -6.2, longitude: 106.8, name: 'Home'),
-        destination:
-            JourneyPoint(latitude: -6.4, longitude: 107.0, name: 'Office'),
+        destination: JourneyPoint(
+          latitude: -6.4,
+          longitude: 107.0,
+          name: 'Office',
+        ),
         departureTime: '08:00',
         arrivalTime: '09:00',
         totalDurationSeconds: 3600,
@@ -143,10 +159,7 @@ void main() {
     });
 
     test('should be empty when no markers or segments', () {
-      final model = JourneyMapModel(
-        markers: [],
-        segments: [],
-      );
+      final model = JourneyMapModel(markers: [], segments: []);
 
       expect(model.isEmpty, true);
     });
@@ -171,10 +184,7 @@ void main() {
   group('JourneySegmentLine', () {
     test('should mark walking segments as approximate', () {
       final line = JourneySegmentLine(
-        points: [
-          (lat: -6.2, lon: 106.8),
-          (lat: -6.3, lon: 106.9),
-        ],
+        points: [(lat: -6.2, lon: 106.8), (lat: -6.3, lon: 106.9)],
         kind: JourneySegmentKind.walking,
       );
 
@@ -183,10 +193,7 @@ void main() {
 
     test('should mark transfer segments as approximate', () {
       final line = JourneySegmentLine(
-        points: [
-          (lat: -6.2, lon: 106.8),
-          (lat: -6.2, lon: 106.8),
-        ],
+        points: [(lat: -6.2, lon: 106.8), (lat: -6.2, lon: 106.8)],
         kind: JourneySegmentKind.transfer,
       );
 
@@ -195,10 +202,7 @@ void main() {
 
     test('should mark transit segments as not approximate', () {
       final line = JourneySegmentLine(
-        points: [
-          (lat: -6.2, lon: 106.8),
-          (lat: -6.3, lon: 106.9),
-        ],
+        points: [(lat: -6.2, lon: 106.8), (lat: -6.3, lon: 106.9)],
         kind: JourneySegmentKind.transit,
       );
 

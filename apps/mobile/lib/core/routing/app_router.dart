@@ -19,14 +19,10 @@ class AppRouter {
   }
 
   static MaterialPageRoute<T> routeToProfile<T>() {
-    return MaterialPageRoute<T>(
-      builder: (_) => const ProfileScreen(),
-    );
+    return MaterialPageRoute<T>(builder: (_) => const ProfileScreen());
   }
 
   static MaterialPageRoute<T> routeToSettings<T>() {
-    return MaterialPageRoute<T>(
-      builder: (_) => const SettingsScreen(),
-    );
+    return MaterialPageRoute<T>(builder: (_) => const SettingsScreen());
   }
 }

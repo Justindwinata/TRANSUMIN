@@ -157,15 +157,21 @@ class NearbyTransitResult {
 
   factory NearbyTransitResult.fromJson(Map<String, dynamic> json) {
     return NearbyTransitResult(
-      stops: (json['stops'] as List?)
-          ?.map((e) => TransitStop.fromJson(e as Map<String, dynamic>))
-          .toList() ?? [],
-      stations: (json['stations'] as List?)
-          ?.map((e) => TransitStation.fromJson(e as Map<String, dynamic>))
-          .toList() ?? [],
+      stops:
+          (json['stops'] as List?)
+              ?.map((e) => TransitStop.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      stations:
+          (json['stations'] as List?)
+              ?.map((e) => TransitStation.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
-  List<TransitStop> get allStops => stops..sort((a, b) => (a.distance ?? 0).compareTo(b.distance ?? 0));
-  List<TransitStation> get allStations => stations..sort((a, b) => (a.distance ?? 0).compareTo(b.distance ?? 0));
+  List<TransitStop> get allStops =>
+      stops..sort((a, b) => (a.distance ?? 0).compareTo(b.distance ?? 0));
+  List<TransitStation> get allStations =>
+      stations..sort((a, b) => (a.distance ?? 0).compareTo(b.distance ?? 0));
 }

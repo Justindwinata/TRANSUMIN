@@ -125,7 +125,8 @@ class RouteAlternative {
     final modes = <String>[];
     for (var s in segments) {
       if (s.type == 'TRANSIT') {
-        final name = s.routeShortName ?? s.routeLongName ?? s.serviceType ?? 'Transit';
+        final name =
+            s.routeShortName ?? s.routeLongName ?? s.serviceType ?? 'Transit';
         if (!modes.contains(name)) modes.add(name);
       }
     }

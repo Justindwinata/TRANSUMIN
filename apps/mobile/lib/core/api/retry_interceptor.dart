@@ -36,7 +36,8 @@ class RetryInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    final isSafeMethod = requestOptions.method == 'GET' ||
+    final isSafeMethod =
+        requestOptions.method == 'GET' ||
         requestOptions.method == 'HEAD' ||
         requestOptions.method == 'OPTIONS' ||
         requestOptions.headers['X-Retry-Safe'] == 'true';
@@ -45,7 +46,8 @@ class RetryInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    final isRetryable = retryableStatusCodes.contains(err.response?.statusCode) ||
+    final isRetryable =
+        retryableStatusCodes.contains(err.response?.statusCode) ||
         err.type == DioExceptionType.connectionTimeout ||
         err.type == DioExceptionType.receiveTimeout ||
         err.type == DioExceptionType.sendTimeout;
@@ -65,11 +67,13 @@ class RetryInterceptor extends Interceptor {
     );
 
     try {
-      final response = await Dio(BaseOptions(
-        baseUrl: requestOptions.baseUrl,
-        connectTimeout: requestOptions.connectTimeout,
-        receiveTimeout: requestOptions.receiveTimeout,
-      )).request<dynamic>(
+      final response = await Dio(
+        BaseOptions(
+          baseUrl: requestOptions.baseUrl,
+          connectTimeout: requestOptions.connectTimeout,
+          receiveTimeout: requestOptions.receiveTimeout,
+        ),
+      ).request<dynamic>(
         requestOptions.path,
         data: requestOptions.data,
         queryParameters: requestOptions.queryParameters,

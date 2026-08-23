@@ -11,8 +11,10 @@ class NearbyState {
 
   factory NearbyState.idle() => NearbyState._(isLoading: false);
   factory NearbyState.loading() => NearbyState._(isLoading: true);
-  factory NearbyState.success(NearbyTransitResult result) => NearbyState._(isLoading: false, result: result);
-  factory NearbyState.error(String message) => NearbyState._(isLoading: false, error: message);
+  factory NearbyState.success(NearbyTransitResult result) =>
+      NearbyState._(isLoading: false, result: result);
+  factory NearbyState.error(String message) =>
+      NearbyState._(isLoading: false, error: message);
 }
 
 class NearbyTransitNotifier extends StateNotifier<NearbyState> {
@@ -32,6 +34,7 @@ class NearbyTransitNotifier extends StateNotifier<NearbyState> {
   void reset() => state = NearbyState.idle();
 }
 
-final nearbyTransitProvider = StateNotifierProvider<NearbyTransitNotifier, NearbyState>((ref) {
-  return NearbyTransitNotifier(ref.read(transitRepositoryProvider));
-});
+final nearbyTransitProvider =
+    StateNotifierProvider<NearbyTransitNotifier, NearbyState>((ref) {
+      return NearbyTransitNotifier(ref.read(transitRepositoryProvider));
+    });

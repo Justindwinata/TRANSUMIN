@@ -7,12 +7,21 @@ class TransitRepository {
 
   TransitRepository(this._ref);
 
-  Future<NearbyTransitResult> getNearbyTransit(double lat, double lon, double radius) async {
-    final response = await _ref.read(apiClientProvider).get('/transit/nearby', queryParameters: {
-      'lat': lat.toString(),
-      'lon': lon.toString(),
-      'radius': radius.toString(),
-    });
+  Future<NearbyTransitResult> getNearbyTransit(
+    double lat,
+    double lon,
+    double radius,
+  ) async {
+    final response = await _ref
+        .read(apiClientProvider)
+        .get(
+          '/transit/nearby',
+          queryParameters: {
+            'lat': lat.toString(),
+            'lon': lon.toString(),
+            'radius': radius.toString(),
+          },
+        );
     return NearbyTransitResult.fromJson(response);
   }
 }

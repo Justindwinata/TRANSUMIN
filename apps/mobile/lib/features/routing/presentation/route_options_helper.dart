@@ -28,11 +28,11 @@ class RouteOptionsHelper {
     if (parts.length < 2) return gtfsTime;
     int hour = int.tryParse(parts[0]) ?? 0;
     final minute = parts[1];
-    
+
     if (hour >= 24) {
       hour = hour % 24;
     }
-    
+
     return '${hour.toString().padLeft(2, '0')}:$minute';
   }
 
@@ -40,7 +40,7 @@ class RouteOptionsHelper {
     if (colorHex == null || colorHex.isEmpty) {
       return const Color(0xFF2563EB);
     }
-    
+
     try {
       String hex = colorHex.replaceAll('#', '');
       if (hex.length == 6) {
@@ -77,14 +77,14 @@ class RouteOptionsHelper {
 
   static String getRankingBadgeLabel(String? badge) {
     if (badge == null) return '';
-    
+
     final badgeMap = {
       'fastest': 'Tercepat',
       'fewestTransfers': 'Minim Transit',
       'leastWalking': 'Minim Jalan',
       'simplest': 'Paling Sederhana',
     };
-    
+
     return badgeMap[badge] ?? badge;
   }
 
@@ -93,16 +93,20 @@ class RouteOptionsHelper {
     String preference,
   ) {
     final sorted = List<RouteAlternative>.from(routes);
-    
+
     switch (preference) {
       case 'fastest':
-        sorted.sort((a, b) => a.totalDurationSeconds.compareTo(b.totalDurationSeconds));
+        sorted.sort(
+          (a, b) => a.totalDurationSeconds.compareTo(b.totalDurationSeconds),
+        );
         break;
       case 'fewestTransfers':
         sorted.sort((a, b) => a.transferCount.compareTo(b.transferCount));
         break;
       case 'leastWalking':
-        sorted.sort((a, b) => a.walkingDistanceMeters.compareTo(b.walkingDistanceMeters));
+        sorted.sort(
+          (a, b) => a.walkingDistanceMeters.compareTo(b.walkingDistanceMeters),
+        );
         break;
       case 'simplest':
         sorted.sort((a, b) {
@@ -112,7 +116,7 @@ class RouteOptionsHelper {
         });
         break;
     }
-    
+
     return sorted;
   }
 

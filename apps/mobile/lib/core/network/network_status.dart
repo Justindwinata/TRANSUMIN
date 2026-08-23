@@ -15,6 +15,7 @@ class NetworkStatusNotifier extends StateNotifier<NetworkStatus> {
   }
 }
 
-final networkStatusProvider = StateNotifierProvider<NetworkStatusNotifier, NetworkStatus>((ref) {
-  return NetworkStatusNotifier();
-});
+final networkStatusProvider =
+    StateNotifierProvider<NetworkStatusNotifier, NetworkStatus>((ref) {
+      return NetworkStatusNotifier();
+    });

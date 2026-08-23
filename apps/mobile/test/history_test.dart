@@ -77,30 +77,36 @@ void main() {
     });
 
     test('should clear all entries', () async {
-      notifier.addEntry(JourneyHistoryEntry(
-        id: '1',
-        originName: 'A',
-        destName: 'B',
-        searchedAt: DateTime(2024),
-      ));
+      notifier.addEntry(
+        JourneyHistoryEntry(
+          id: '1',
+          originName: 'A',
+          destName: 'B',
+          searchedAt: DateTime(2024),
+        ),
+      );
       notifier.clear();
 
       expect(notifier.state.entries, isEmpty);
     });
 
     test('should remove entry by id', () {
-      notifier.addEntry(JourneyHistoryEntry(
-        id: '1',
-        originName: 'A',
-        destName: 'B',
-        searchedAt: DateTime(2024),
-      ));
-      notifier.addEntry(JourneyHistoryEntry(
-        id: '2',
-        originName: 'C',
-        destName: 'D',
-        searchedAt: DateTime(2024),
-      ));
+      notifier.addEntry(
+        JourneyHistoryEntry(
+          id: '1',
+          originName: 'A',
+          destName: 'B',
+          searchedAt: DateTime(2024),
+        ),
+      );
+      notifier.addEntry(
+        JourneyHistoryEntry(
+          id: '2',
+          originName: 'C',
+          destName: 'D',
+          searchedAt: DateTime(2024),
+        ),
+      );
 
       notifier.removeById('1');
 
@@ -110,12 +116,14 @@ void main() {
 
     test('should limit entries to max', () {
       for (var i = 0; i < 60; i++) {
-        notifier.addEntry(JourneyHistoryEntry(
-          id: '$i',
-          originName: 'Origin $i',
-          destName: 'Dest $i',
-          searchedAt: DateTime(2024, 8, 19, 0, i % 60),
-        ));
+        notifier.addEntry(
+          JourneyHistoryEntry(
+            id: '$i',
+            originName: 'Origin $i',
+            destName: 'Dest $i',
+            searchedAt: DateTime(2024, 8, 19, 0, i % 60),
+          ),
+        );
       }
 
       expect(notifier.state.entries.length, JourneyHistoryNotifier.maxEntries);

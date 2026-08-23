@@ -31,18 +31,10 @@ class JourneyStepWidget extends StatelessWidget {
               CircleAvatar(
                 radius: 16,
                 backgroundColor: color,
-                child: Icon(
-                  icon,
-                  size: 16,
-                  color: Colors.white,
-                ),
+                child: Icon(icon, size: 16, color: Colors.white),
               ),
               if (!isLast)
-                Container(
-                  width: 2,
-                  height: 40,
-                  color: const Color(0xFF737686),
-                ),
+                Container(width: 2, height: 40, color: const Color(0xFF737686)),
             ],
           ),
           const SizedBox(width: 12),
@@ -53,7 +45,9 @@ class JourneyStepWidget extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.bold),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(

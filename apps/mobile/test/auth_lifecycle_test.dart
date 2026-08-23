@@ -84,14 +84,17 @@ void main() {
       expect(notifier.state.accessToken, 'token-xyz');
     });
 
-    test('initialize should set unauthenticated when no token stored', () async {
-      final storage = _FakeSecureStorage();
-      final notifier = AuthNotifier(storage);
-      await notifier.initialize();
+    test(
+      'initialize should set unauthenticated when no token stored',
+      () async {
+        final storage = _FakeSecureStorage();
+        final notifier = AuthNotifier(storage);
+        await notifier.initialize();
 
-      expect(notifier.state.isAuthenticated, false);
-      expect(notifier.state.isLoading, false);
-    });
+        expect(notifier.state.isAuthenticated, false);
+        expect(notifier.state.isLoading, false);
+      },
+    );
 
     test('initialize should set unauthenticated if storage throws', () async {
       final storage = _BrokenSecureStorage();
@@ -108,12 +111,14 @@ void main() {
       final persistence = _FakeHistoryPersistence();
       final notifier = JourneyHistoryNotifier(persistence);
 
-      notifier.addEntry(JourneyHistoryEntry(
-        id: '1',
-        originName: 'A',
-        destName: 'B',
-        searchedAt: DateTime(2024, 1, 1),
-      ));
+      notifier.addEntry(
+        JourneyHistoryEntry(
+          id: '1',
+          originName: 'A',
+          destName: 'B',
+          searchedAt: DateTime(2024, 1, 1),
+        ),
+      );
 
       expect(persistence.stored.length, 1);
       expect(persistence.stored[0].id, '1');
@@ -121,12 +126,14 @@ void main() {
 
     test('should load entries from storage on creation', () async {
       final persistence = _FakeHistoryPersistence();
-      persistence.stored.add(JourneyHistoryEntry(
-        id: 'loaded-1',
-        originName: 'Loaded',
-        destName: 'Place',
-        searchedAt: DateTime(2024, 1, 1),
-      ));
+      persistence.stored.add(
+        JourneyHistoryEntry(
+          id: 'loaded-1',
+          originName: 'Loaded',
+          destName: 'Place',
+          searchedAt: DateTime(2024, 1, 1),
+        ),
+      );
 
       final notifier = JourneyHistoryNotifier(persistence);
       await notifier.load();
@@ -136,12 +143,14 @@ void main() {
 
     test('should clear storage when clear() called', () {
       final persistence = _FakeHistoryPersistence();
-      persistence.stored.add(JourneyHistoryEntry(
-        id: '1',
-        originName: 'A',
-        destName: 'B',
-        searchedAt: DateTime(2024),
-      ));
+      persistence.stored.add(
+        JourneyHistoryEntry(
+          id: '1',
+          originName: 'A',
+          destName: 'B',
+          searchedAt: DateTime(2024),
+        ),
+      );
 
       final notifier = JourneyHistoryNotifier(persistence);
       notifier.clear();

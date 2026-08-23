@@ -23,16 +23,21 @@ class ErrorState extends StatelessWidget {
         children: [
           const Icon(Icons.error_outline, size: 64, color: Color(0xFFBA1A1A)),
           const SizedBox(height: 16),
-          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 8),
-          Text(description, style: const TextStyle(fontSize: 14, color: Colors.grey), textAlign: TextAlign.center),
+          Text(
+            description,
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
+            textAlign: TextAlign.center,
+          ),
           if (onRetry != null && buttonLabel != null) ...[
             const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: onRetry,
-              child: Text(buttonLabel!),
-            ),
-          ]
+            ElevatedButton(onPressed: onRetry, child: Text(buttonLabel!)),
+          ],
         ],
       ),
     );

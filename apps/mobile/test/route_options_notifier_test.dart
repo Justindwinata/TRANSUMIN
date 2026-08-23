@@ -8,7 +8,11 @@ class MockRoutingRepository implements RoutingRepository {
   Exception? mockError;
   Duration delay;
 
-  MockRoutingRepository({this.mockResult, this.mockError, this.delay = Duration.zero});
+  MockRoutingRepository({
+    this.mockResult,
+    this.mockError,
+    this.delay = Duration.zero,
+  });
 
   @override
   Future<List<RouteAlternative>> planJourney(JourneyRequest request) async {
@@ -96,7 +100,9 @@ void main() {
     });
 
     test('searchRoutes should detect network errors', () async {
-      final repo = MockRoutingRepository(mockError: Exception('Connection timeout'));
+      final repo = MockRoutingRepository(
+        mockError: Exception('Connection timeout'),
+      );
       final notifier = RouteOptionsNotifier(repo);
 
       final request = JourneyRequest(

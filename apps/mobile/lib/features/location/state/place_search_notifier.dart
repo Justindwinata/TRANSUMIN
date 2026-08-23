@@ -8,7 +8,7 @@ class PlaceSearchState {
   final bool isLoading;
   final List<Place> results;
   final String? error;
-  
+
   PlaceSearchState({
     this.query = '',
     this.isLoading = false,
@@ -34,13 +34,13 @@ class PlaceSearchState {
 class PlaceSearchNotifier extends StateNotifier<PlaceSearchState> {
   final GeocodingRepository _repository;
   Timer? _debounceTimer;
-  
+
   PlaceSearchNotifier(this._repository) : super(PlaceSearchState());
 
   void setQuery(String query) {
     state = state.copyWith(query: query);
     _debounceTimer?.cancel();
-    
+
     if (query.length < 2) {
       state = state.copyWith(results: [], isLoading: false, error: null);
       return;
@@ -57,7 +57,11 @@ class PlaceSearchNotifier extends StateNotifier<PlaceSearchState> {
       final results = await _repository.search(query);
       state = state.copyWith(isLoading: false, results: results);
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString(), results: []);
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+        results: [],
+      );
     }
   }
 
@@ -73,6 +77,7 @@ class PlaceSearchNotifier extends StateNotifier<PlaceSearchState> {
   }
 }
 
-final placeSearchProvider = StateNotifierProvider<PlaceSearchNotifier, PlaceSearchState>((ref) {
-  return PlaceSearchNotifier(ref.watch(geocodingRepositoryProvider));
-});
+final placeSearchProvider =
+    StateNotifierProvider<PlaceSearchNotifier, PlaceSearchState>((ref) {
+      return PlaceSearchNotifier(ref.watch(geocodingRepositoryProvider));
+    });

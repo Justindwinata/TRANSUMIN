@@ -3,13 +3,15 @@ import '../domain/models.dart';
 
 class RecentSearchNotifier extends StateNotifier<List<Place>> {
   static const int maxRecent = 10;
-  
+
   RecentSearchNotifier() : super([]);
 
   void addRecent(Place place) {
     state = [
       place,
-      ...state.where((p) => p.id != place.id || p.name != place.name).take(maxRecent - 1),
+      ...state
+          .where((p) => p.id != place.id || p.name != place.name)
+          .take(maxRecent - 1),
     ];
   }
 
@@ -18,6 +20,7 @@ class RecentSearchNotifier extends StateNotifier<List<Place>> {
   }
 }
 
-final recentSearchProvider = StateNotifierProvider<RecentSearchNotifier, List<Place>>((ref) {
-  return RecentSearchNotifier();
-});
+final recentSearchProvider =
+    StateNotifierProvider<RecentSearchNotifier, List<Place>>((ref) {
+      return RecentSearchNotifier();
+    });

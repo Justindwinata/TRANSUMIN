@@ -44,17 +44,18 @@ class JourneyDetailScreen extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: alreadySaved
-                        ? OutlinedButton.icon(
-                            onPressed: null,
-                            icon: const Icon(Icons.bookmark_added),
-                            label: const Text('Sudah Disimpan'),
-                          )
-                        : ElevatedButton.icon(
-                            onPressed: () => _saveJourney(context, ref),
-                            icon: const Icon(Icons.bookmark_add),
-                            label: const Text('Simpan Perjalanan'),
-                          ),
+                    child:
+                        alreadySaved
+                            ? OutlinedButton.icon(
+                              onPressed: null,
+                              icon: const Icon(Icons.bookmark_added),
+                              label: const Text('Sudah Disimpan'),
+                            )
+                            : ElevatedButton.icon(
+                              onPressed: () => _saveJourney(context, ref),
+                              icon: const Icon(Icons.bookmark_add),
+                              label: const Text('Simpan Perjalanan'),
+                            ),
                   ),
                 ],
               ),
@@ -92,17 +93,19 @@ class JourneyDetailScreen extends ConsumerWidget {
       'destLon': route.destination.longitude,
     };
 
-    ref.read(savedJourneysProvider.notifier).addJourney(
-      originName: route.origin.name ?? 'Origin',
-      destName: route.destination.name ?? 'Destination',
-      payloadJson: jsonEncode(payload),
-      label:
-          '${route.origin.name ?? 'Origin'} → ${route.destination.name ?? 'Destination'}',
-    );
+    ref
+        .read(savedJourneysProvider.notifier)
+        .addJourney(
+          originName: route.origin.name ?? 'Origin',
+          destName: route.destination.name ?? 'Destination',
+          payloadJson: jsonEncode(payload),
+          label:
+              '${route.origin.name ?? 'Origin'} → ${route.destination.name ?? 'Destination'}',
+        );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Perjalanan disimpan')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Perjalanan disimpan')));
   }
 
   String _iconType(InstructionKind kind) {
@@ -157,7 +160,10 @@ class _Header extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFF2563EB).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(16),
@@ -174,7 +180,10 @@ class _Header extends StatelessWidget {
               const SizedBox(width: 8),
               if (route.badge != null)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFF2563EB),
                     borderRadius: BorderRadius.circular(16),
@@ -260,9 +269,10 @@ class _MapPreview extends StatelessWidget {
             height: 200,
             child: FlutterMap(
               options: MapOptions(
-                initialCenter: mapModel.center != null
-                    ? LatLng(mapModel.center!.lat, mapModel.center!.lon)
-                    : const LatLng(-6.2, 106.8),
+                initialCenter:
+                    mapModel.center != null
+                        ? LatLng(mapModel.center!.lat, mapModel.center!.lon)
+                        : const LatLng(-6.2, 106.8),
                 initialZoom: mapModel.zoom ?? 13.0,
                 interactionOptions: const InteractionOptions(
                   flags: ~InteractiveFlag.all,
@@ -275,40 +285,52 @@ class _MapPreview extends StatelessWidget {
                 ),
                 if (mapModel.hasFullGeometry)
                   PolylineLayer(
-                    polylines: mapModel.segments
-                        .map(
-                          (seg) => Polyline(
-                            points: seg.points
-                                .map((p) => LatLng(p.lat, p.lon))
-                                .toList(),
-                            color: seg.kind == JourneySegmentKind.transit
-                                ? (seg.routeColor != null
-                                    ? Color(int.parse('0xFF${seg.routeColor}'))
-                                    : const Color(0xFF2563EB))
-                                : (seg.kind == JourneySegmentKind.walking
-                                    ? const Color(0xFF737686)
-                                    : const Color(0xFF943700)),
-                            strokeWidth: 3,
-                          ),
-                        )
-                        .toList(),
+                    polylines:
+                        mapModel.segments
+                            .map(
+                              (seg) => Polyline(
+                                points:
+                                    seg.points
+                                        .map((p) => LatLng(p.lat, p.lon))
+                                        .toList(),
+                                color:
+                                    seg.kind == JourneySegmentKind.transit
+                                        ? (seg.routeColor != null
+                                            ? Color(
+                                              int.parse(
+                                                '0xFF${seg.routeColor}',
+                                              ),
+                                            )
+                                            : const Color(0xFF2563EB))
+                                        : (seg.kind ==
+                                                JourneySegmentKind.walking
+                                            ? const Color(0xFF737686)
+                                            : const Color(0xFF943700)),
+                                strokeWidth: 3,
+                              ),
+                            )
+                            .toList(),
                   ),
                 MarkerLayer(
-                  markers: mapModel.markers
-                      .map(
-                        (m) => Marker(
-                          point: LatLng(m.latitude, m.longitude),
-                          width: 36,
-                          height: 36,
-                          child: _MarkerIcon(
-                            kind: m.kind,
-                            color: m.routeColor != null
-                                ? Color(int.parse('0xFF${m.routeColor}'))
-                                : null,
-                          ),
-                        ),
-                      )
-                      .toList(),
+                  markers:
+                      mapModel.markers
+                          .map(
+                            (m) => Marker(
+                              point: LatLng(m.latitude, m.longitude),
+                              width: 36,
+                              height: 36,
+                              child: _MarkerIcon(
+                                kind: m.kind,
+                                color:
+                                    m.routeColor != null
+                                        ? Color(
+                                          int.parse('0xFF${m.routeColor}'),
+                                        )
+                                        : null,
+                              ),
+                            ),
+                          )
+                          .toList(),
                 ),
               ],
             ),
@@ -332,12 +354,12 @@ class _MarkerIcon extends StatelessWidget {
       kind == JourneyMapMarkerKind.origin
           ? Icons.radio_button_checked
           : kind == JourneyMapMarkerKind.destination
-              ? Icons.flag
-              : kind == JourneyMapMarkerKind.boarding
-                  ? Icons.directions_transit
-                  : kind == JourneyMapMarkerKind.alighting
-                      ? Icons.directions_transit_filled
-                      : Icons.train,
+          ? Icons.flag
+          : kind == JourneyMapMarkerKind.boarding
+          ? Icons.directions_transit
+          : kind == JourneyMapMarkerKind.alighting
+          ? Icons.directions_transit_filled
+          : Icons.train,
       color: c,
       size: 28,
     );

@@ -13,9 +13,7 @@ class ProfileScreen extends ConsumerWidget {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profil'),
-      ),
+      appBar: AppBar(title: const Text('Profil')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -26,28 +24,35 @@ class ProfileScreen extends ConsumerWidget {
             title: 'Lokasi Tersimpan',
             subtitle: 'Kelola Rumah, Kampus, Kantor',
             icon: Icons.bookmark,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const SavedPlacesScreen()),
-            ),
+            onTap:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SavedPlacesScreen()),
+                ),
           ),
           _ProfileTile(
             title: 'Perjalanan Tersimpan',
             subtitle: 'Akses cepat rute favorit',
             icon: Icons.route,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const SavedJourneysScreen()),
-            ),
+            onTap:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const SavedJourneysScreen(),
+                  ),
+                ),
           ),
           _ProfileTile(
             title: 'Riwayat Pencarian',
             subtitle: 'Lihat dan hapus riwayat',
             icon: Icons.history,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const JourneyHistoryScreen()),
-            ),
+            onTap:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const JourneyHistoryScreen(),
+                  ),
+                ),
           ),
           const SizedBox(height: 24),
           _SectionTitle(title: 'Pengaturan'),
@@ -91,20 +96,24 @@ class ProfileScreen extends ConsumerWidget {
   void _confirmLogout(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Keluar?'),
-        content: const Text('Anda yakin ingin keluar dari akun ini?'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
-          TextButton(
-            onPressed: () {
-              ref.read(authProvider.notifier).logout();
-              Navigator.pop(ctx);
-            },
-            child: const Text('Keluar'),
+      builder:
+          (ctx) => AlertDialog(
+            title: const Text('Keluar?'),
+            content: const Text('Anda yakin ingin keluar dari akun ini?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Batal'),
+              ),
+              TextButton(
+                onPressed: () {
+                  ref.read(authProvider.notifier).logout();
+                  Navigator.pop(ctx);
+                },
+                child: const Text('Keluar'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -130,7 +139,11 @@ class _ProfileHeader extends StatelessWidget {
             CircleAvatar(
               radius: 32,
               backgroundColor: const Color(0xFF2563EB).withOpacity(0.1),
-              child: const Icon(Icons.person, size: 32, color: Color(0xFF2563EB)),
+              child: const Icon(
+                Icons.person,
+                size: 32,
+                color: Color(0xFF2563EB),
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -139,7 +152,10 @@ class _ProfileHeader extends StatelessWidget {
                 children: [
                   Text(
                     authState.email?.split('@').first ?? 'Pengguna',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -182,7 +198,11 @@ class _SectionTitle extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         title,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.grey),
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: Colors.grey,
+        ),
       ),
     );
   }

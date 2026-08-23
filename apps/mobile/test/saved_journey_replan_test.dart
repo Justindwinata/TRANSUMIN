@@ -6,7 +6,8 @@ import 'dart:convert';
 void main() {
   group('SavedJourney replan payload validation', () {
     test('valid payload should parse origin and destination coordinates', () {
-      final payload = '{"originLat":-6.2,"originLon":106.8,"destLat":-6.3,"destLon":106.9}';
+      final payload =
+          '{"originLat":-6.2,"originLon":106.8,"destLat":-6.3,"destLon":106.9}';
       final decoded = jsonDecode(payload) as Map<String, dynamic>;
 
       expect(decoded['originLat'], -6.2);

@@ -7,7 +7,10 @@ void main() {
     late RetryInterceptor interceptor;
 
     setUp(() {
-      interceptor = RetryInterceptor(maxRetries: 3, baseDelay: Duration(milliseconds: 10));
+      interceptor = RetryInterceptor(
+        maxRetries: 3,
+        baseDelay: Duration(milliseconds: 10),
+      );
     });
 
     bool shouldRetry(RequestInterceptorHandler? handler) => true; // placeholder
@@ -27,23 +30,26 @@ void main() {
       expect(options.method, 'OPTIONS');
     });
 
-    test('should identify POST as NOT retryable (idempotency safety)', () async {
-      final dioException = DioException(
-        requestOptions: RequestOptions(path: '/routing/plan', method: 'POST'),
-        type: DioExceptionType.connectionError,
-      );
+    test(
+      'should identify POST as NOT retryable (idempotency safety)',
+      () async {
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: '/routing/plan', method: 'POST'),
+          type: DioExceptionType.connectionError,
+        );
 
-      var didRetry = false;
-      final handler = _TrackingErrorInterceptorHandler((retryOptions) {
-        if (retryOptions.method == 'POST') {
-          didRetry = true;
-        }
-      });
+        var didRetry = false;
+        final handler = _TrackingErrorInterceptorHandler((retryOptions) {
+          if (retryOptions.method == 'POST') {
+            didRetry = true;
+          }
+        });
 
-      interceptor.onError(dioException, handler);
+        interceptor.onError(dioException, handler);
 
-      expect(didRetry, false);
-    });
+        expect(didRetry, false);
+      },
+    );
 
     test('should identify PATCH as NOT retryable', () async {
       final dioException = DioException(

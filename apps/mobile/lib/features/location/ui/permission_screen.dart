@@ -29,15 +29,26 @@ class LocationPermissionScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 32),
             ElevatedButton(
-              onPressed: state.isRequesting
-                  ? null
-                  : () async {
-                      await ref.read(locationProvider.notifier).requestLocationPermission();
-                      if (context.mounted && state.permissionStatus.name == 'granted') {
-                        Navigator.pop(context);
-                      }
-                    },
-              child: state.isRequesting ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)) : const Text('Izinkan Lokasi'),
+              onPressed:
+                  state.isRequesting
+                      ? null
+                      : () async {
+                        await ref
+                            .read(locationProvider.notifier)
+                            .requestLocationPermission();
+                        if (context.mounted &&
+                            state.permissionStatus.name == 'granted') {
+                          Navigator.pop(context);
+                        }
+                      },
+              child:
+                  state.isRequesting
+                      ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                      : const Text('Izinkan Lokasi'),
             ),
             const SizedBox(height: 12),
             TextButton(

@@ -28,7 +28,7 @@ class _TransumInAppState extends ConsumerState<TransumInApp> {
     });
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final isOnline = ref.watch(networkStatusProvider.notifier).isOnline;
@@ -58,7 +58,10 @@ class _TransumInAppState extends ConsumerState<TransumInApp> {
                               SizedBox(width: 8),
                               Text(
                                 'Tidak ada koneksi internet',
-                                style: TextStyle(color: Colors.white, fontSize: 14),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
                               ),
                             ],
                           ),

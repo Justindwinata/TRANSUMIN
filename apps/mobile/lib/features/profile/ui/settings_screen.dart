@@ -170,39 +170,49 @@ class SettingsScreen extends ConsumerWidget {
   void _confirmLogout(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Keluar?'),
-        content: const Text('Anda yakin ingin keluar dari akun ini?'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
-          TextButton(
-            onPressed: () {
-              ref.read(authProvider.notifier).logout();
-              Navigator.pop(ctx);
-            },
-            child: const Text('Keluar'),
+      builder:
+          (ctx) => AlertDialog(
+            title: const Text('Keluar?'),
+            content: const Text('Anda yakin ingin keluar dari akun ini?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Batal'),
+              ),
+              TextButton(
+                onPressed: () {
+                  ref.read(authProvider.notifier).logout();
+                  Navigator.pop(ctx);
+                },
+                child: const Text('Keluar'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
   void _confirmClearHistory(BuildContext context) {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Hapus Riwayat?'),
-        content: const Text('Hapus seluruh riwayat pencarian lokal dan server?'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-            },
-            child: const Text('Hapus'),
+      builder:
+          (ctx) => AlertDialog(
+            title: const Text('Hapus Riwayat?'),
+            content: const Text(
+              'Hapus seluruh riwayat pencarian lokal dan server?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Batal'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                },
+                child: const Text('Hapus'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -228,7 +238,11 @@ class _SettingsSection extends StatelessWidget {
           padding: const EdgeInsets.only(left: 8, bottom: 8),
           child: Text(
             title,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.grey),
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey,
+            ),
           ),
         ),
         Card(child: Column(children: children)),
@@ -255,7 +269,8 @@ class _SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isDestructive ? const Color(0xFFBA1A1A) : null;
-    final bgColor = isDestructive ? const Color(0xFFBA1A1A).withOpacity(0.05) : null;
+    final bgColor =
+        isDestructive ? const Color(0xFFBA1A1A).withOpacity(0.05) : null;
 
     return Material(
       color: bgColor,
@@ -273,7 +288,13 @@ class _SettingsTile extends StatelessWidget {
                   children: [
                     Text(title, style: TextStyle(fontSize: 16, color: color)),
                     if (subtitle != null)
-                      Text(subtitle!, style: const TextStyle(fontSize: 13, color: Colors.grey)),
+                      Text(
+                        subtitle!,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
+                        ),
+                      ),
                   ],
                 ),
               ),

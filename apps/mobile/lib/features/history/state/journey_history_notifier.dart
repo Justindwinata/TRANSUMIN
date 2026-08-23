@@ -137,12 +137,12 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
 
 final journeyHistoryProvider =
     StateNotifierProvider<JourneyHistoryNotifier, JourneyHistoryState>((ref) {
-  final persistence = ref.watch(historyPersistenceProvider).asData?.value;
-  if (persistence == null) {
-    return JourneyHistoryNotifier(HistoryPersistenceDummy());
-  }
-  return JourneyHistoryNotifier(persistence);
-});
+      final persistence = ref.watch(historyPersistenceProvider).asData?.value;
+      if (persistence == null) {
+        return JourneyHistoryNotifier(HistoryPersistenceDummy());
+      }
+      return JourneyHistoryNotifier(persistence);
+    });
 
 class HistoryPersistenceDummy implements HistoryPersistence {
   @override

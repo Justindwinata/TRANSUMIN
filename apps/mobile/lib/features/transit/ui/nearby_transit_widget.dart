@@ -7,7 +7,8 @@ class NearbyTransitWidget extends ConsumerWidget {
   final double lat;
   final double lon;
 
-  const NearbyTransitWidget({Key? key, required this.lat, required this.lon}) : super(key: key);
+  const NearbyTransitWidget({Key? key, required this.lat, required this.lon})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,11 +19,15 @@ class NearbyTransitWidget extends ConsumerWidget {
         if (state.isLoading) const CircularProgressIndicator(),
         if (state.error != null) Text('Error: ${state.error}'),
         if (state.result != null)
-          ...state.result!.allStops.map((stop) => ListTile(
-                title: Text(stop.name),
-                subtitle: Text('Distance: ${stop.distance?.toStringAsFixed(2) ?? '-'} km'),
-                leading: const Icon(Icons.directions_bus),
-              )),
+          ...state.result!.allStops.map(
+            (stop) => ListTile(
+              title: Text(stop.name),
+              subtitle: Text(
+                'Distance: ${stop.distance?.toStringAsFixed(2) ?? '-'} km',
+              ),
+              leading: const Icon(Icons.directions_bus),
+            ),
+          ),
       ],
     );
   }

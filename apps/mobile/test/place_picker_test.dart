@@ -11,10 +11,7 @@ void main() {
       ProviderScope(
         child: MaterialApp(
           home: Scaffold(
-            body: PlacePicker(
-              label: 'Pilih',
-              onSelect: (p) => selected = p,
-            ),
+            body: PlacePicker(label: 'Pilih', onSelect: (p) => selected = p),
           ),
         ),
       ),

@@ -40,7 +40,7 @@ class EmptyState extends StatelessWidget {
               onPressed: onButtonPressed,
               child: Text(buttonLabel!),
             ),
-          ]
+          ],
         ],
       ),
     );

@@ -39,27 +39,34 @@ class HomeScreen extends ConsumerWidget {
             AppButton(
               label: 'Cari Rute',
               isLoading: false,
-              onPressed: journey.isComplete
-                  ? () => _searchRoute(context, ref, journey)
-                  : null,
+              onPressed:
+                  journey.isComplete
+                      ? () => _searchRoute(context, ref, journey)
+                      : null,
             ),
             const SizedBox(height: 16),
             const Divider(),
             ListTile(
               title: const Text('Lokasi Tersimpan'),
               leading: const Icon(Icons.bookmark),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SavedPlacesScreen()),
-              ),
+              onTap:
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const SavedPlacesScreen(),
+                    ),
+                  ),
             ),
             ListTile(
               title: const Text('Riwayat Perjalanan'),
               leading: const Icon(Icons.history),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const JourneyHistoryScreen()),
-              ),
+              onTap:
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const JourneyHistoryScreen(),
+                    ),
+                  ),
             ),
           ],
         ),
@@ -71,21 +78,25 @@ class HomeScreen extends ConsumerWidget {
     final result = await showModalBottomSheet<Place>(
       context: context,
       isScrollControlled: true,
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        minChildSize: 0.5,
-        maxChildSize: 0.9,
-        builder: (context, scrollController) => SingleChildScrollView(
-          controller: scrollController,
-          child: PlacePicker(
-            label: 'Pilih Lokasi Asal',
-            onSelect: (place) => Navigator.pop(context, place),
+      builder:
+          (context) => DraggableScrollableSheet(
+            initialChildSize: 0.7,
+            minChildSize: 0.5,
+            maxChildSize: 0.9,
+            builder:
+                (context, scrollController) => SingleChildScrollView(
+                  controller: scrollController,
+                  child: PlacePicker(
+                    label: 'Pilih Lokasi Asal',
+                    onSelect: (place) => Navigator.pop(context, place),
+                  ),
+                ),
           ),
-        ),
-      ),
     );
     if (result != null) {
-      ref.read(journeyProvider.notifier).setOrigin(JourneyLocation.fromPlace(result));
+      ref
+          .read(journeyProvider.notifier)
+          .setOrigin(JourneyLocation.fromPlace(result));
     }
   }
 
@@ -93,21 +104,25 @@ class HomeScreen extends ConsumerWidget {
     final result = await showModalBottomSheet<Place>(
       context: context,
       isScrollControlled: true,
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        minChildSize: 0.5,
-        maxChildSize: 0.9,
-        builder: (context, scrollController) => SingleChildScrollView(
-          controller: scrollController,
-          child: PlacePicker(
-            label: 'Pilih Lokasi Tujuan',
-            onSelect: (place) => Navigator.pop(context, place),
+      builder:
+          (context) => DraggableScrollableSheet(
+            initialChildSize: 0.7,
+            minChildSize: 0.5,
+            maxChildSize: 0.9,
+            builder:
+                (context, scrollController) => SingleChildScrollView(
+                  controller: scrollController,
+                  child: PlacePicker(
+                    label: 'Pilih Lokasi Tujuan',
+                    onSelect: (place) => Navigator.pop(context, place),
+                  ),
+                ),
           ),
-        ),
-      ),
     );
     if (result != null) {
-      ref.read(journeyProvider.notifier).setDestination(JourneyLocation.fromPlace(result));
+      ref
+          .read(journeyProvider.notifier)
+          .setDestination(JourneyLocation.fromPlace(result));
     }
   }
 

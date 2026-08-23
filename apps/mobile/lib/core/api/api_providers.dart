@@ -15,16 +15,20 @@ final dioProvider = Provider<Dio>((ref) {
     ),
   );
 
-  dio.interceptors.add(AuthInterceptor(() {
-    return ref.read(authProvider).accessToken;
-  }, onUnauthorized: () {
-    ref.read(authProvider.notifier).logout();
-  }));
+  dio.interceptors.add(
+    AuthInterceptor(
+      () {
+        return ref.read(authProvider).accessToken;
+      },
+      onUnauthorized: () {
+        ref.read(authProvider.notifier).logout();
+      },
+    ),
+  );
 
-  dio.interceptors.add(RetryInterceptor(
-    maxRetries: 3,
-    baseDelay: const Duration(seconds: 1),
-  ));
+  dio.interceptors.add(
+    RetryInterceptor(maxRetries: 3, baseDelay: const Duration(seconds: 1)),
+  );
 
   if (AppConfig.enableLogging) {
     dio.interceptors.add(

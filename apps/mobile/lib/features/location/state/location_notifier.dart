@@ -16,7 +16,7 @@ class LocationState {
   final Location? currentLocation;
   final String? error;
   final bool isRequesting;
-  
+
   LocationState({
     this.permissionStatus = LocationPermissionStatus.unknown,
     this.currentLocation,
@@ -45,10 +45,13 @@ class LocationNotifier extends StateNotifier<LocationState> {
   Future<void> requestLocationPermission() async {
     // Platform-specific permission logic will be implemented with geolocator
     // For now, simulate the flow
-    state = state.copyWith(isRequesting: true, permissionStatus: LocationPermissionStatus.requesting);
-    
+    state = state.copyWith(
+      isRequesting: true,
+      permissionStatus: LocationPermissionStatus.requesting,
+    );
+
     await Future.delayed(const Duration(milliseconds: 500));
-    
+
     // Simulate granted
     state = state.copyWith(
       isRequesting: false,
@@ -60,7 +63,7 @@ class LocationNotifier extends StateNotifier<LocationState> {
     if (state.permissionStatus != LocationPermissionStatus.granted) {
       await requestLocationPermission();
     }
-    
+
     if (state.permissionStatus == LocationPermissionStatus.granted) {
       // Simulated location (Jakarta area)
       final location = Location(
@@ -78,6 +81,8 @@ class LocationNotifier extends StateNotifier<LocationState> {
   }
 }
 
-final locationProvider = StateNotifierProvider<LocationNotifier, LocationState>((ref) {
-  return LocationNotifier();
-});
+final locationProvider = StateNotifierProvider<LocationNotifier, LocationState>(
+  (ref) {
+    return LocationNotifier();
+  },
+);

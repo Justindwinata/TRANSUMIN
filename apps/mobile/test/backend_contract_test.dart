@@ -26,7 +26,8 @@ void main() {
         ],
       };
 
-      final journeys = (json['journeys'] as List?)
+      final journeys =
+          (json['journeys'] as List?)
               ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];
@@ -41,11 +42,7 @@ void main() {
         'journeys': [
           {
             'id': 'journey-1',
-            'origin': {
-              'latitude': -6.2,
-              'longitude': 106.8,
-              'name': 'Home',
-            },
+            'origin': {'latitude': -6.2, 'longitude': 106.8, 'name': 'Home'},
             'destination': {
               'latitude': -6.3,
               'longitude': 106.9,
@@ -115,7 +112,8 @@ void main() {
         ],
       };
 
-      final journeys = (json['journeys'] as List?)
+      final journeys =
+          (json['journeys'] as List?)
               ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];
@@ -142,7 +140,8 @@ void main() {
     test('should handle empty journeys list', () {
       final json = {'journeys': []};
 
-      final journeys = (json['journeys'] as List?)
+      final journeys =
+          (json['journeys'] as List?)
               ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];
@@ -153,7 +152,8 @@ void main() {
     test('should handle null journeys gracefully', () {
       final json = {'journeys': null};
 
-      final journeys = (json['journeys'] as List?)
+      final journeys =
+          (json['journeys'] as List?)
               ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];
@@ -203,7 +203,8 @@ void main() {
         ],
       };
 
-      final journeys = (json['journeys'] as List?)
+      final journeys =
+          (json['journeys'] as List?)
               ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];
@@ -259,7 +260,8 @@ void main() {
         ],
       };
 
-      final journeys = (json['journeys'] as List?)
+      final journeys =
+          (json['journeys'] as List?)
               ?.map((j) => RouteAlternative.fromJson(j))
               .toList() ??
           [];

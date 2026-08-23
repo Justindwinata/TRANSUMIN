@@ -8,7 +8,11 @@ void main() {
       final route = RouteAlternative(
         id: '1',
         origin: JourneyPoint(latitude: -6.2, longitude: 106.8, name: 'Rumah'),
-        destination: JourneyPoint(latitude: -6.3, longitude: 106.9, name: 'Kantor'),
+        destination: JourneyPoint(
+          latitude: -6.3,
+          longitude: 106.9,
+          name: 'Kantor',
+        ),
         departureTime: '08:00:00',
         arrivalTime: '09:00:00',
         totalDurationSeconds: 3600,
@@ -32,7 +36,11 @@ void main() {
       final route = RouteAlternative(
         id: '1',
         origin: JourneyPoint(latitude: -6.2, longitude: 106.8, name: 'Home'),
-        destination: JourneyPoint(latitude: -6.3, longitude: 106.9, name: 'Office'),
+        destination: JourneyPoint(
+          latitude: -6.3,
+          longitude: 106.9,
+          name: 'Office',
+        ),
         departureTime: '08:00:00',
         arrivalTime: '09:00:00',
         totalDurationSeconds: 3600,
@@ -98,7 +106,9 @@ void main() {
       final walkIns = instructions.where((i) => i.kind == InstructionKind.walk);
       expect(walkIns.length, 2);
 
-      final boardIns = instructions.where((i) => i.kind == InstructionKind.board);
+      final boardIns = instructions.where(
+        (i) => i.kind == InstructionKind.board,
+      );
       expect(boardIns.length, 1);
       expect(boardIns.first.routeName, 'KRL');
 
@@ -162,14 +172,20 @@ void main() {
 
       final instructions = JourneyInstructionMapper.fromJourney(route);
 
-      final transferIns = instructions.where((i) => i.kind == InstructionKind.transfer);
+      final transferIns = instructions.where(
+        (i) => i.kind == InstructionKind.transfer,
+      );
       expect(transferIns.length, 1);
       expect(transferIns.first.title, 'Transfer');
 
-      final boardIns = instructions.where((i) => i.kind == InstructionKind.board);
+      final boardIns = instructions.where(
+        (i) => i.kind == InstructionKind.board,
+      );
       expect(boardIns.length, 2);
 
-      final alightIns = instructions.where((i) => i.kind == InstructionKind.alight);
+      final alightIns = instructions.where(
+        (i) => i.kind == InstructionKind.alight,
+      );
       expect(alightIns.length, 2);
     });
 

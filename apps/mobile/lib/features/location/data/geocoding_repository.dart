@@ -5,7 +5,7 @@ import '../domain/models.dart';
 class GeocodingRepository {
   final dynamic _apiClient;
   GeocodingRepository(this._apiClient);
-  
+
   Future<List<Place>> search(String query) async {
     final results = await _apiClient.searchPlaces(query);
     return results.map<Place>((json) {

@@ -210,7 +210,9 @@ class _RouteCard extends StatelessWidget {
               Text(
                 route.fareText,
                 style: const TextStyle(
-                    fontSize: 14, fontWeight: FontWeight.w600),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -238,8 +240,7 @@ class _RouteCard extends StatelessWidget {
               const Spacer(),
               if (index == 0)
                 IconButton(
-                  icon:
-                      const Icon(Icons.bookmark_add_outlined, size: 20),
+                  icon: const Icon(Icons.bookmark_add_outlined, size: 20),
                   tooltip: 'Simpan perjalanan ini',
                   onPressed: onSave,
                 ),

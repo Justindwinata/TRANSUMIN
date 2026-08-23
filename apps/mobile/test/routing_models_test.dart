@@ -6,7 +6,11 @@ void main() {
     test('toJson should serialize correctly', () {
       final request = JourneyRequest(
         origin: JourneyPoint(latitude: -6.2, longitude: 106.8, name: 'Origin'),
-        destination: JourneyPoint(latitude: -6.3, longitude: 106.9, name: 'Dest'),
+        destination: JourneyPoint(
+          latitude: -6.3,
+          longitude: 106.9,
+          name: 'Dest',
+        ),
         departureTime: DateTime(2024, 8, 19, 8, 0),
         preference: 'fastest',
       );
