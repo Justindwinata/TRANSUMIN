@@ -42,6 +42,8 @@ class NetworkStatusNotifier extends StateNotifier<NetworkStatus> {
     state = status;
   }
 
+  NetworkMonitor? get monitor => _monitor;
+
   bool get isOnline => state == NetworkStatus.online;
 }
 
