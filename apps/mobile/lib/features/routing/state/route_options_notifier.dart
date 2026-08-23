@@ -75,7 +75,8 @@ class RouteOptionsNotifier extends StateNotifier<RouteOptionsState> {
   String _currentRequestId = '';
   Future<void>? _inFlight;
 
-  RouteOptionsNotifier(this.repository) : super(RouteOptionsState.idle());
+  RouteOptionsNotifier(this.repository, [RouteOptionsState? initialState])
+      : super(initialState ?? RouteOptionsState.idle());
 
   String _newRequestId() => DateTime.now().microsecondsSinceEpoch.toString();
 

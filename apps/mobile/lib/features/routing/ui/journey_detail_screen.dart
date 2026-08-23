@@ -20,7 +20,11 @@ class JourneyDetailScreen extends ConsumerWidget {
     final instructions = JourneyInstructionMapper.fromJourney(route);
     final mapModel = JourneyMapBuilder.fromJourney(route);
     final savedJourneys = ref.watch(savedJourneysProvider);
-    final alreadySaved = savedJourneys.journeys.any((j) => j.originName == (route.origin.name ?? '') && j.destName == (route.destination.name ?? ''));
+    final alreadySaved = savedJourneys.journeys.any(
+      (j) =>
+          j.originName == (route.origin.name ?? '') &&
+          j.destName == (route.destination.name ?? ''),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -80,6 +84,27 @@ class JourneyDetailScreen extends ConsumerWidget {
     );
   }
 
+  void _saveJourney(BuildContext context, WidgetRef ref) {
+    final payload = {
+      'originLat': route.origin.latitude,
+      'originLon': route.origin.longitude,
+      'destLat': route.destination.latitude,
+      'destLon': route.destination.longitude,
+    };
+
+    ref.read(savedJourneysProvider.notifier).addJourney(
+      originName: route.origin.name ?? 'Origin',
+      destName: route.destination.name ?? 'Destination',
+      payloadJson: jsonEncode(payload),
+      label:
+          '${route.origin.name ?? 'Origin'} → ${route.destination.name ?? 'Destination'}',
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Perjalanan disimpan')),
+    );
+  }
+
   String _iconType(InstructionKind kind) {
     switch (kind) {
       case InstructionKind.start:
@@ -132,10 +157,7 @@ class _Header extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: const Color(0xFF2563EB).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(16),
@@ -152,10 +174,7 @@ class _Header extends StatelessWidget {
               const SizedBox(width: 8),
               if (route.badge != null)
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: const Color(0xFF2563EB),
                     borderRadius: BorderRadius.circular(16),
@@ -241,10 +260,9 @@ class _MapPreview extends StatelessWidget {
             height: 200,
             child: FlutterMap(
               options: MapOptions(
-                initialCenter:
-                    mapModel.center != null
-                        ? LatLng(mapModel.center!.lat, mapModel.center!.lon)
-                        : const LatLng(-6.2, 106.8),
+                initialCenter: mapModel.center != null
+                    ? LatLng(mapModel.center!.lat, mapModel.center!.lon)
+                    : const LatLng(-6.2, 106.8),
                 initialZoom: mapModel.zoom ?? 13.0,
                 interactionOptions: const InteractionOptions(
                   flags: ~InteractiveFlag.all,
@@ -255,7 +273,7 @@ class _MapPreview extends StatelessWidget {
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   userAgentPackageName: 'com.transum.in',
                 ),
-                if (mapModel.hasFullGeometry) ...[
+                if (mapModel.hasFullGeometry)
                   PolylineLayer(
                     polylines: mapModel.segments
                         .map(
@@ -275,54 +293,28 @@ class _MapPreview extends StatelessWidget {
                         )
                         .toList(),
                   ),
-                ],
                 MarkerLayer(
-                  markers:
-                      mapModel.markers
-                          .map(
-                            (m) => Marker(
-                              point: LatLng(m.latitude, m.longitude),
-                              width: 36,
-                              height: 36,
-                              child: _MarkerIcon(
-                                kind: m.kind,
-                                color:
-                                    m.routeColor != null
-                                        ? Color(
-                                          int.parse('0xFF${m.routeColor}'),
-                                        )
-                                        : null,
-                              ),
-                            ),
-                          )
-                          .toList(),
+                  markers: mapModel.markers
+                      .map(
+                        (m) => Marker(
+                          point: LatLng(m.latitude, m.longitude),
+                          width: 36,
+                          height: 36,
+                          child: _MarkerIcon(
+                            kind: m.kind,
+                            color: m.routeColor != null
+                                ? Color(int.parse('0xFF${m.routeColor}'))
+                                : null,
+                          ),
+                        ),
+                      )
+                      .toList(),
                 ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-void _saveJourney(BuildContext context, WidgetRef ref) {
-    final payload = {
-      'originLat': route.origin.latitude,
-      'originLon': route.origin.longitude,
-      'destLat': route.destination.latitude,
-      'destLon': route.destination.longitude,
-    };
-
-    ref.read(savedJourneysProvider.notifier).addJourney(
-      originName: route.origin.name ?? 'Origin',
-      destName: route.destination.name ?? 'Destination',
-      payloadJson: jsonEncode(payload),
-      label: '${route.origin.name ?? 'Origin'} → ${route.destination.name ?? 'Destination'}',
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Perjalanan disimpan')),
     );
   }
 }
@@ -340,12 +332,12 @@ class _MarkerIcon extends StatelessWidget {
       kind == JourneyMapMarkerKind.origin
           ? Icons.radio_button_checked
           : kind == JourneyMapMarkerKind.destination
-          ? Icons.flag
-          : kind == JourneyMapMarkerKind.boarding
-          ? Icons.directions_transit
-          : kind == JourneyMapMarkerKind.alighting
-          ? Icons.directions_transit_filled
-          : Icons.train,
+              ? Icons.flag
+              : kind == JourneyMapMarkerKind.boarding
+                  ? Icons.directions_transit
+                  : kind == JourneyMapMarkerKind.alighting
+                      ? Icons.directions_transit_filled
+                      : Icons.train,
       color: c,
       size: 28,
     );

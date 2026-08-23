@@ -11,6 +11,22 @@ class RetryInterceptor extends Interceptor {
     this.retryableStatusCodes = const {408, 429, 500, 502, 503, 504},
   });
 
+  bool isRetryableStatus(int? statusCode) {
+    if (statusCode == null) return false;
+    return retryableStatusCodes.contains(statusCode);
+  }
+
+  bool isRetryableException(DioExceptionType type) {
+    return type == DioExceptionType.connectionTimeout ||
+        type == DioExceptionType.receiveTimeout ||
+        type == DioExceptionType.sendTimeout ||
+        type == DioExceptionType.connectionError;
+  }
+
+  Duration calculateDelay(int retryCount) {
+    return baseDelay * (1 << retryCount);
+  }
+
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     final requestOptions = err.requestOptions;

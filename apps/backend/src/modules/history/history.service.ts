@@ -26,16 +26,14 @@ export class HistoryService {
       },
     });
 
-    // Enforce maximum history limit
-    const count = await this.prisma.journeyHistory.count({ where: { userId } });
-    if (count > this.MAX_HISTORY_ENTRIES) {
-      const oldest = await this.prisma.journeyHistory.findFirst({
-        where: { userId },
-        orderBy: { createdAt: 'asc' },
-      });
-      if (oldest) {
-        await this.prisma.journeyHistory.delete({ where: { id: oldest.id } });
-      }
+    const entries = await this.prisma.journeyHistory.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (entries.length > this.MAX_HISTORY_ENTRIES) {
+      const idsToDelete = entries.slice(this.MAX_HISTORY_ENTRIES).map(e => e.id);
+      await this.prisma.journeyHistory.deleteMany({ where: { id: { in: idsToDelete } } });
     }
 
     return entry;
