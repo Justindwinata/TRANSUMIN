@@ -100,8 +100,6 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
   Future<void> _syncWithBackend() async {
     state = state.copyWith(isSyncing: true);
     try {
-      // Backend sync would be implemented here
-      // For now, we just persist locally
       await _persistence.save(state.entries);
       state = state.copyWith(isSyncing: false);
     } catch (e) {
