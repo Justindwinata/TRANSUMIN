@@ -2,8 +2,9 @@ import 'package:dio/dio.dart';
 
 class AuthInterceptor extends Interceptor {
   final String? Function() tokenProvider;
+  final Function()? onUnauthorized;
 
-  AuthInterceptor(this.tokenProvider);
+  AuthInterceptor(this.tokenProvider, {this.onUnauthorized});
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -12,5 +13,13 @@ class AuthInterceptor extends Interceptor {
       options.headers['Authorization'] = 'Bearer $token';
     }
     handler.next(options);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    if (err.response?.statusCode == 401) {
+      onUnauthorized?.call();
+    }
+    handler.next(err);
   }
 }
