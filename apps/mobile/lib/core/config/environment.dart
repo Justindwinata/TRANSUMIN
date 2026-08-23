@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
 
 enum Environment { development, production, testing }
 
@@ -19,13 +19,22 @@ class AppConfig {
     const fromEnv = String.fromEnvironment('API_BASE_URL', defaultValue: '');
     if (fromEnv.isNotEmpty) return fromEnv;
 
-    if (Platform.isAndroid) {
-      return 'http://10.0.2.2:3000';
-    } else if (Platform.isIOS) {
+    if (kIsWeb) {
       return 'http://localhost:3000';
     }
-    return 'http://localhost:3000';
+
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return 'http://10.0.2.2:3000';
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return 'http://localhost:3000';
+      default:
+        return 'http://localhost:3000';
+    }
   }
+
+  static TargetPlatform get defaultPlatform => defaultTargetPlatform;
 
   static bool get enableLogging => environment != Environment.testing;
 
