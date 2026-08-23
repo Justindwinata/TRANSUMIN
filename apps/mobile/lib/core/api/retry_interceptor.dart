@@ -36,6 +36,15 @@ class RetryInterceptor extends Interceptor {
       return handler.next(err);
     }
 
+    final isSafeMethod = requestOptions.method == 'GET' ||
+        requestOptions.method == 'HEAD' ||
+        requestOptions.method == 'OPTIONS' ||
+        requestOptions.headers['X-Retry-Safe'] == 'true';
+
+    if (!isSafeMethod) {
+      return handler.next(err);
+    }
+
     final isRetryable = retryableStatusCodes.contains(err.response?.statusCode) ||
         err.type == DioExceptionType.connectionTimeout ||
         err.type == DioExceptionType.receiveTimeout ||
