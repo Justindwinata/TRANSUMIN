@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:convert';
 import 'package:mobile/features/saved/data/saved_journeys_repository.dart';
 import 'package:mobile/features/routing/domain/models.dart';
 import 'package:mobile/features/routing/state/route_options_notifier.dart';
@@ -122,10 +123,7 @@ class SavedJourneyReplanScreen extends ConsumerWidget {
 
   Map<String, dynamic> _parsePayload(String json) {
     try {
-      final decoded = Map<String, dynamic>.from(
-        json as Map<String, dynamic>,
-      );
-      return decoded;
+      return jsonDecode(json) as Map<String, dynamic>;
     } catch (e) {
       return {};
     }

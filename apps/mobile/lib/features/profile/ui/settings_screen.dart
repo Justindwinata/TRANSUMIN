@@ -281,7 +281,7 @@ class _SettingsTile extends StatelessWidget {
             ],
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 }
