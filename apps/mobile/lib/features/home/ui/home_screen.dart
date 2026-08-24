@@ -45,7 +45,8 @@ class HomeScreen extends ConsumerWidget {
               isLoading: false,
               onPressed:
                   journey.isComplete
-                      ? () => _searchRoute(context, ref, journey, routePreference)
+                      ? () =>
+                          _searchRoute(context, ref, journey, routePreference)
                       : null,
             ),
             const SizedBox(height: 16),

@@ -85,7 +85,10 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
   final HistoryPersistence _persistence;
   Future<void> Function(List<JourneyHistoryEntry>)? _syncBackend;
 
-  JourneyHistoryNotifier(this._persistence, {Future<void> Function(List<JourneyHistoryEntry>)? syncBackend}) : super(const JourneyHistoryState(entries: [])) {
+  JourneyHistoryNotifier(
+    this._persistence, {
+    Future<void> Function(List<JourneyHistoryEntry>)? syncBackend,
+  }) : super(const JourneyHistoryState(entries: [])) {
     _syncBackend = syncBackend ?? _defaultSync;
   }
 
@@ -114,8 +117,16 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
   }
 
   void addEntry(JourneyHistoryEntry entry) {
-    final filtered = state.entries.where((e) => !(e.originName == entry.originName && e.destName == entry.destName)).toList();
-    final updated = [entry, ...filtered].take(JourneyHistoryNotifier.maxEntries).toList();
+    final filtered =
+        state.entries
+            .where(
+              (e) =>
+                  !(e.originName == entry.originName &&
+                      e.destName == entry.destName),
+            )
+            .toList();
+    final updated =
+        [entry, ...filtered].take(JourneyHistoryNotifier.maxEntries).toList();
     state = state.copyWith(entries: updated);
     _persistence.save(updated);
     _syncBackend!(updated);
@@ -127,22 +138,30 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
   }
 
   Future<void> removeById(String id) async {
-    state = state.copyWith(entries: state.entries.where((e) => e.id != id).toList());
+    state = state.copyWith(
+      entries: state.entries.where((e) => e.id != id).toList(),
+    );
     await _persistence.save(state.entries);
     await _syncBackend!(state.entries);
   }
 }
 
-final journeyHistoryProvider = StateNotifierProvider<JourneyHistoryNotifier, JourneyHistoryState>((ref) {
-  final persistence = ref.watch(historyPersistenceProvider).asData?.value;
-  Future<void> Function(List<JourneyHistoryEntry>) syncBackend = (entries) async {
-    await ref.read(authProvider.notifier).saveHistoryToBackend(entries);
-  };
-  if (persistence == null) {
-    return JourneyHistoryNotifier(HistoryPersistenceDummy(), syncBackend: syncBackend);
-  }
-  return JourneyHistoryNotifier(persistence, syncBackend: syncBackend);
-});
+final journeyHistoryProvider =
+    StateNotifierProvider<JourneyHistoryNotifier, JourneyHistoryState>((ref) {
+      final persistence = ref.watch(historyPersistenceProvider).asData?.value;
+      Future<void> Function(List<JourneyHistoryEntry>) syncBackend = (
+        entries,
+      ) async {
+        await ref.read(authProvider.notifier).saveHistoryToBackend(entries);
+      };
+      if (persistence == null) {
+        return JourneyHistoryNotifier(
+          HistoryPersistenceDummy(),
+          syncBackend: syncBackend,
+        );
+      }
+      return JourneyHistoryNotifier(persistence, syncBackend: syncBackend);
+    });
 
 class HistoryPersistenceDummy implements HistoryPersistence {
   @override
@@ -154,4 +173,3 @@ class HistoryPersistenceDummy implements HistoryPersistence {
   @override
   Future<void> clear() async {}
 }
-

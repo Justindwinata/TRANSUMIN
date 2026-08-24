@@ -1,4 +1,11 @@
-enum NotificationType { serviceDisruption, routeChange, delay, journeyReminder, system }
+enum NotificationType {
+  serviceDisruption,
+  routeChange,
+  delay,
+  journeyReminder,
+  system,
+}
+
 enum NotificationSeverity { info, warning, critical }
 
 class NotificationItem {

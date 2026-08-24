@@ -33,8 +33,9 @@ class RouteRanker {
         break;
       case 'fastest':
       default:
-        sorted.sort((a, b) =>
-            a.totalDurationSeconds.compareTo(b.totalDurationSeconds));
+        sorted.sort(
+          (a, b) => a.totalDurationSeconds.compareTo(b.totalDurationSeconds),
+        );
         break;
     }
     return sorted;

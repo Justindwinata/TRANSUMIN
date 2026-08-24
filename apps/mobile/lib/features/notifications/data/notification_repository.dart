@@ -47,9 +47,13 @@ class NotificationRepository {
   }
 }
 
-final notificationRepositoryProvider = Provider<NotificationRepository>((ref) => NotificationRepository());
+final notificationRepositoryProvider = Provider<NotificationRepository>(
+  (ref) => NotificationRepository(),
+);
 
-final notificationsProvider = FutureProvider<List<NotificationItem>>((ref) async {
+final notificationsProvider = FutureProvider<List<NotificationItem>>((
+  ref,
+) async {
   final repo = ref.watch(notificationRepositoryProvider);
   return repo.fetchAll();
 });

@@ -35,12 +35,15 @@ class NotificationCenterScreen extends ConsumerWidget {
               final n = notifications[index];
               return NotificationTile(
                 notification: n,
-                onMarkRead: n.isRead
-                    ? null
-                    : () async {
-                        await ref.read(notificationRepositoryProvider).markRead(n.id);
-                        ref.refresh(notificationsProvider);
-                      },
+                onMarkRead:
+                    n.isRead
+                        ? null
+                        : () async {
+                          await ref
+                              .read(notificationRepositoryProvider)
+                              .markRead(n.id);
+                          ref.refresh(notificationsProvider);
+                        },
                 // TODO: implement navigation based on type
                 onTap: () {},
               );

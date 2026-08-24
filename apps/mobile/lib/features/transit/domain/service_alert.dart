@@ -37,9 +37,10 @@ class ServiceAlert {
       startsAt:
           DateTime.tryParse(json['startsAt'] as String? ?? '') ??
           DateTime.now(),
-      endsAt: json['endsAt'] == null
-          ? null
-          : DateTime.tryParse(json['endsAt'] as String),
+      endsAt:
+          json['endsAt'] == null
+              ? null
+              : DateTime.tryParse(json['endsAt'] as String),
       severity: _severityFromString(json['severity'] as String?),
       status: _statusFromString(json['status'] as String?),
       operatorName: json['operatorName'] as String?,

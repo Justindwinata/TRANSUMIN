@@ -16,12 +16,22 @@ class NotificationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = notification.isRead ? Colors.grey.shade100 : Colors.yellow.shade50;
+    final bg =
+        notification.isRead ? Colors.grey.shade100 : Colors.yellow.shade50;
     return ListTile(
       tileColor: bg,
-      title: Text(notification.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+      title: Text(
+        notification.title,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
       subtitle: Text(notification.body),
-      trailing: notification.isRead ? null : IconButton(icon: const Icon(Icons.check), onPressed: onMarkRead),
+      trailing:
+          notification.isRead
+              ? null
+              : IconButton(
+                icon: const Icon(Icons.check),
+                onPressed: onMarkRead,
+              ),
       onTap: onTap,
     );
   }

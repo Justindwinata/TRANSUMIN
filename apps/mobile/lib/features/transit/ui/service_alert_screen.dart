@@ -20,7 +20,8 @@ class ServiceAlertScreen extends ConsumerWidget {
           return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: alerts.length,
-            itemBuilder: (context, index) => ServiceAlertWidget(alert: alerts[index]),
+            itemBuilder:
+                (context, index) => ServiceAlertWidget(alert: alerts[index]),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
