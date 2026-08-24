@@ -110,7 +110,7 @@ void main() {
     test('should persist entries to storage', () {
       final persistence = _FakeHistoryPersistence();
       final container = ProviderContainer();
-    final notifier = JourneyHistoryNotifier(persistence, container.ref);
+      final notifier = JourneyHistoryNotifier(persistence, container);
 
       notifier.addEntry(
         JourneyHistoryEntry(
@@ -137,7 +137,7 @@ void main() {
       );
 
       final container = ProviderContainer();
-    final notifier = JourneyHistoryNotifier(persistence, container.ref);
+      final notifier = JourneyHistoryNotifier(persistence, container);
       await notifier.load();
       expect(notifier.state.entries.length, 1);
       expect(notifier.state.entries[0].id, 'loaded-1');
@@ -155,7 +155,7 @@ void main() {
       );
 
       final container = ProviderContainer();
-    final notifier = JourneyHistoryNotifier(persistence, container.ref);
+      final notifier = JourneyHistoryNotifier(persistence, container);
       notifier.clear();
 
       expect(persistence.stored, isEmpty);

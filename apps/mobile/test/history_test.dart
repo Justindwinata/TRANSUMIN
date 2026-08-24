@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/features/history/state/journey_history_notifier.dart';
 import 'package:mobile/features/history/data/history_persistence.dart';
 
@@ -24,10 +25,10 @@ void main() {
     late JourneyHistoryNotifier notifier;
     late _FakeHistoryPersistence persistence;
 
-    setUp(() {
+setUp(() {
       persistence = _FakeHistoryPersistence();
       final container = ProviderContainer();
-    notifier = JourneyHistoryNotifier(persistence, container.ref);
+      notifier = JourneyHistoryNotifier(persistence, container);
     });
 
     test('should start empty', () {

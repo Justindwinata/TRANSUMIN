@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/features/routing/domain/models.dart';
 import 'package:mobile/features/routing/state/route_options_notifier.dart';
 import 'package:mobile/features/saved/data/saved_journeys_repository.dart';
@@ -22,10 +23,10 @@ void main() {
     late JourneyHistoryNotifier historyNotifier;
     late _FakeHistoryPersistence persistence;
 
-    setUp(() {
+setUp(() {
       persistence = _FakeHistoryPersistence();
       final container = ProviderContainer();
-    historyNotifier = JourneyHistoryNotifier(persistence, container.ref);
+      historyNotifier = JourneyHistoryNotifier(persistence, container);
     });
 
     test(
