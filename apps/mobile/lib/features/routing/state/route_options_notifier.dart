@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/routing_repository.dart';
+import '../data/route_ranker.dart';
 import '../domain/models.dart';
 
 enum RoutingStatus { idle, searching, loading, success, noRoute, error }
@@ -99,10 +100,12 @@ class RouteOptionsNotifier extends StateNotifier<RouteOptionsState> {
 
       if (_isStale(requestId)) return;
 
-      if (routes.isEmpty) {
+      final ranked = RouteRanker.rank(routes, request.preference);
+
+      if (ranked.isEmpty) {
         state = RouteOptionsState.noRoute(requestId);
       } else {
-        state = RouteOptionsState.success(routes, requestId);
+        state = RouteOptionsState.success(ranked, requestId);
       }
     } catch (e) {
       if (_isStale(requestId)) return;
