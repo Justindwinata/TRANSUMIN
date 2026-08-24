@@ -8,7 +8,7 @@ class NotificationCenterScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncNotifications = ref.watch(notificationsProvider);
+    final notificationsAsync = ref.watch(notificationsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -17,14 +17,16 @@ class NotificationCenterScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.done_all),
             tooltip: 'Tandai semua sudah dibaca',
-            onPressed: () async {
-              await ref.read(notificationRepositoryProvider).markAllRead();
-              ref.refresh(notificationsProvider);
-            },
+            onPressed: notificationsAsync.hasValue
+                ? () async {
+                    await ref.read(notificationRepositoryProvider).markAllRead();
+                    ref.refresh(notificationsProvider);
+                  }
+                : null,
           ),
         ],
       ),
-      body: asyncNotifications.when(
+      body: notificationsAsync.when(
         data: (notifications) {
           if (notifications.isEmpty) {
             return const Center(child: Text('Tidak ada notifikasi.'));
@@ -35,17 +37,21 @@ class NotificationCenterScreen extends ConsumerWidget {
               final n = notifications[index];
               return NotificationTile(
                 notification: n,
-                onMarkRead:
-                    n.isRead
-                        ? null
-                        : () async {
-                          await ref
-                              .read(notificationRepositoryProvider)
-                              .markRead(n.id);
-                          ref.refresh(notificationsProvider);
-                        },
-                // TODO: implement navigation based on type
-                onTap: () {},
+                onMarkRead: n.isRead
+                    ? null
+                    : () async {
+                        await ref
+                            .read(notificationRepositoryProvider)
+                            .markRead(n.id);
+                        ref.refresh(notificationsProvider);
+                      },
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${n.title}: ${n.body}'),
+                    ),
+                  );
+                },
               );
             },
           );

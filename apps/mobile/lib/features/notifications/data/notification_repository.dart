@@ -1,59 +1,58 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 import '../domain/notification_model.dart';
 
 class NotificationRepository {
-  // In‑memory store for simplicity. Replace with backend API later.
-  final List<NotificationItem> _store = [];
+  static const String _key = 'notifications';
+  final SharedPreferences _prefs;
+
+  NotificationRepository(this._prefs);
 
   Future<List<NotificationItem>> fetchAll() async {
-    // Simulate network latency
-    await Future.delayed(const Duration(milliseconds: 200));
-    return List<NotificationItem>.from(_store);
+    final raw = _prefs.getString(_key);
+    if (raw == null) return [];
+    final list = jsonDecode(raw) as List;
+    return list
+        .map((j) => NotificationItem.fromJson(j as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<void> _saveAll(List<NotificationItem> items) async {
+    await _prefs.setString(_key, jsonEncode(items.map((i) => i.toJson()).toList()));
   }
 
   Future<void> add(NotificationItem item) async {
-    _store.add(item);
+    final current = await fetchAll();
+    await _saveAll([item, ...current]);
   }
 
   Future<void> markRead(String id) async {
-    final idx = _store.indexWhere((n) => n.id == id);
-    if (idx != -1) {
-      final n = _store[idx];
-      _store[idx] = NotificationItem(
-        id: n.id,
-        title: n.title,
-        body: n.body,
-        type: n.type,
-        severity: n.severity,
-        createdAt: n.createdAt,
-        isRead: true,
-      );
-    }
+    final current = await fetchAll();
+    final updated = current.map((n) => n.id == id ? n.copyWith(isRead: true) : n).toList();
+    await _saveAll(updated);
   }
 
   Future<void> markAllRead() async {
-    for (var i = 0; i < _store.length; i++) {
-      final n = _store[i];
-      _store[i] = NotificationItem(
-        id: n.id,
-        title: n.title,
-        body: n.body,
-        type: n.type,
-        severity: n.severity,
-        createdAt: n.createdAt,
-        isRead: true,
-      );
-    }
+    final current = await fetchAll();
+    final updated = current.map((n) => n.copyWith(isRead: true)).toList();
+    await _saveAll(updated);
   }
 }
 
-final notificationRepositoryProvider = Provider<NotificationRepository>(
-  (ref) => NotificationRepository(),
-);
+final notificationRepositoryProvider = Provider<NotificationRepository>((ref) {
+  return NotificationRepository(ref.watch(sharedPreferencesProvider));
+});
 
-final notificationsProvider = FutureProvider<List<NotificationItem>>((
-  ref,
-) async {
+final notificationsProvider = FutureProvider<List<NotificationItem>>((ref) {
   final repo = ref.watch(notificationRepositoryProvider);
   return repo.fetchAll();
+});
+
+final unreadNotificationCountProvider = Provider<int>((ref) {
+  final async = ref.watch(notificationsProvider);
+  return async.maybeWhen(
+    data: (items) => items.where((n) => !n.isRead).length,
+    orElse: () => 0,
+  );
 });
