@@ -195,3 +195,19 @@ model JourneyHistory {
 
   @@map("journey_history")
 }
+
+model ServiceAlert {
+  id              String   @id @default(uuid())
+  title           String
+  description     String
+  startsAt        DateTime @map("starts_at")
+  endsAt          DateTime? @map("ends_at")
+  severity        String
+  status          String
+  operatorName    String?  @map("operator_name")
+  affectedRoute   String?  @map("affected_route")
+  affectedStop    String?  @map("affected_stop")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("service_alerts")
+}

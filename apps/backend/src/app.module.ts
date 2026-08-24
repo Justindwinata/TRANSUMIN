@@ -10,6 +10,7 @@ import { RoutingModule } from './modules/routing/routing.module';
 import { SavedPlacesModule } from './modules/saved-places/saved-places.module';
 import { SavedJourneysModule } from './modules/saved-journeys/saved-journeys.module';
 import { HistoryModule } from './modules/history/history.module';
+import { ServiceAlertsModule } from './modules/service-alerts/service-alerts.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { HistoryModule } from './modules/history/history.module';
     SavedPlacesModule,
     SavedJourneysModule,
     HistoryModule,
+    ServiceAlertsModule,
   ],
 })
 export class AppModule {}
