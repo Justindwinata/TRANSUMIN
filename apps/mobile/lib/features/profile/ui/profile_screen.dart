@@ -4,6 +4,7 @@ import 'package:mobile/features/auth/auth_provider.dart';
 import 'package:mobile/features/saved/ui/saved_places_screen.dart';
 import 'package:mobile/features/saved/ui/saved_journeys_screen.dart';
 import 'package:mobile/features/history/ui/journey_history_screen.dart';
+import 'package:mobile/features/notifications/ui/notification_center_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -60,7 +61,10 @@ class ProfileScreen extends ConsumerWidget {
             title: 'Notifikasi',
             subtitle: 'Kelola notifikasi perjalanan',
             icon: Icons.notifications,
-            onTap: () => _showComingSoon(context),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const NotificationCenterScreen()),
+            ),
           ),
           _ProfileTile(
             title: 'Tema',
