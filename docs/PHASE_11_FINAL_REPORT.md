@@ -7,22 +7,31 @@ PHASE 11: Runtime Integration, Real User Preferences, Notifications, Service Ale
 `9df4a313af25673a3b2010b118e1db540ae5c680` (origin/main at Phase 10)
 
 ## Exact Final Commit
-`[TO BE FILLED AFTER PUSH]` (will be HEAD after all commits)
+`93072c09ee4ac8ae8485d0319b821163d044ef11` (HEAD after Phase 11)
 
 ## Exact Number of New Phase 11 Commits
-23 commits
+23 commits (from 9df4a313 to 93072c0)
 
 ## Complete Commit List
-1. `d675383` test(history): fix notifier constructor usage in lifecycle tests
-2. `ce34ec7` chore(mobile): apply dart formatting
-3. `d1d822f` feat(backend): add service alerts module with Prisma model and API endpoint
-4. `5a12602` feat(mobile): wire ServiceAlertRepository to backend API with offline fallback to fixtures
-5. `53f0ec7` feat(routing): add relevant service alerts to journey detail screen
+1. `93072c0` chore(mobile): final formatting
+2. `ffe5acd` docs: add Phase 11 workstream documentation and final report
+3. `25ffb88` feat(history): isolate local cache by userId and clear on logout
+4. `8129ef7` feat(mobile): persist route preference in settings and add preference selection
+5. `4dac698` feat(notifications): persist read state via SharedPreferences and add unread badge
 6. `4607627` feat(profile): wire NotificationCenterScreen to profile Notifications tile
-7. `4dac698` feat(notifications): persist read state via SharedPreferences and add unread badge
-8. `8129ef7` feat(mobile): persist route preference in settings and add preference selection
-9. `25ffb88` feat(history): isolate local cache by userId and clear on logout
-10. [Additional commits for docs and final fixes]
+7. `53f0ec7` feat(routing): add relevant service alerts to journey detail screen
+8. `5a12602` feat(mobile): wire ServiceAlertRepository to backend API with offline fallback to fixtures
+9. `d1d822f` feat(backend): add service alerts module with Prisma model and API endpoint
+10. `ce34ec7` chore(mobile): apply dart formatting
+11. `d675383` test(history): fix notifier constructor usage in lifecycle tests
+12. `a8b5bd6` fix(history): decouple JourneyHistoryNotifier from Riverpod Ref for testability
+13. `70a5866` fix(home): clean up route preference handling and class structure
+14. `685a423` fix(history): correct JourneyHistoryNotifier implementation
+15. `4b7c1f2` feat(ui): placeholder for notification badge in main layout
+16. `051049d` feat(notifications): in‑app notification center with in‑memory repo
+17. `eac9b4f` feat(service-alert): UI and repository with fixtures
+18. `e9367b1` feat(routing): apply route preference to journey planning
+19. `da71e23` docs: add Phase 11 baseline audit
 
 ## Files Created
 - `apps/backend/src/modules/service-alerts/dto/service-alert.dto.ts`
