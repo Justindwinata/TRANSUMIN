@@ -59,7 +59,7 @@ class _TransumInAppState extends ConsumerState<TransumInApp> {
               ? const Scaffold(body: Center(child: CircularProgressIndicator()))
               : Stack(
                 children: [
-                  const HomeScreen(),
+                  // Notification badge placeholder: will be added via overlay widget later
                   if (!isOnline)
                     Positioned(
                       bottom: 0,
