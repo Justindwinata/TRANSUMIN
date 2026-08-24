@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/features/location/domain/models.dart';
-import 'package:mobile/features/location/ui/search_screen.dart';
 import 'package:mobile/features/location/state/journey_notifier.dart';
 import 'package:mobile/shared/widgets/location_input.dart';
 import 'package:mobile/shared/widgets/app_button.dart';
@@ -13,6 +12,7 @@ import 'package:mobile/features/saved/ui/saved_places_screen.dart';
 import 'package:mobile/features/history/ui/journey_history_screen.dart';
 import 'package:mobile/features/history/state/journey_history_notifier.dart';
 import 'package:mobile/features/profile/state/user_preferences_notifier.dart';
+import 'package:mobile/features/profile/data/user_preferences_repository.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -77,56 +77,6 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
   }
-}
-
-class _PreferenceDisplay extends StatelessWidget {
-  final RoutePreference preference;
-
-  const _PreferenceDisplay({required this.preference});
-
-  @override
-  Widget build(BuildContext context) {
-    String label;
-    IconData icon;
-    switch (preference) {
-      case RoutePreference.minTransfers:
-        label = 'Sedikit Peralihan';
-        icon = Icons.swap_horiz;
-        break;
-      case RoutePreference.minWalking:
-        label = 'Jalan Kaki Minimal';
-        icon = Icons.directions_walk;
-        break;
-      case RoutePreference.fastest:
-      default:
-        label = 'Tercepak';
-        icon = Icons.speed;
-        break;
-    }
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.blue.shade50,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.blue.shade200),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 18, color: Colors.blue.shade700),
-          const SizedBox(width: 8),
-          Text(
-            'Preferensi: $label',
-            style: TextStyle(
-              color: Colors.blue.shade700,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
   Future<void> _pickOrigin(BuildContext context, WidgetRef ref) async {
     final result = await showModalBottomSheet<Place>(
@@ -218,6 +168,55 @@ class _PreferenceDisplay extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => RouteOptionsScreen(request: request)),
+    );
+  }
+}
+
+class _PreferenceDisplay extends StatelessWidget {
+  final RoutePreference preference;
+
+  const _PreferenceDisplay({required this.preference});
+
+  @override
+  Widget build(BuildContext context) {
+    String label;
+    IconData icon;
+    switch (preference) {
+      case RoutePreference.minTransfers:
+        label = 'Sedikit Peralihan';
+        icon = Icons.swap_horiz;
+        break;
+      case RoutePreference.minWalking:
+        label = 'Jalan Kaki Minimal';
+        icon = Icons.directions_walk;
+        break;
+      case RoutePreference.fastest:
+      default:
+        label = 'Tercepat';
+        icon = Icons.speed;
+        break;
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.blue.shade200),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 18, color: Colors.blue.shade700),
+          const SizedBox(width: 8),
+          Text(
+            'Preferensi: $label',
+            style: TextStyle(
+              color: Colors.blue.shade700,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
