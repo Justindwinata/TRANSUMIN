@@ -26,7 +26,8 @@ void main() {
 
     setUp(() {
       persistence = _FakeHistoryPersistence();
-      notifier = JourneyHistoryNotifier(persistence);
+      final container = ProviderContainer();
+    notifier = JourneyHistoryNotifier(persistence, container.ref);
     });
 
     test('should start empty', () {

@@ -24,7 +24,8 @@ void main() {
 
     setUp(() {
       persistence = _FakeHistoryPersistence();
-      historyNotifier = JourneyHistoryNotifier(persistence);
+      final container = ProviderContainer();
+    historyNotifier = JourneyHistoryNotifier(persistence, container.ref);
     });
 
     test(

@@ -7,9 +7,7 @@ import 'features/auth/auth_provider.dart';
 import 'core/network/network_monitor.dart';
 import 'features/profile/data/user_preferences_repository.dart';
 
-final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
-  throw UnimplementedError('SharedPreferences must be overridden in main');
-});
+final sharedPreferencesProvider = Provider<SharedPreferences>((ref) => throw UnimplementedError('SharedPreferences must be overridden in main'));
 
 final userPreferencesRepositoryProvider = Provider<UserPreferencesRepository>((ref) {
   final prefs = ref.watch(sharedPreferencesProvider);

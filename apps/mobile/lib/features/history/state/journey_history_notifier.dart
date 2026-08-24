@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/features/history/data/history_persistence.dart';
 import 'package:mobile/features/auth/auth_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 
 class JourneyHistoryEntry {
   final String id;
@@ -85,7 +87,8 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
   final HistoryPersistence _persistence;
   final Ref _ref;
 
-  JourneyHistoryNotifier(this._persistence, this._ref)
+  JourneyHistoryNotifier(this._persistence, [Ref? ref])
+    : _ref = ref ?? ProviderContainer().ref,
     : super(const JourneyHistoryState(entries: []));
 
   Future<void> load() async {
