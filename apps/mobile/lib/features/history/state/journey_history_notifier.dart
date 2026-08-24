@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/features/history/data/history_persistence.dart';
 import 'package:mobile/features/auth/auth_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 
 class JourneyHistoryEntry {
   final String id;
@@ -87,9 +85,7 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
   final HistoryPersistence _persistence;
   final Ref _ref;
 
-  JourneyHistoryNotifier(this._persistence, [Ref? ref])
-    : _ref = ref ?? ProviderContainer().ref,
-    : super(const JourneyHistoryState(entries: []));
+  JourneyHistoryNotifier(this._persistence, this._ref) : super(const JourneyHistoryState(entries: []));
 
   Future<void> load() async {
     state = state.copyWith(isLoading: true, error: null);
@@ -114,16 +110,8 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
   }
 
   void addEntry(JourneyHistoryEntry entry) {
-    final filtered =
-        state.entries
-            .where(
-              (e) =>
-                  !(e.originName == entry.originName &&
-                      e.destName == entry.destName),
-            )
-            .toList();
-    final updated =
-        [entry, ...filtered].take(JourneyHistoryNotifier.maxEntries).toList();
+    final filtered = state.entries.where((e) => !(e.originName == entry.originName && e.destName == entry.destName)).toList();
+    final updated = [entry, ...filtered].take(JourneyHistoryNotifier.maxEntries).toList();
     state = state.copyWith(entries: updated);
     _persistence.save(updated);
     _ref.read(authProvider.notifier).saveHistoryToBackend(updated);
@@ -135,22 +123,19 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
   }
 
   Future<void> removeById(String id) async {
-    state = state.copyWith(
-      entries: state.entries.where((e) => e.id != id).toList(),
-    );
+    state = state.copyWith(entries: state.entries.where((e) => e.id != id).toList());
     await _persistence.save(state.entries);
     await _ref.read(authProvider.notifier).saveHistoryToBackend(state.entries);
   }
 }
 
-final journeyHistoryProvider =
-    StateNotifierProvider<JourneyHistoryNotifier, JourneyHistoryState>((ref) {
-      final persistence = ref.watch(historyPersistenceProvider).asData?.value;
-      if (persistence == null) {
-        return JourneyHistoryNotifier(HistoryPersistenceDummy(), ref);
-      }
-      return JourneyHistoryNotifier(persistence, ref);
-    });
+final journeyHistoryProvider = StateNotifierProvider<JourneyHistoryNotifier, JourneyHistoryState>((ref) {
+  final persistence = ref.watch(historyPersistenceProvider).asData?.value;
+  if (persistence == null) {
+    return JourneyHistoryNotifier(HistoryPersistenceDummy(), ref);
+  }
+  return JourneyHistoryNotifier(persistence, ref);
+});
 
 class HistoryPersistenceDummy implements HistoryPersistence {
   @override
@@ -162,3 +147,4 @@ class HistoryPersistenceDummy implements HistoryPersistence {
   @override
   Future<void> clear() async {}
 }
+
