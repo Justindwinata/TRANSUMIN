@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/features/auth/auth_provider.dart';
+import 'package:mobile/features/profile/state/user_preferences_notifier.dart';
+import 'package:mobile/features/profile/data/user_preferences_repository.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -84,11 +86,10 @@ class SettingsScreen extends ConsumerWidget {
           _SettingsSection(
             title: 'Rute & Navigasi',
             children: [
-              _SettingsTile(
+              _PreferenceTile(
+                ref: ref,
                 title: 'Preferensi Rute Default',
-                subtitle: 'Cepat / Minim Transit / Minim Jalan',
-                leading: Icons.route,
-                onTap: () => _showComingSoon(context),
+                icon: Icons.route,
               ),
               _SettingsTile(
                 title: 'Jarak Jalan Kaki Maksimal',
@@ -251,7 +252,97 @@ class _SettingsSection extends StatelessWidget {
   }
 }
 
-class _SettingsTile extends StatelessWidget {
+class _PreferenceTile extends StatelessWidget {
+  final WidgetRef ref;
+  final String title;
+  final IconData icon;
+
+  const _PreferenceTile({
+    required this.ref,
+    required this.title,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final preference = ref.watch(routePreferenceProvider);
+    final label = _preferenceLabel(preference);
+    return Material(
+      child: InkWell(
+        onTap: () => _showPreferenceDialog(context),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Icon(icon, color: const Color(0xFF2563EB)),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: const TextStyle(fontSize: 16)),
+                    Text(
+                      label,
+                      style: const TextStyle(fontSize: 13, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right, color: Colors.grey),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _preferenceLabel(RoutePreference pref) {
+    switch (pref) {
+      case RoutePreference.minTransfers:
+        return 'Sedikit Peralihan';
+      case RoutePreference.minWalking:
+        return 'Jalan Kaki Minimal';;
+      case RoutePreference.fastest:
+      default:
+        return 'Tercepat';
+    }
+  }
+
+  void _showPreferenceDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => Column(
+        children: [
+          const SizedBox(height: 12),
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Pilih Preferensi Rute',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          ...RoutePreference.values.map((pref) => RadioListTile<RoutePreference>(
+            title: Text(_preferenceLabel(pref)),
+            value: pref,
+            groupValue: ref.read(routePreferenceProvider),
+            onChanged: (value) async {
+              if (value == null) return;
+              await ref.read(routePreferenceProvider.notifier).setPreference(value);
+              Navigator.pop(ctx);
+            },
+          )),
+        ],
+      ),
+    );
+  }
+}
   final String title;
   final String? subtitle;
   final IconData leading;
