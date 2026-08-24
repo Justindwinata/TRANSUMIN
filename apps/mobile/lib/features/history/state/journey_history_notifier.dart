@@ -152,15 +152,24 @@ final journeyHistoryProvider =
       Future<void> Function(List<JourneyHistoryEntry>) syncBackend = (
         entries,
       ) async {
+        final userId = ref.read(authProvider).userId;
+        if (userId == null) return;
         await ref.read(authProvider.notifier).saveHistoryToBackend(entries);
       };
-      if (persistence == null) {
-        return JourneyHistoryNotifier(
-          HistoryPersistenceDummy(),
-          syncBackend: syncBackend,
-        );
-      }
-      return JourneyHistoryNotifier(persistence, syncBackend: syncBackend);
+      final notifier = JourneyHistoryNotifier(
+        persistence ?? HistoryPersistenceDummy(),
+        syncBackend: syncBackend,
+      );
+      ref.listen<String?>(
+        authProvider.select((s) => s.userId),
+        (prev, next) {
+          if (next == null) {
+            notifier.clear();
+          }
+        },
+      );
+      notifier.load();
+      return notifier;
     });
 
 class HistoryPersistenceDummy implements HistoryPersistence {
