@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/features/history/data/history_persistence.dart';
+import 'package:mobile/features/auth/auth_provider.dart';
 
 class JourneyHistoryEntry {
   final String id;
@@ -82,14 +83,15 @@ class JourneyHistoryState {
 class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
   static const int maxEntries = 50;
   final HistoryPersistence _persistence;
+  final Ref _ref;
 
-  JourneyHistoryNotifier(this._persistence)
+  JourneyHistoryNotifier(this._persistence, this._ref)
     : super(const JourneyHistoryState(entries: []));
 
   Future<void> load() async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final localEntries = await _persistence.load();
+      final localEntries = _persistence.load();
       state = state.copyWith(isLoading: false, entries: localEntries);
       await _syncWithBackend();
     } catch (e) {
@@ -100,9 +102,8 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
   Future<void> _syncWithBackend() async {
     state = state.copyWith(isSyncing: true);
     try {
-    await _persistence.save(state.entries);
-    ref.read(authProvider.notifier).saveHistoryToBackend(state.entries);
-
+      await _persistence.save(state.entries);
+      await _ref.read(authProvider.notifier).saveHistoryToBackend(state.entries);
       state = state.copyWith(isSyncing: false);
     } catch (e) {
       state = state.copyWith(isSyncing: false, error: 'Gagal sinkronisasi: $e');
@@ -122,28 +123,20 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
         [entry, ...filtered].take(JourneyHistoryNotifier.maxEntries).toList();
     state = state.copyWith(entries: updated);
     _persistence.save(updated);
-    ref.read(authProvider.notifier).saveHistoryToBackend(updated);
-
-    ref.read(authProvider.notifier).saveHistoryToBackend(updated);
-
+    _ref.read(authProvider.notifier).saveHistoryToBackend(updated);
   }
 
   void clear() {
     state = state.copyWith(entries: const []);
     _persistence.clear();
-    // backend clear handled via auth logout
-
   }
 
-  void removeById(String id) {
+  Future<void> removeById(String id) async {
     state = state.copyWith(
       entries: state.entries.where((e) => e.id != id).toList(),
     );
     await _persistence.save(state.entries);
-    ref.read(authProvider.notifier).saveHistoryToBackend(state.entries);
-
-        ref.read(authProvider.notifier).saveHistoryToBackend(state.entries);
-
+    await _ref.read(authProvider.notifier).saveHistoryToBackend(state.entries);
   }
 }
 
@@ -151,9 +144,9 @@ final journeyHistoryProvider =
     StateNotifierProvider<JourneyHistoryNotifier, JourneyHistoryState>((ref) {
       final persistence = ref.watch(historyPersistenceProvider).asData?.value;
       if (persistence == null) {
-        return JourneyHistoryNotifier(HistoryPersistenceDummy());
+        return JourneyHistoryNotifier(HistoryPersistenceDummy(), ref);
       }
-      return JourneyHistoryNotifier(persistence);
+      return JourneyHistoryNotifier(persistence, ref);
     });
 
 class HistoryPersistenceDummy implements HistoryPersistence {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/theme/app_theme.dart';
@@ -8,16 +7,13 @@ import 'features/auth/auth_provider.dart';
 import 'core/network/network_monitor.dart';
 import 'features/profile/data/user_preferences_repository.dart';
 
-final sharedPreferencesProvider = FutureProvider<SharedPreferences>((ref) async {
-  return await SharedPreferences.getInstance();
+final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
+  throw UnimplementedError('SharedPreferences must be overridden in main');
 });
 
 final userPreferencesRepositoryProvider = Provider<UserPreferencesRepository>((ref) {
-  final prefsAsync = ref.watch(sharedPreferencesProvider);
-  return prefsAsync.maybeWhen(
-    data: (prefs) => UserPreferencesRepository(prefs),
-    orElse: () => throw UnimplementedError('SharedPreferences not ready'),
-  );
+  final prefs = ref.watch(sharedPreferencesProvider);
+  return UserPreferencesRepository(prefs);
 });
 
 Future<void> main() async {
@@ -27,9 +23,6 @@ Future<void> main() async {
     ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(prefs),
-        userPreferencesRepositoryProvider.overrideWith(
-          (ref) => UserPreferencesRepository(prefs),
-        ),
       ],
       child: const TransumInApp(),
     ),
