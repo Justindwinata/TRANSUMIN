@@ -17,12 +17,15 @@ class NotificationCenterScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.done_all),
             tooltip: 'Tandai semua sudah dibaca',
-            onPressed: notificationsAsync.hasValue
-                ? () async {
-                    await ref.read(notificationRepositoryProvider).markAllRead();
-                    ref.refresh(notificationsProvider);
-                  }
-                : null,
+            onPressed:
+                notificationsAsync.hasValue
+                    ? () async {
+                      await ref
+                          .read(notificationRepositoryProvider)
+                          .markAllRead();
+                      ref.refresh(notificationsProvider);
+                    }
+                    : null,
           ),
         ],
       ),
@@ -37,19 +40,18 @@ class NotificationCenterScreen extends ConsumerWidget {
               final n = notifications[index];
               return NotificationTile(
                 notification: n,
-                onMarkRead: n.isRead
-                    ? null
-                    : () async {
-                        await ref
-                            .read(notificationRepositoryProvider)
-                            .markRead(n.id);
-                        ref.refresh(notificationsProvider);
-                      },
+                onMarkRead:
+                    n.isRead
+                        ? null
+                        : () async {
+                          await ref
+                              .read(notificationRepositoryProvider)
+                              .markRead(n.id);
+                          ref.refresh(notificationsProvider);
+                        },
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${n.title}: ${n.body}'),
-                    ),
+                    SnackBar(content: Text('${n.title}: ${n.body}')),
                   );
                 },
               );

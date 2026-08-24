@@ -301,7 +301,7 @@ class _PreferenceTile extends StatelessWidget {
       case RoutePreference.minTransfers:
         return 'Sedikit Peralihan';
       case RoutePreference.minWalking:
-        return 'Jalan Kaki Minimal';;
+        return 'Jalan Kaki Minimal';
       case RoutePreference.fastest:
       default:
         return 'Tercepat';
@@ -311,38 +311,45 @@ class _PreferenceTile extends StatelessWidget {
   void _showPreferenceDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (ctx) => Column(
-        children: [
-          const SizedBox(height: 12),
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(2),
-            ),
+      builder:
+          (ctx) => Column(
+            children: [
+              const SizedBox(height: 12),
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Pilih Preferensi Rute',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              ...RoutePreference.values.map(
+                (pref) => RadioListTile<RoutePreference>(
+                  title: Text(_preferenceLabel(pref)),
+                  value: pref,
+                  groupValue: ref.read(routePreferenceProvider),
+                  onChanged: (value) async {
+                    if (value == null) return;
+                    await ref
+                        .read(routePreferenceProvider.notifier)
+                        .setPreference(value);
+                    Navigator.pop(ctx);
+                  },
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          const Text(
-            'Pilih Preferensi Rute',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          ...RoutePreference.values.map((pref) => RadioListTile<RoutePreference>(
-            title: Text(_preferenceLabel(pref)),
-            value: pref,
-            groupValue: ref.read(routePreferenceProvider),
-            onChanged: (value) async {
-              if (value == null) return;
-              await ref.read(routePreferenceProvider.notifier).setPreference(value);
-              Navigator.pop(ctx);
-            },
-          )),
-        ],
-      ),
     );
   }
 }
+
+class _SettingsTile extends StatelessWidget {
   final String title;
   final String? subtitle;
   final IconData leading;

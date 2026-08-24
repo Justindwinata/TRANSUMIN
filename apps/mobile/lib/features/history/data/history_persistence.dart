@@ -13,7 +13,9 @@ class HistoryPersistence {
 
   String get _key {
     final uid = _userId;
-    return uid == null || uid.isEmpty ? 'journey_history:anon' : _keyForUser(uid);
+    return uid == null || uid.isEmpty
+        ? 'journey_history:anon'
+        : _keyForUser(uid);
   }
 
   List<JourneyHistoryEntry> load() {
@@ -37,7 +39,9 @@ class HistoryPersistence {
   }
 }
 
-final historyPersistenceProvider = FutureProvider<HistoryPersistence>((ref) async {
+final historyPersistenceProvider = FutureProvider<HistoryPersistence>((
+  ref,
+) async {
   final prefs = await SharedPreferences.getInstance();
   final userId = ref.watch(authProvider).userId;
   return HistoryPersistence(prefs, userId: userId);

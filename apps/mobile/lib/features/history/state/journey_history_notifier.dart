@@ -160,14 +160,11 @@ final journeyHistoryProvider =
         persistence ?? HistoryPersistenceDummy(),
         syncBackend: syncBackend,
       );
-      ref.listen<String?>(
-        authProvider.select((s) => s.userId),
-        (prev, next) {
-          if (next == null) {
-            notifier.clear();
-          }
-        },
-      );
+      ref.listen<String?>(authProvider.select((s) => s.userId), (prev, next) {
+        if (next == null) {
+          notifier.clear();
+        }
+      });
       notifier.load();
       return notifier;
     });

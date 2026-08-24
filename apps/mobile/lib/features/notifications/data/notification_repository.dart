@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../domain/notification_model.dart';
+import 'package:mobile/main.dart' as app;
 
 class NotificationRepository {
   static const String _key = 'notifications';
@@ -19,7 +20,10 @@ class NotificationRepository {
   }
 
   Future<void> _saveAll(List<NotificationItem> items) async {
-    await _prefs.setString(_key, jsonEncode(items.map((i) => i.toJson()).toList()));
+    await _prefs.setString(
+      _key,
+      jsonEncode(items.map((i) => i.toJson()).toList()),
+    );
   }
 
   Future<void> add(NotificationItem item) async {
@@ -29,7 +33,8 @@ class NotificationRepository {
 
   Future<void> markRead(String id) async {
     final current = await fetchAll();
-    final updated = current.map((n) => n.id == id ? n.copyWith(isRead: true) : n).toList();
+    final updated =
+        current.map((n) => n.id == id ? n.copyWith(isRead: true) : n).toList();
     await _saveAll(updated);
   }
 
@@ -41,7 +46,7 @@ class NotificationRepository {
 }
 
 final notificationRepositoryProvider = Provider<NotificationRepository>((ref) {
-  return NotificationRepository(ref.watch(sharedPreferencesProvider));
+  return NotificationRepository(ref.watch(app.sharedPreferencesProvider));
 });
 
 final notificationsProvider = FutureProvider<List<NotificationItem>>((ref) {

@@ -8,7 +8,7 @@ import 'package:mobile/shared/widgets/journey_step.dart';
 import 'package:mobile/features/saved/state/saved_journeys_notifier.dart';
 import 'package:mobile/features/transit/data/service_alert_repository.dart';
 import 'package:mobile/features/transit/domain/service_alert.dart';
-import '../domain/models.dart';;
+import '../domain/models.dart';
 import 'package:mobile/features/transit/ui/service_alert_widget.dart';
 import '../presentation/journey_instruction_mapper.dart';
 import '../../map/presentation/journey_map_model.dart';
@@ -146,6 +146,19 @@ class JourneyDetailScreen extends ConsumerWidget {
         final routeShortNames = <String>{};
         for (final s in route.segments) {
           if (s.routeShortName != null) routeShortNames.add(s.routeShortName!);
+        }
+        return alerts
+            .where(
+              (a) =>
+                  a.status == AlertStatus.active &&
+                  routeShortNames.any((r) => a.affectsRoute(r)),
+            )
+            .toList();
+      },
+      loading: () => [],
+      error: (_, __) => [],
+    );
+  }
 }
 
 class _AffectedAlerts extends StatelessWidget {
@@ -170,17 +183,6 @@ class _AffectedAlerts extends StatelessWidget {
           ...alerts.map((a) => ServiceAlertWidget(alert: a)),
         ],
       ),
-    );
-  }
-}
-        return alerts
-            .where((a) =>
-                a.status == AlertStatus.active &&
-                routeShortNames.any((r) => a.affectsRoute(r)))
-            .toList();
-      },
-      loading: () => [],
-      error: (_, __) => [],
     );
   }
 }

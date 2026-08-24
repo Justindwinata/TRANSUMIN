@@ -14,9 +14,10 @@ class ServiceAlertRepository {
       return ServiceAlertFixtures.developmentAlerts();
     }
     try {
-      final response = await _ref.read(apiClientProvider).get('/service-alerts');
-      final list =
-          (response['alerts'] as List?) ?? (response['data'] as List?);
+      final response = await _ref
+          .read(apiClientProvider)
+          .get('/service-alerts');
+      final list = (response['alerts'] as List?) ?? (response['data'] as List?);
       return (list ?? [])
           .cast<Map<String, dynamic>>()
           .map((j) => ServiceAlert.fromJson(j))
@@ -27,8 +28,7 @@ class ServiceAlertRepository {
   }
 }
 
-final serviceAlertRepositoryProvider =
-    Provider<ServiceAlertRepository>((ref) {
+final serviceAlertRepositoryProvider = Provider<ServiceAlertRepository>((ref) {
   return ServiceAlertRepository(ref);
 });
 

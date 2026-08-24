@@ -61,10 +61,13 @@ class ProfileScreen extends ConsumerWidget {
             title: 'Notifikasi',
             subtitle: 'Kelola notifikasi perjalanan',
             icon: Icons.notifications,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const NotificationCenterScreen()),
-            ),
+            onTap:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const NotificationCenterScreen(),
+                  ),
+                ),
           ),
           _ProfileTile(
             title: 'Tema',
