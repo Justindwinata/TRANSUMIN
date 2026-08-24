@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/models.dart';
 import '../state/nearby_transit_notifier.dart';
 
 class NearbyTransitWidget extends ConsumerWidget {
