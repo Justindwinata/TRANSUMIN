@@ -25,10 +25,9 @@ void main() {
     late JourneyHistoryNotifier notifier;
     late _FakeHistoryPersistence persistence;
 
-setUp(() {
+    setUp(() {
       persistence = _FakeHistoryPersistence();
-      final container = ProviderContainer();
-      notifier = JourneyHistoryNotifier(persistence, container);
+      notifier = JourneyHistoryNotifier(persistence);
     });
 
     test('should start empty', () {
