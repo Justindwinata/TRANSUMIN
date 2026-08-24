@@ -6,7 +6,10 @@ import 'package:latlong2/latlong.dart';
 import 'package:mobile/shared/widgets/app_card.dart';
 import 'package:mobile/shared/widgets/journey_step.dart';
 import 'package:mobile/features/saved/state/saved_journeys_notifier.dart';
-import '../domain/models.dart';
+import 'package:mobile/features/transit/data/service_alert_repository.dart';
+import 'package:mobile/features/transit/domain/service_alert.dart';
+import '../domain/models.dart';;
+import 'package:mobile/features/transit/ui/service_alert_widget.dart';
 import '../presentation/journey_instruction_mapper.dart';
 import '../../map/presentation/journey_map_model.dart';
 
@@ -20,6 +23,10 @@ class JourneyDetailScreen extends ConsumerWidget {
     final instructions = JourneyInstructionMapper.fromJourney(route);
     final mapModel = JourneyMapBuilder.fromJourney(route);
     final savedJourneys = ref.watch(savedJourneysProvider);
+    final asyncAlerts = ref.watch(serviceAlertsProvider);
+
+    final relevantAlerts = _relevantAlerts(route, asyncAlerts);
+
     final alreadySaved = savedJourneys.journeys.any(
       (j) =>
           j.originName == (route.origin.name ?? '') &&
@@ -78,6 +85,8 @@ class JourneyDetailScreen extends ConsumerWidget {
                 isLast: i == instructions.last,
               ),
             ),
+            const SizedBox(height: 8),
+            _AffectedAlerts(alerts: relevantAlerts),
             const SizedBox(height: 24),
           ],
         ),
@@ -126,6 +135,53 @@ class JourneyDetailScreen extends ConsumerWidget {
       case InstructionKind.wait:
         return 'wait';
     }
+  }
+
+  static List<ServiceAlert> _relevantAlerts(
+    RouteAlternative route,
+    AsyncValue<List<ServiceAlert>> asyncAlerts,
+  ) {
+    return asyncAlerts.when(
+      data: (alerts) {
+        final routeShortNames = <String>{};
+        for (final s in route.segments) {
+          if (s.routeShortName != null) routeShortNames.add(s.routeShortName!);
+}
+
+class _AffectedAlerts extends StatelessWidget {
+  final List<ServiceAlert> alerts;
+
+  const _AffectedAlerts({required this.alerts});
+
+  @override
+  Widget build(BuildContext context) {
+    if (alerts.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Peringatan yang Mempengaruhi Rute Ini',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          ...alerts.map((a) => ServiceAlertWidget(alert: a)),
+        ],
+      ),
+    );
+  }
+}
+        return alerts
+            .where((a) =>
+                a.status == AlertStatus.active &&
+                routeShortNames.any((r) => a.affectsRoute(r)))
+            .toList();
+      },
+      loading: () => [],
+      error: (_, __) => [],
+    );
   }
 }
 
