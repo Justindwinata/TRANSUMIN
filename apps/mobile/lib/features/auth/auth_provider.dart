@@ -73,11 +73,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
     );
   }
 
+  Future<void> saveHistoryToBackend(List<JourneyHistoryEntry> entries) async {
+    final userId = state.userId;
+    if (userId == null) return;
+    // TODO: call backend API to sync history
+  }
+
   Future<void> logout() async {
     await _secureStorage.clearAll();
     state = AuthState();
   }
 }
+
 
 final secureStorageProvider = Provider<SecureStorage>((ref) {
   return SecureStorage();

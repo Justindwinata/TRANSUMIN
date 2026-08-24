@@ -100,7 +100,9 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
   Future<void> _syncWithBackend() async {
     state = state.copyWith(isSyncing: true);
     try {
-      await _persistence.save(state.entries);
+    await _persistence.save(state.entries);
+    ref.read(authProvider.notifier).saveHistoryToBackend(state.entries);
+
       state = state.copyWith(isSyncing: false);
     } catch (e) {
       state = state.copyWith(isSyncing: false, error: 'Gagal sinkronisasi: $e');
@@ -120,18 +122,28 @@ class JourneyHistoryNotifier extends StateNotifier<JourneyHistoryState> {
         [entry, ...filtered].take(JourneyHistoryNotifier.maxEntries).toList();
     state = state.copyWith(entries: updated);
     _persistence.save(updated);
+    ref.read(authProvider.notifier).saveHistoryToBackend(updated);
+
+    ref.read(authProvider.notifier).saveHistoryToBackend(updated);
+
   }
 
   void clear() {
     state = state.copyWith(entries: const []);
     _persistence.clear();
+    // backend clear handled via auth logout
+
   }
 
   void removeById(String id) {
     state = state.copyWith(
       entries: state.entries.where((e) => e.id != id).toList(),
     );
-    _persistence.save(state.entries);
+    await _persistence.save(state.entries);
+    ref.read(authProvider.notifier).saveHistoryToBackend(state.entries);
+
+        ref.read(authProvider.notifier).saveHistoryToBackend(state.entries);
+
   }
 }
 
