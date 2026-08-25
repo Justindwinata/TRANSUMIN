@@ -1,53 +1,60 @@
 /// Data Freshness States
-/// 
+///
 /// Defines how current and trustworthy transit data is considered.
 /// The exact thresholds are configurable and should be based on actual
 /// dataset behavior and GTFS service periods.
 
-export type FreshnessState = 'fresh' | 'recent' | 'stale' | 'unknown' | 'unavailable';
+class FreshnessState {
+  static const String fresh = 'fresh';
+  static const String recent = 'recent';
+  static const String stale = 'stale';
+  static const String unknown = 'unknown';
+  static const String unavailable = 'unavailable';
+}
 
 /// Freshness thresholds (in hours)
-export const FRESHNESS_THRESHOLDS = {
+class FreshnessThresholds {
   /// Data was retrieved within this window
-  fresh: 24,
+  static const int fresh = 24;
+
   /// Data is within this window after fresh
-  recent: 168, // 7 days
+  static const int recent = 168; // 7 days
+
   /// Data older than this is considered stale
-  stale: 720, // 30 days
-};
+  static const int stale = 720; // 30 days
+}
 
 /// Determine freshness state based on retrievedAt timestamp
-export function getFreshnessState(retrievedAt: Date | null, validatedAt: Date | null): FreshnessState {
-  if (!retrievedAt) {
-    return 'unknown';
+String getFreshnessState(DateTime? retrievedAt, DateTime? validatedAt) {
+  if (retrievedAt == null) {
+    return FreshnessState.unknown;
   }
 
-  const now = new Date();
-  const retrievedHours = (now.getTime() - retrievedAt.getTime()) / (1000 * 60 * 60);
+  final now = DateTime.now();
+  final retrievedHours = now.difference(retrievedAt).inHours.toDouble();
 
-  if (retrievedHours <= FRESHNESS_THRESHOLDS.fresh) {
-    return 'fresh';
-  } else if (retrievedHours <= FRESHNESS_THRESHOLDS.recent) {
-    return 'recent';
-  } else if (retrievedHours <= FRESHNESS_THRESHOLDS.stale) {
-    return 'stale';
+  if (retrievedHours <= FreshnessThresholds.fresh) {
+    return FreshnessState.fresh;
+  } else if (retrievedHours <= FreshnessThresholds.recent) {
+    return FreshnessState.recent;
+  } else if (retrievedHours <= FreshnessThresholds.stale) {
+    return FreshnessState.stale;
   }
 
-  return 'stale';
+  return FreshnessState.stale;
 }
 
 /// Human-readable freshness label in Indonesian
-export function getFreshnessLabel(state: FreshnessState): string {
+String getFreshnessLabel(String state) {
   switch (state) {
-    case 'fresh':
+    case FreshnessState.fresh:
+    case FreshnessState.recent:
       return 'Data terbaru';
-    case 'recent':
-      return 'Data terbaru';
-    case 'stale':
+    case FreshnessState.stale:
       return 'Data mungkin tidak terkini';
-    case 'unknown':
+    case FreshnessState.unknown:
       return 'Status data tidak tersedia';
-    case 'unavailable':
+    case FreshnessState.unavailable:
       return 'Data tidak tersedia';
     default:
       return 'Data tidak tersedia';
@@ -55,17 +62,17 @@ export function getFreshnessLabel(state: FreshnessState): string {
 }
 
 /// Human-readable freshness message in Indonesian
-export function getFreshnessMessage(state: FreshnessState, retrievedAt?: Date): string {
+String getFreshnessMessage(String state, {DateTime? retrievedAt}) {
   switch (state) {
-    case 'fresh':
-      return retrievedAt ? 'Data diperbarui hari ini' : 'Data terbaru';
-    case 'recent':
-      return retrievedAt ? 'Data diperbarui недавно' : 'Data terbaru';
-    case 'stale':
+    case FreshnessState.fresh:
+      return retrievedAt != null ? 'Data diperbarui hari ini' : 'Data terbaru';
+    case FreshnessState.recent:
+      return 'Data terbaru';
+    case FreshnessState.stale:
       return 'Data mungkin tidak mencerminkan situasi terkini';
-    case 'unknown':
+    case FreshnessState.unknown:
       return 'Kami tidak dapat memastikan kapan data ini diperbarui';
-    case 'unavailable':
+    case FreshnessState.unavailable:
       return 'Data transit saat ini tidak tersedia';
     default:
       return 'Data transit saat ini tidak tersedia';
@@ -73,6 +80,6 @@ export function getFreshnessMessage(state: FreshnessState, retrievedAt?: Date): 
 }
 
 /// Determine if data is fresh enough for routing decisions
-export function isFreshEnoughForRouting(state: FreshnessState): boolean {
-  return state === 'fresh' || state === 'recent';
+bool isFreshEnoughForRouting(String state) {
+  return state == FreshnessState.fresh || state == FreshnessState.recent;
 }
