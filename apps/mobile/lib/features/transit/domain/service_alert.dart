@@ -10,6 +10,7 @@ class ServiceAlert {
   final DateTime? endsAt;
   final AlertSeverity severity;
   final AlertStatus status;
+  final String source;
   final String? operatorName;
   final String? affectedRouteShortName;
   final String? affectedStopName;
@@ -23,6 +24,7 @@ class ServiceAlert {
     this.endsAt,
     this.severity = AlertSeverity.info,
     this.status = AlertStatus.active,
+    this.source = 'fixture',
     this.operatorName,
     this.affectedRouteShortName,
     this.affectedStopName,
@@ -41,13 +43,18 @@ class ServiceAlert {
           json['endsAt'] == null
               ? null
               : DateTime.tryParse(json['endsAt'] as String),
-      severity: _severityFromString(json['severity'] as String?),
-      status: _statusFromString(json['status'] as String?),
+      severity: _severityFromString(json['severity'] as String? ?? 'info'),
+      status: _statusFromString(json['status'] as String? ?? 'active'),
+      source: json['source'] as String? ?? 'fixture',
       operatorName: json['operatorName'] as String?,
       affectedRouteShortName: json['affectedRouteShortName'] as String?,
       affectedStopName: json['affectedStopName'] as String?,
-      isDevelopmentData: json['isDevelopmentData'] as bool? ?? false,
+      isDevelopmentData: json['isDevelopmentData'] as bool? ?? _isDevelopmentBySource(json['source'] as String? ?? 'fixture'),
     );
+  }
+
+  static bool _isDevelopmentBySource(String source) {
+    return source == 'fixture' || source == 'development';
   }
 
   static AlertSeverity _severityFromString(String? value) {
