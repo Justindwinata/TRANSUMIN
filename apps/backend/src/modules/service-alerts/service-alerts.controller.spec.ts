@@ -13,21 +13,28 @@ describe('ServiceAlertsController', () => {
         {
           provide: ServiceAlertsService,
           useValue: {
-            getActiveAlerts: jest.fn().mockResolvedValue([
-              {
-                id: 'sa-1',
-                title: 'Test Alert',
-                description: 'Test description',
-                startsAt: '2024-01-01T00:00:00.000Z',
-                endsAt: null,
-                severity: 'major',
-                status: 'active',
-                operatorName: 'TransJakarta',
-                affectedRoute: '1',
-                affectedStop: 'Stop A',
-                createdAt: '2024-01-01T00:00:00.000Z',
-              },
-            ]),
+            getActiveAlerts: jest.fn().mockImplementation((query) => {
+              const mockData = [
+                {
+                  id: 'sa-1',
+                  title: 'Test Alert',
+                  description: 'Test description',
+                  startsAt: '2024-01-01T00:00:00.000Z',
+                  endsAt: null,
+                  severity: 'high',
+                  status: 'active',
+                  source: 'official',
+                  operatorName: 'TransJakarta',
+                  affectedRoute: '1',
+                  affectedStop: 'Stop A',
+                  createdAt: '2024-01-01T00:00:00.000Z',
+                },
+              ];
+              if (query?.operatorName && query.operatorName !== 'TransJakarta') {
+                return Promise.resolve([]);
+              }
+              return Promise.resolve(mockData);
+            }),
           },
         },
       ],
@@ -42,8 +49,15 @@ describe('ServiceAlertsController', () => {
   });
 
   it('should return active alerts', async () => {
-    const result = await controller.getActiveAlerts();
+    const result = await controller.getActiveAlerts({});
     expect(result).toHaveLength(1);
     expect(result[0].title).toBe('Test Alert');
+    expect(result[0].source).toBe('official');
+  });
+
+  it('should pass query parameters to service', async () => {
+    const result = await controller.getActiveAlerts({ operatorName: 'Other' });
+    expect(result).toHaveLength(0);
+    expect(service.getActiveAlerts).toHaveBeenCalledWith({ operatorName: 'Other' });
   });
 });

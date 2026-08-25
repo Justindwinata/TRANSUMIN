@@ -18,6 +18,7 @@ model User {
   savedPlaces   SavedPlace[]
   savedJourneys SavedJourney[]
   journeyHistory JourneyHistory[]
+  notifications Notification[]
 
   @@map("users")
 }
@@ -204,6 +205,7 @@ model ServiceAlert {
   endsAt          DateTime? @map("ends_at")
   severity        String
   status          String
+  source          String   @default("fixture") @map("source")
   operatorName    String?  @map("operator_name")
   affectedRoute   String?  @map("affected_route")
   affectedStop    String?  @map("affected_stop")

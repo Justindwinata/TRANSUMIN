@@ -6,6 +6,7 @@ export class ServiceAlertDto {
   endsAt: string | null;
   severity: string;
   status: string;
+  source: string;
   operatorName?: string | null;
   affectedRoute?: string | null;
   affectedStop?: string | null;
@@ -20,6 +21,7 @@ export const serviceAlertToDto = (row: {
   endsAt: Date | null;
   severity: string;
   status: string;
+  source: string;
   operatorName?: string | null;
   affectedRoute?: string | null;
   affectedStop?: string | null;
@@ -32,6 +34,7 @@ export const serviceAlertToDto = (row: {
   endsAt: row.endsAt ? row.endsAt.toISOString() : null,
   severity: row.severity,
   status: row.status,
+  source: row.source,
   operatorName: row.operatorName ?? null,
   affectedRoute: row.affectedRoute ?? null,
   affectedStop: row.affectedStop ?? null,
