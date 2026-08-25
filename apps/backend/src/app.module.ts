@@ -11,6 +11,7 @@ import { SavedPlacesModule } from './modules/saved-places/saved-places.module';
 import { SavedJourneysModule } from './modules/saved-journeys/saved-journeys.module';
 import { HistoryModule } from './modules/history/history.module';
 import { ServiceAlertsModule } from './modules/service-alerts/service-alerts.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ServiceAlertsModule } from './modules/service-alerts/service-alerts.mod
     SavedJourneysModule,
     HistoryModule,
     ServiceAlertsModule,
+    NotificationsModule,
   ],
 })
 export class AppModule {}
