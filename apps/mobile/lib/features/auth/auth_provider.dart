@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/core/auth/secure_storage.dart';
 import 'package:mobile/features/history/state/journey_history_notifier.dart';
 import 'package:mobile/core/api/api_providers.dart';
+import 'package:mobile/features/notifications/data/notification_repository.dart';
 
 class AuthState {
   final bool isAuthenticated;
@@ -89,8 +90,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
+    final userId = state.userId;
     await _secureStorage.clearAll();
     state = AuthState();
+    
+    if (userId != null) {
+      try {
+        final ref = ProviderContainer();
+        final notifRepo = ref.read(notificationRepositoryProvider);
+        await notifRepo.clear(userId);
+      } catch (_) {}
+    }
   }
 }
 

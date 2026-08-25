@@ -8,11 +8,13 @@ import '../domain/notification_model.dart';
 import 'package:mobile/main.dart' as app;
 
 class NotificationRepository {
-  static const String _key = 'notifications';
+  static const String _keyPrefix = 'notifications:';
   final SharedPreferences _prefs;
   final Ref _ref;
 
   NotificationRepository(this._prefs, this._ref);
+
+  String _getKey(String userId) => '$_keyPrefix$userId';
 
   Future<List<NotificationItem>> fetchAll() async {
     final isConnected = _ref.read(networkStatusProvider).isConnected;
@@ -29,16 +31,17 @@ class NotificationRepository {
             .cast<Map<String, dynamic>>()
             .map((j) => NotificationItem.fromJson(j))
             .toList();
-        // Sync to local cache
-        await _saveAll(items);
+        await _saveAll(items, userId);
         return items;
       } catch (e) {
         // Fall back to local cache on error
       }
     }
 
-    // Offline or error: return local cache
-    final raw = _prefs.getString(_key);
+    // Offline or error: return local cache for current user
+    if (userId == null) return [];
+    
+    final raw = _prefs.getString(_getKey(userId));
     if (raw == null) return [];
     final list = jsonDecode(raw) as List;
     return list
@@ -46,27 +49,31 @@ class NotificationRepository {
         .toList();
   }
 
-  Future<void> _saveAll(List<NotificationItem> items) async {
+  Future<void> _saveAll(List<NotificationItem> items, String userId) async {
     await _prefs.setString(
-      _key,
+      _getKey(userId),
       jsonEncode(items.map((i) => i.toJson()).toList()),
     );
   }
 
   Future<void> add(NotificationItem item) async {
+    final userId = _ref.read(authProvider).userId;
+    if (userId == null) return;
+    
     final current = await fetchAll();
-    await _saveAll([item, ...current]);
+    await _saveAll([item, ...current], userId);
   }
 
   Future<void> markRead(String id) async {
     final isConnected = _ref.read(networkStatusProvider).isConnected;
     final userId = _ref.read(authProvider).userId;
+    if (userId == null) return;
 
     // Update local cache immediately
     final current = await fetchAll();
     final updated =
         current.map((n) => n.id == id ? n.copyWith(isRead: true) : n).toList();
-    await _saveAll(updated);
+    await _saveAll(updated, userId);
 
     // Sync to backend if online
     if (isConnected) {
@@ -84,14 +91,15 @@ class NotificationRepository {
   Future<void> markAllRead() async {
     final isConnected = _ref.read(networkStatusProvider).isConnected;
     final userId = _ref.read(authProvider).userId;
+    if (userId == null) return;
 
     // Update local cache immediately
     final current = await fetchAll();
     final updated = current.map((n) => n.copyWith(isRead: true)).toList();
-    await _saveAll(updated);
+    await _saveAll(updated, userId);
 
     // Sync to backend if online
-    if (isConnected && userId != null) {
+    if (isConnected) {
       try {
         await _ref.read(apiClientProvider).post(
           '/notifications/read-all',
@@ -101,6 +109,10 @@ class NotificationRepository {
         // Ignore backend sync errors
       }
     }
+  }
+
+  Future<void> clear(String userId) async {
+    await _prefs.remove(_getKey(userId));
   }
 }
 
