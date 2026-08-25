@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/core/auth/secure_storage.dart';
 import 'package:mobile/features/history/state/journey_history_notifier.dart';
+import 'package:mobile/core/api/api_providers.dart';
 
 class AuthState {
   final bool isAuthenticated;
@@ -76,8 +77,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> saveHistoryToBackend(List<JourneyHistoryEntry> entries) async {
     final userId = state.userId;
-    if (userId == null) return;
-    // Backend sync stub: real implementation will call POST /history/sync.
+    final token = state.accessToken;
+    if (userId == null || token == null) return;
+    try {
+      final ref = ProviderContainer();
+      final apiClient = ref.read(apiClientProvider);
+      await apiClient.syncHistory(token, entries.map((e) => e.toJson()).toList());
+    } catch (_) {
+      // Swallow sync errors; local cache remains authoritative
+    }
   }
 
   Future<void> logout() async {

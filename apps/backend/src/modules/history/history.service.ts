@@ -67,4 +67,58 @@ export class HistoryService {
     await this.prisma.journeyHistory.deleteMany({ where: { userId } });
     return { success: true };
   }
+
+  async sync(
+    userId: string,
+    entries: Array<{
+      originName: string;
+      destName: string;
+      summaryJson: string;
+      searchedAt: string;
+    }>,
+  ): Promise<JourneyHistoryEntry[]> {
+    const created: JourneyHistoryEntry[] = [];
+
+    for (const entry of entries) {
+      const existing = await this.prisma.journeyHistory.findFirst({
+        where: {
+          userId,
+          originName: entry.originName,
+          destName: entry.destName,
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      if (existing) {
+        await this.prisma.journeyHistory.update({
+          where: { id: existing.id },
+          data: {
+            summaryJson: entry.summaryJson,
+            createdAt: new Date(entry.searchedAt),
+          },
+        });
+      } else {
+        await this.prisma.journeyHistory.create({
+          data: {
+            userId,
+            originName: entry.originName,
+            destName: entry.destName,
+            summaryJson: entry.summaryJson,
+          },
+        });
+      }
+    }
+
+    const allEntries = await this.prisma.journeyHistory.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (allEntries.length > this.MAX_HISTORY_ENTRIES) {
+      const idsToDelete = allEntries.slice(this.MAX_HISTORY_ENTRIES).map(e => e.id);
+      await this.prisma.journeyHistory.deleteMany({ where: { id: { in: idsToDelete } } });
+    }
+
+    return this.list(userId, this.MAX_HISTORY_ENTRIES);
+  }
 }

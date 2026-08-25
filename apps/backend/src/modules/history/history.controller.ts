@@ -27,4 +27,12 @@ export class HistoryController {
   clear(@Request() req: any) {
     return this.service.clear(req.user.id);
   }
+
+  @Post('sync')
+  async sync(
+    @Request() req: any,
+    @Body() dto: { entries: Array<{ originName: string; destName: string; summaryJson: string; searchedAt: string }> },
+  ) {
+    return this.service.sync(req.user.id, dto.entries);
+  }
 }

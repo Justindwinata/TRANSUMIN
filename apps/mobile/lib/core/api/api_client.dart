@@ -75,4 +75,15 @@ class ApiClient {
     );
     return response['result'] as Map<String, dynamic>?;
   }
+
+  Future<void> syncHistory(
+    String token,
+    List<Map<String, dynamic>> entries,
+  ) async {
+    await post(
+      '/history/sync',
+      data: {'entries': entries},
+      headers: {'Authorization': 'Bearer $token'},
+    );
+  }
 }
