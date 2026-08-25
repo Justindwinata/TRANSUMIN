@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/features/history/state/journey_history_notifier.dart';
 import 'package:mobile/features/history/data/history_persistence.dart';
+import 'package:mobile/features/history/data/offline_queue.dart';
 import 'package:mobile/features/auth/auth_provider.dart';
 import 'package:mobile/core/auth/secure_storage.dart';
 
@@ -20,6 +21,23 @@ class _FakeHistoryPersistence implements HistoryPersistence {
   Future<void> clear() async {
     stored = [];
   }
+}
+
+class _FakeOfflineQueue implements OfflineQueue {
+  @override
+  List<OfflineAction> load() => [];
+
+  @override
+  Future<void> _saveAll(List<OfflineAction> actions) async {}
+
+  @override
+  Future<void> enqueue(OfflineAction action) async {}
+
+  @override
+  Future<void> remove(String id) async {}
+
+  @override
+  Future<void> clear() async {}
 }
 
 class _FakeSecureStorage extends SecureStorage {
@@ -107,9 +125,15 @@ void main() {
   });
 
   group('History persistence lifecycle', () {
-    test('should persist entries to storage', () {
+test('should persist entries to storage', () {
       final persistence = _FakeHistoryPersistence();
-      final notifier = JourneyHistoryNotifier(persistence);
+      final offlineQueue = _FakeOfflineQueue();
+      final container = ProviderContainer();
+      final notifier = JourneyHistoryNotifier(
+        persistence,
+        offlineQueue,
+        ref: container,
+      );
 
       notifier.addEntry(
         JourneyHistoryEntry(
@@ -122,6 +146,7 @@ void main() {
 
       expect(persistence.stored.length, 1);
       expect(persistence.stored[0].id, '1');
+      container.dispose();
     });
 
     test('should load entries from storage on creation', () async {
@@ -136,10 +161,16 @@ void main() {
       );
 
       final container = ProviderContainer();
-      final notifier = JourneyHistoryNotifier(persistence);
+      final offlineQueue = _FakeOfflineQueue();
+      final notifier = JourneyHistoryNotifier(
+        persistence,
+        offlineQueue,
+        ref: container,
+      );
       await notifier.load();
       expect(notifier.state.entries.length, 1);
       expect(notifier.state.entries[0].id, 'loaded-1');
+      container.dispose();
     });
 
     test('should clear storage when clear() called', () {
@@ -153,11 +184,18 @@ void main() {
         ),
       );
 
-      final notifier = JourneyHistoryNotifier(persistence);
+      final offlineQueue = _FakeOfflineQueue();
+      final container = ProviderContainer();
+      final notifier = JourneyHistoryNotifier(
+        persistence,
+        offlineQueue,
+        ref: container,
+      );
       notifier.clear();
 
       expect(persistence.stored, isEmpty);
       expect(notifier.state.entries, isEmpty);
+      container.dispose();
     });
   });
 }

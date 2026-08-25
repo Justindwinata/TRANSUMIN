@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/features/history/state/journey_history_notifier.dart';
 import 'package:mobile/features/history/data/history_persistence.dart';
+import 'package:mobile/features/history/data/offline_queue.dart';
+import 'package:mobile/core/network/network_status.dart';
 
 class _FakeHistoryPersistence implements HistoryPersistence {
   List<JourneyHistoryEntry> stored = [];
@@ -20,14 +22,43 @@ class _FakeHistoryPersistence implements HistoryPersistence {
   }
 }
 
+class _FakeOfflineQueue implements OfflineQueue {
+  @override
+  List<OfflineAction> load() => [];
+
+  @override
+  Future<void> _saveAll(List<OfflineAction> actions) async {}
+
+  @override
+  Future<void> enqueue(OfflineAction action) async {}
+
+  @override
+  Future<void> remove(String id) async {}
+
+  @override
+  Future<void> clear() async {}
+}
+
 void main() {
   group('JourneyHistoryNotifier', () {
     late JourneyHistoryNotifier notifier;
     late _FakeHistoryPersistence persistence;
+    late _FakeOfflineQueue offlineQueue;
+    late ProviderContainer container;
 
     setUp(() {
       persistence = _FakeHistoryPersistence();
-      notifier = JourneyHistoryNotifier(persistence);
+      offlineQueue = _FakeOfflineQueue();
+      container = ProviderContainer();
+      notifier = JourneyHistoryNotifier(
+        persistence,
+        offlineQueue,
+        ref: container,
+      );
+    });
+
+    tearDown(() {
+      container.dispose();
     });
 
     test('should start empty', () {

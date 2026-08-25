@@ -5,6 +5,7 @@ import 'package:mobile/features/routing/state/route_options_notifier.dart';
 import 'package:mobile/features/saved/data/saved_journeys_repository.dart';
 import 'package:mobile/features/history/state/journey_history_notifier.dart';
 import 'package:mobile/features/history/data/history_persistence.dart';
+import 'package:mobile/features/history/data/offline_queue.dart';
 import 'dart:convert';
 
 class _FakeHistoryPersistence implements HistoryPersistence {
@@ -18,14 +19,43 @@ class _FakeHistoryPersistence implements HistoryPersistence {
   Future<void> clear() async => stored = [];
 }
 
+class _FakeOfflineQueue implements OfflineQueue {
+  @override
+  List<OfflineAction> load() => [];
+
+  @override
+  Future<void> _saveAll(List<OfflineAction> actions) async {}
+
+  @override
+  Future<void> enqueue(OfflineAction action) async {}
+
+  @override
+  Future<void> remove(String id) async {}
+
+  @override
+  Future<void> clear() async {}
+}
+
 void main() {
   group('Integration flow - save and replan', () {
     late JourneyHistoryNotifier historyNotifier;
     late _FakeHistoryPersistence persistence;
+    late _FakeOfflineQueue offlineQueue;
+    late ProviderContainer container;
 
     setUp(() {
       persistence = _FakeHistoryPersistence();
-      historyNotifier = JourneyHistoryNotifier(persistence);
+      offlineQueue = _FakeOfflineQueue();
+      container = ProviderContainer();
+      historyNotifier = JourneyHistoryNotifier(
+        persistence,
+        offlineQueue,
+        ref: container,
+      );
+    });
+
+    tearDown(() {
+      container.dispose();
     });
 
     test(
