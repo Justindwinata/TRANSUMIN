@@ -9,6 +9,7 @@ import 'package:mobile/features/history/data/offline_queue.dart';
 class QueueProcessor {
   final Ref _ref;
   StreamSubscription<NetworkStatus>? _sub;
+  bool _isDraining = false;
 
   QueueProcessor(this._ref);
 
@@ -25,22 +26,38 @@ class QueueProcessor {
   }
 
   Future<void> _drainQueue() async {
-    final queue = _ref.read(offlineQueueProvider);
-    final actions = queue.load();
-    if (actions.isEmpty) return;
+    if (_isDraining) return;
+    _isDraining = true;
+    try {
+      final queue = _ref.read(offlineQueueProvider);
+      final actions = queue.load();
+      if (actions.isEmpty) return;
 
-    final token = _ref.read(authProvider).accessToken;
-    if (token == null) return;
+      final token = _ref.read(authProvider).accessToken;
+      if (token == null) return;
 
-    final apiClient = _ref.read(apiClientProvider);
+      final apiClient = _ref.read(apiClientProvider);
 
-    for (final action in actions) {
-      try {
-        await _executeAction(apiClient, token, action);
-        await queue.remove(action.id);
-      } catch (e) {
-        break;
+      for (final action in actions) {
+        try {
+          await _executeAction(apiClient, token, action);
+          await queue.remove(action.id);
+        } catch (e) {
+          // If permanent client error (4xx except 408/429), discard to avoid blocking queue
+          final errStr = e.toString();
+          if (errStr.contains('Status: 400') ||
+              errStr.contains('Status: 401') ||
+              errStr.contains('Status: 403') ||
+              errStr.contains('Status: 404')) {
+            await queue.remove(action.id);
+          } else {
+            // Temporary network/server error — stop draining
+            break;
+          }
+        }
       }
+    } finally {
+      _isDraining = false;
     }
   }
 
