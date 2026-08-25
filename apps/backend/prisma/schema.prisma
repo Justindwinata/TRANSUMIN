@@ -36,23 +36,33 @@ model AuthIdentity {
 
 // Transit Data Foundation
 model DataSource {
-  id             String   @id @default(uuid())
-  name           String
-  url            String
-  license        String?
-  lastFetchedAt  DateTime @map("last_fetched_at")
-  datasets       DatasetVersion[]
+  id              String   @id @default(uuid())
+  name            String
+  url             String
+  license         String?
+  lastFetchedAt   DateTime @map("last_fetched_at")
+  checksum        String?  @map("checksum")
+  retrievedAt     DateTime @map("retrieved_at")
+  validatedAt     DateTime @map("validated_at")
+  effectiveFrom   DateTime? @map("effective_from")
+  effectiveTo     DateTime? @map("effective_to")
+  sourceType      String   @default("gtfs") @map("source_type")
+  sourceStatus    String   @default("active") @map("source_status")
+  licenseUrl      String?  @map("license_url")
+  datasets        DatasetVersion[]
 
   @@map("data_sources")
 }
 
 model DatasetVersion {
-  id             String   @id @default(uuid())
-  sourceId       String   @map("source_id")
-  version        String
-  isActive       Boolean  @default(false) @map("is_active")
-  createdAt      DateTime @default(now()) @map("created_at")
-  source         DataSource @relation(fields: [sourceId], references: [id])
+  id              String   @id @default(uuid())
+  sourceId        String   @map("source_id")
+  version         String
+  isActive        Boolean  @default(false) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  retrievedAt     DateTime @map("retrieved_at")
+  validatedAt     DateTime @map("validated_at")
+  source          DataSource @relation(fields: [sourceId], references: [id])
 
   @@map("dataset_versions")
 }
