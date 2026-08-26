@@ -37,7 +37,9 @@ class AppConfig {
 
   static TargetPlatform get defaultPlatform => defaultTargetPlatform;
 
-  static bool get enableLogging => environment != Environment.testing;
+  static bool get enableLogging =>
+      environment != Environment.testing &&
+      environment != Environment.production;
 
   static Duration get connectTimeout => const Duration(seconds: 15);
   static Duration get receiveTimeout => const Duration(seconds: 30);
