@@ -1,33 +1,147 @@
 import { PrismaClient } from '@prisma/client';
 import { IngestionReport } from './gtfs.types';
 
+export interface DataSourceMetadata {
+  sourceName: string;
+  sourceUrl: string;
+  license?: string;
+  sourceType?: string;
+  sourceStatus?: string;
+  licenseUrl?: string;
+  checksum?: string;
+  effectiveFrom?: Date;
+  effectiveTo?: Date;
+}
+
+export interface DatasetVersionMetadata {
+  version: string;
+  sourceName: string;
+  checksum: string;
+  retrievedAt: Date;
+  validatedAt: Date;
+  effectiveFrom?: Date;
+  effectiveTo?: Date;
+  recordCounts: {
+    agencies: number;
+    routes: number;
+    stops: number;
+    trips: number;
+    stopTimes: number;
+    calendars: number;
+    transfers: number;
+  };
+  validationResult: 'passed' | 'failed';
+  status: 'downloaded' | 'validating' | 'validated' | 'failed' | 'active' | 'superseded';
+}
+
 export class DatasetRegistry {
   constructor(private prisma: PrismaClient) {}
 
-  async registerDataSource(name: string, url: string, license: string | null) {
+  async registerDataSource(metadata: DataSourceMetadata) {
     return this.prisma.dataSource.upsert({
-      where: { id: name },
-      update: {},
-      create: { id: name, name, url, license, lastFetchedAt: new Date() },
+      where: { id: metadata.sourceName },
+      update: {
+        url: metadata.sourceUrl,
+        license: metadata.license,
+        sourceType: metadata.sourceType || 'gtfs',
+        sourceStatus: metadata.sourceStatus || 'active',
+        licenseUrl: metadata.licenseUrl,
+        lastFetchedAt: new Date(),
+        retrievedAt: new Date(),
+        validatedAt: new Date(),
+        effectiveFrom: metadata.effectiveFrom,
+        effectiveTo: metadata.effectiveTo,
+        checksum: metadata.checksum,
+      },
+      create: {
+        id: metadata.sourceName,
+        name: metadata.sourceName,
+        url: metadata.sourceUrl,
+        license: metadata.license,
+        sourceType: metadata.sourceType || 'gtfs',
+        sourceStatus: metadata.sourceStatus || 'active',
+        licenseUrl: metadata.licenseUrl,
+        lastFetchedAt: new Date(),
+        retrievedAt: new Date(),
+        validatedAt: new Date(),
+        effectiveFrom: metadata.effectiveFrom,
+        effectiveTo: metadata.effectiveTo,
+        checksum: metadata.checksum,
+      },
     });
   }
 
-  async createDatasetVersion(sourceName: string, version: string) {
-    const source = await this.prisma.dataSource.findUnique({ where: { id: sourceName } });
-    if (!source) throw new Error(`Source not found: ${sourceName}`);
+  async createDatasetVersion(metadata: DatasetVersionMetadata) {
+    const source = await this.prisma.dataSource.findUnique({ where: { id: metadata.sourceName } });
+    if (!source) throw new Error(`Source not found: ${metadata.sourceName}`);
+
     return this.prisma.datasetVersion.create({
-      data: { sourceId: source.id, version, isActive: false },
+      data: {
+        sourceId: source.id,
+        version: metadata.version,
+        isActive: false,
+        retrievedAt: metadata.retrievedAt,
+        validatedAt: metadata.validatedAt,
+        checksum: metadata.checksum,
+        effectiveFrom: metadata.effectiveFrom,
+        effectiveTo: metadata.effectiveTo,
+        agenciesCount: metadata.recordCounts.agencies,
+        routesCount: metadata.recordCounts.routes,
+        stopsCount: metadata.recordCounts.stops,
+        tripsCount: metadata.recordCounts.trips,
+        stopTimesCount: metadata.recordCounts.stopTimes,
+        calendarsCount: metadata.recordCounts.calendars,
+        transfersCount: metadata.recordCounts.transfers,
+        validationResult: metadata.validationResult,
+        status: metadata.status,
+      },
+    });
+  }
+
+  async updateDatasetVersion(datasetId: string, updates: {
+    agenciesCount?: number;
+    routesCount?: number;
+    stopsCount?: number;
+    tripsCount?: number;
+    stopTimesCount?: number;
+    calendarsCount?: number;
+    transfersCount?: number;
+    validationResult?: 'passed' | 'failed';
+    status?: 'downloaded' | 'validating' | 'validated' | 'failed' | 'active' | 'superseded';
+  }) {
+    return this.prisma.datasetVersion.update({
+      where: { id: datasetId },
+      data: updates,
     });
   }
 
   async activateDataset(datasetId: string) {
     return this.prisma.$transaction(async (tx) => {
-      await tx.datasetVersion.updateMany({ data: { isActive: false } });
-      await tx.datasetVersion.update({ where: { id: datasetId }, data: { isActive: true } });
+      // Mark old active as superseded
+      await tx.datasetVersion.updateMany({
+        where: { isActive: true },
+        data: { isActive: false, status: 'superseded' },
+      });
+
+      // Activate new dataset
+      await tx.datasetVersion.update({
+        where: { id: datasetId },
+        data: { isActive: true, status: 'active' },
+      });
+    });
+  }
+
+  async getActiveDataset() {
+    return this.prisma.datasetVersion.findFirst({
+      where: { isActive: true },
+      include: { source: true },
     });
   }
 
   async listDatasets() {
-    return this.prisma.datasetVersion.findMany({ orderBy: { createdAt: 'desc' } });
+    return this.prisma.datasetVersion.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: { source: true },
+    });
   }
 }

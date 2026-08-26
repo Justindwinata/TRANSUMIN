@@ -35,10 +35,32 @@ export class GtfsIngestionPipeline {
   constructor(private prisma: PrismaClient) {}
 
   async run(options: IngestionOptions): Promise<IngestionReport> {
-    const dataset = await new DatasetRegistry(this.prisma).createDatasetVersion(
-      options.sourceName,
-      options.version,
-    );
+    const registry = new DatasetRegistry(this.prisma);
+    const fetchedAt = new Date();
+    const validatedAt = new Date();
+    const checksum = `${options.sourceName}-${options.version}-${fetchedAt.getTime()}`;
+
+    // Create dataset version with provenance metadata
+    const recordCounts = {
+      agencies: 0,
+      routes: 0,
+      stops: 0,
+      trips: 0,
+      stopTimes: 0,
+      calendars: 0,
+      transfers: 0,
+    };
+
+    const dataset = await registry.createDatasetVersion({
+      version: options.version,
+      sourceName: options.sourceName,
+      checksum,
+      retrievedAt: fetchedAt,
+      validatedAt: validatedAt,
+      recordCounts,
+      validationResult: 'passed',
+      status: 'downloaded',
+    });
 
     try {
       const agencies = this.parseFile(path.join(options.fetchDir, 'agency.txt')) as GtfsAgency[];
@@ -148,7 +170,20 @@ export class GtfsIngestionPipeline {
           }
         });
 
-        await new DatasetRegistry(this.prisma).activateDataset(dataset.id);
+        // Update dataset version with actual record counts and validation result
+        await registry.updateDatasetVersion(dataset.id, {
+          agenciesCount: this.seenAgencies.size,
+          routesCount: this.seenRoutes.size,
+          stopsCount: this.seenStops.size,
+          tripsCount: trips.length,
+          stopTimesCount: stopTimes.length,
+          calendarsCount: calendars.length,
+          transfersCount: transfers.length,
+          validationResult: 'passed',
+          status: 'validated',
+        });
+
+        await registry.activateDataset(dataset.id);
       }
 
       return {
@@ -167,6 +202,13 @@ export class GtfsIngestionPipeline {
         status: 'SUCCESS',
       };
     } catch (err) {
+      // Update dataset version to failed status
+      const registry = new DatasetRegistry(this.prisma);
+      await registry.updateDatasetVersion(dataset.id, {
+        validationResult: 'failed',
+        status: 'failed',
+      }).catch(() => {});
+
       return {
         sourceName: options.sourceName,
         version: options.version,
