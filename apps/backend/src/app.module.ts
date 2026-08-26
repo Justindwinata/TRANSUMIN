@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './modules/health/health.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TransitModule } from './modules/transit/transit.module';
@@ -18,6 +19,16 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.local', '.env'],
+    }),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => [
+        {
+          ttl: config.get<number>('RATE_LIMIT_WINDOW_MS') ? config.get<number>('RATE_LIMIT_WINDOW_MS')! / 1000 : 900,
+          limit: config.get<number>('RATE_LIMIT_MAX_REQUESTS') || 100,
+        },
+      ],
     }),
     PrismaModule,
     HealthModule,
