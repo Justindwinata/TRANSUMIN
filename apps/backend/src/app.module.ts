@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './modules/health/health.module';
@@ -13,6 +13,7 @@ import { SavedJourneysModule } from './modules/saved-journeys/saved-journeys.mod
 import { HistoryModule } from './modules/history/history.module';
 import { ServiceAlertsModule } from './modules/service-alerts/service-alerts.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { SecurityHeadersMiddleware } from './core/middleware/security-headers.middleware';
 
 @Module({
   imports: [
@@ -44,4 +45,8 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     NotificationsModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(SecurityHeadersMiddleware).forRoutes('*');
+  }
+}
