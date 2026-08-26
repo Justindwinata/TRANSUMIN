@@ -13,10 +13,16 @@ import { UsersModule } from '../users/users.module';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        secret: config.get('JWT_SECRET'),
-        signOptions: { expiresIn: config.get('JWT_EXPIRES_IN') },
-      }),
+      useFactory: (config: ConfigService) => {
+        const secret = config.get<string>('JWT_SECRET');
+        if (!secret) {
+          throw new Error('JWT_SECRET configuration is missing');
+        }
+        return {
+          secret,
+          signOptions: { expiresIn: config.get('JWT_EXPIRES_IN') || '7d' },
+        };
+      },
     }),
   ],
   providers: [AuthService],
