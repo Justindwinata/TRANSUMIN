@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { IngestionReport } from './gtfs.types';
 
@@ -34,6 +35,7 @@ export interface DatasetVersionMetadata {
   status: 'downloaded' | 'validating' | 'validated' | 'failed' | 'active' | 'superseded';
 }
 
+@Injectable()
 export class DatasetRegistry {
   constructor(private prisma: PrismaClient) {}
 
@@ -117,13 +119,11 @@ export class DatasetRegistry {
 
   async activateDataset(datasetId: string) {
     return this.prisma.$transaction(async (tx) => {
-      // Mark old active as superseded
       await tx.datasetVersion.updateMany({
         where: { isActive: true },
         data: { isActive: false, status: 'superseded' },
       });
 
-      // Activate new dataset
       await tx.datasetVersion.update({
         where: { id: datasetId },
         data: { isActive: true, status: 'active' },
