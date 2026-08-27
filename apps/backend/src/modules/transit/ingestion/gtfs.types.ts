@@ -22,6 +22,7 @@ export interface GtfsStop {
   stop_lat: string;
   stop_lon: string;
   parent_station?: string;
+  location_type?: string;
   zone_id?: string;
   wheelchair_boarding?: string;
 }

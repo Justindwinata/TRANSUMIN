@@ -40,7 +40,6 @@ export interface NormalizedAgency {
   authority: string;
   website: string;
   sourceUrl: string;
-  sourceDatasetId: string;
 }
 
 export interface NormalizedRoute {
@@ -51,7 +50,6 @@ export interface NormalizedRoute {
   routeType: string;
   serviceType: string;
   color?: string;
-  sourceDatasetId: string;
 }
 
 export interface NormalizedStop {
@@ -61,7 +59,6 @@ export interface NormalizedStop {
   lat: number;
   lon: number;
   stationId?: string;
-  sourceDatasetId: string;
 }
 
 export interface NormalizedTrip {
@@ -70,7 +67,6 @@ export interface NormalizedTrip {
   serviceId: string;
   directionId: number;
   headsign: string;
-  sourceDatasetId: string;
 }
 
 export interface NormalizedStopTime {
@@ -100,7 +96,6 @@ export interface NormalizedTransfer {
   toStopId: string;
   transferType: number;
   minTransferTime?: number;
-  sourceDatasetId: string;
 }
 
 export interface NormalizedShapePoint {
@@ -109,14 +104,12 @@ export interface NormalizedShapePoint {
   ptLon: number;
   ptSequence: number;
   distTraveled?: number;
-  sourceDatasetId: string;
 }
 
 export interface NormalizedCalendarDate {
   serviceId: string;
   date: Date;
   exceptionType: number;
-  sourceDatasetId: string;
 }
 
 export function normalizeAgency(gtfs: GtfsAgency, sourceName: string, datasetId: string): NormalizedAgency {
@@ -127,7 +120,6 @@ export function normalizeAgency(gtfs: GtfsAgency, sourceName: string, datasetId:
     authority: sourceName,
     website: gtfs.agency_url,
     sourceUrl: '',
-    sourceDatasetId: datasetId,
   };
 }
 
@@ -145,7 +137,6 @@ export function normalizeRoute(
     routeType: gtfs.route_type,
     serviceType,
     color: gtfs.route_color,
-    sourceDatasetId: datasetId,
   };
 }
 
@@ -161,7 +152,6 @@ export function normalizeStop(
     lat: parseFloat(gtfs.stop_lat),
     lon: parseFloat(gtfs.stop_lon),
     stationId: gtfs.parent_station,
-    sourceDatasetId: datasetId,
   };
 }
 
@@ -172,7 +162,6 @@ export function normalizeTrip(gtfs: GtfsTrip, datasetId: string): NormalizedTrip
     serviceId: gtfs.service_id,
     directionId: gtfs.direction_id ? parseInt(gtfs.direction_id, 10) : 0,
     headsign: gtfs.trip_headsign ?? '',
-    sourceDatasetId: datasetId,
   };
 }
 
@@ -208,7 +197,6 @@ export function normalizeTransfer(gtfs: GtfsTransfer, datasetId: string): Normal
     toStopId: gtfs.to_stop_id,
     transferType: parseInt(gtfs.transfer_type, 10),
     minTransferTime: gtfs.min_transfer_time ? parseInt(gtfs.min_transfer_time, 10) : undefined,
-    sourceDatasetId: datasetId,
   };
 }
 
@@ -219,7 +207,6 @@ export function normalizeShapePoint(gtfs: GtfsShape, datasetId: string): Normali
     ptLon: parseFloat(gtfs.shape_pt_lon),
     ptSequence: parseInt(gtfs.shape_pt_sequence, 10),
     distTraveled: gtfs.shape_dist_traveled ? parseFloat(gtfs.shape_dist_traveled) : undefined,
-    sourceDatasetId: datasetId,
   };
 }
 
@@ -228,6 +215,5 @@ export function normalizeCalendarDate(gtfs: GtfsCalendarDate, datasetId: string)
     serviceId: gtfs.service_id,
     date: CsvParser.parseDate(gtfs.date) ?? new Date(),
     exceptionType: parseInt(gtfs.exception_type, 10),
-    sourceDatasetId: datasetId,
   };
 }

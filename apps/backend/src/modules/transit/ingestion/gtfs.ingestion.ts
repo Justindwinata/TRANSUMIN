@@ -98,42 +98,87 @@ export class GtfsIngestionPipeline {
 
       if (!options.dryRun) {
         await this.prisma.$transaction(async (tx) => {
+          const agencyIdMap = new Map<string, string>();
           for (const a of agencies) {
             const norm = normalizeAgency(a, options.sourceName, dataset.id);
             if (this.seenAgencies.has(norm.id)) { this.rejections.duplicateIds++; continue; }
             this.seenAgencies.add(norm.id);
-            await tx.agency.upsert({
+            const created = await tx.agency.upsert({
               where: { id: norm.id },
               update: { name: norm.name, shortName: norm.shortName, website: norm.website },
-              create: norm,
+              create: {
+                id: norm.id,
+                name: norm.name,
+                shortName: norm.shortName,
+                authority: norm.authority,
+                website: norm.website,
+                sourceUrl: norm.sourceUrl,
+              },
             });
+            agencyIdMap.set(a.agency_id ?? 'default', created.id);
+          }
+
+          const stationMap = new Map<string, string>();
+          for (const s of stops) {
+            if (s.parent_station && s.location_type === '1') {
+              const stationId = s.stop_id;
+              const created = await tx.station.upsert({
+                where: { id: stationId },
+                update: { name: s.stop_name, lat: parseFloat(s.stop_lat), lon: parseFloat(s.stop_lon) },
+                create: {
+                  id: stationId,
+                  name: s.stop_name,
+                  lat: parseFloat(s.stop_lat),
+                  lon: parseFloat(s.stop_lon),
+                },
+              });
+              stationMap.set(stationId, created.id);
+            }
           }
 
           for (const r of routes) {
-            const agencyId = `${options.sourceName.toLowerCase()}-agency-${r.agency_id ?? 'default'}`;
+            const mappedAgencyId = agencyIdMap.get(r.agency_id ?? 'default');
+            if (!mappedAgencyId) { this.rejections.orphans++; continue; }
             if (!this.agencyIdSet.has(r.agency_id ?? 'default')) { this.rejections.orphans++; continue; }
-            const norm = normalizeRoute(r, agencyId, r.route_type, dataset.id);
-            if (this.seenRoutes.has(norm.id)) { this.rejections.duplicateIds++; continue; }
-            this.seenRoutes.add(norm.id);
+            const norm = normalizeRoute(r, mappedAgencyId, r.route_type, dataset.id);
+            if (this.seenRoutes.has(r.route_id)) { this.rejections.duplicateIds++; continue; }
+            this.seenRoutes.add(r.route_id);
             await tx.route.upsert({
-              where: { id: norm.id },
+              where: { id: r.route_id },
               update: { shortName: norm.shortName, longName: norm.longName, routeType: norm.routeType, serviceType: norm.serviceType, color: norm.color, agencyId: norm.agencyId },
-              create: norm,
+              create: {
+                id: r.route_id,
+                agencyId: norm.agencyId,
+                shortName: norm.shortName,
+                longName: norm.longName,
+                routeType: norm.routeType,
+                serviceType: norm.serviceType,
+                color: norm.color,
+              },
             });
           }
 
+          const mappedAgencyId = agencyIdMap.get('default') || Array.from(agencyIdMap.values())[0];
           for (const s of stops) {
             if (!GtfsValidator.validateCoordinates(parseFloat(s.stop_lat), parseFloat(s.stop_lon))) {
               this.rejections.invalidCoordinates++; continue;
             }
-            const agencyId = `${options.sourceName.toLowerCase()}-agency-default`;
-            const norm = normalizeStop(s, agencyId, dataset.id);
+            if (!mappedAgencyId) { this.rejections.orphans++; continue; }
+            const norm = normalizeStop(s, mappedAgencyId, dataset.id);
             if (this.seenStops.has(norm.id)) { this.rejections.duplicateIds++; continue; }
             this.seenStops.add(norm.id);
+            const stationId = norm.stationId && stationMap.has(norm.stationId) ? stationMap.get(norm.stationId) : undefined;
             await tx.stop.upsert({
               where: { id: norm.id },
               update: { name: norm.name, lat: norm.lat, lon: norm.lon },
-              create: norm,
+              create: {
+                id: norm.id,
+                agencyId: norm.agencyId,
+                name: norm.name,
+                lat: norm.lat,
+                lon: norm.lon,
+                stationId: stationId,
+              },
             });
           }
 
@@ -143,7 +188,13 @@ export class GtfsIngestionPipeline {
             await tx.trip.upsert({
               where: { id: norm.id },
               update: { headsign: norm.headsign, directionId: norm.directionId },
-              create: norm,
+              create: {
+                id: norm.id,
+                routeId: norm.routeId,
+                serviceId: norm.serviceId,
+                directionId: norm.directionId,
+                headsign: norm.headsign,
+              },
             });
           }
 
@@ -176,7 +227,13 @@ export class GtfsIngestionPipeline {
             await tx.transfer.upsert({
               where: { id: norm.id },
               update: { transferType: norm.transferType, minTransferTime: norm.minTransferTime },
-              create: norm,
+              create: {
+                id: norm.id,
+                fromStopId: norm.fromStopId,
+                toStopId: norm.toStopId,
+                transferType: norm.transferType,
+                minTransferTime: norm.minTransferTime,
+              },
             });
           }
 
@@ -192,7 +249,6 @@ export class GtfsIngestionPipeline {
                 ptLon: norm.ptLon,
                 ptSequence: norm.ptSequence,
                 distTraveled: norm.distTraveled,
-                sourceDatasetId: dataset.id,
               },
             });
           }
@@ -206,7 +262,6 @@ export class GtfsIngestionPipeline {
                 serviceId: norm.serviceId,
                 date: norm.date,
                 exceptionType: norm.exceptionType,
-                sourceDatasetId: dataset.id,
               },
             });
           }

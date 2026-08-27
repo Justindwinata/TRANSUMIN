@@ -15,6 +15,7 @@ async function bootstrap() {
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true, forbidNonWhitelisted: true }));
   const port = process.env.PORT || 3000;
+  console.log('Attempting to listen on port', port);
   await app.listen(port);
   console.log(`TRANSUM-IN API running on port ${port}`);
 }
