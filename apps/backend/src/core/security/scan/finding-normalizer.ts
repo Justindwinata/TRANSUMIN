@@ -148,13 +148,13 @@ export class DefaultFindingNormalizer implements SecurityFindingNormalizer {
 
   private mergeStatus(existing: SecurityFindingStatus, newer: SecurityFindingStatus): SecurityFindingStatus {
     const priority: SecurityFindingStatus[] = [
+      SecurityFindingStatus.REGRESSION_VERIFIED,
+      SecurityFindingStatus.FIXED,
+      SecurityFindingStatus.ACCEPTED_RISK,
+      SecurityFindingStatus.FALSE_POSITIVE,
       SecurityFindingStatus.CONFIRMED,
       SecurityFindingStatus.TRIAGED,
       SecurityFindingStatus.OPEN,
-      SecurityFindingStatus.FALSE_POSITIVE,
-      SecurityFindingStatus.ACCEPTED_RISK,
-      SecurityFindingStatus.FIXED,
-      SecurityFindingStatus.REGRESSION_VERIFIED,
     ];
 
     const existingIdx = priority.indexOf(existing);
