@@ -24,7 +24,7 @@ describe('Security Scan Abstraction & Normalization Tests', () => {
       expect(normalized.length).toBe(1);
       expect(normalized[0].id).toBe('test-1');
       expect(normalized[0].severity).toBe(SecurityFindingSeverity.CRITICAL);
-      expect(normalized[0].sourceTool).toBe('strix-cli');
+      expect(normalized[0].sourceProvider).toBe('strix-cli');
       expect(normalized[0].status).toBe(SecurityFindingStatus.OPEN);
       expect(normalized[0].fingerprint).toBeDefined();
     });

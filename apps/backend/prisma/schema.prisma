@@ -184,6 +184,12 @@ model Transfer {
   toStopId        String   @map("to_stop_id")
   transferType    Int      @map("transfer_type")
   minTransferTime Int?     @map("min_transfer_time")
+  fromOperator    String?  @map("from_operator")
+  toOperator      String?  @map("to_operator")
+  walkDistance    Float?   @map("walk_distance")
+  estimatedDuration Int?   @map("estimated_duration")
+  source          String?  @default("gtfs")
+  confidence      Float?   @default(1.0)
 
   @@map("transfers")
 }

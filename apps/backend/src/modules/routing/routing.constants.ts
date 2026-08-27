@@ -92,6 +92,11 @@ export interface TransferCandidate {
   fromTripId: string;
   toTripId: string;
   transferStopId: string;
+  toStopId?: string;
   waitSeconds: number;
   walkDistance: number;
+  minTransferTime?: number;
+  fromOperator?: string;
+  toOperator?: string;
+  confidence?: number;
 }
