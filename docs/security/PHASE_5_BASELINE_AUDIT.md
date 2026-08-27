@@ -2,12 +2,13 @@
 
 **Date:** 2026-08-28
 **Phase:** Security Phase 5
-**Baseline SHA:** 2a98496
+**Baseline SHA:** a1fa2bc
+**Previous (Phase 4):** 2a98496
 
 ## 1. Repository State
 
 ```
-HEAD: 2a98496
+HEAD: a1fa2bc
 Branch: main
 Remote: origin/main (synchronized, 0 ahead, 0 behind)
 Status: Working tree clean
@@ -15,184 +16,197 @@ Status: Working tree clean
 
 ## 2. Phase 4 Completion Verification
 
-| Component | Status | Evidence |
+### Components Verified
+
+| Component | Status | Location |
 |-----------|--------|----------|
-| SecurityScanExecutor | IMPLEMENTED | `apps/backend/src/core/security/scan/scan-executor.ts` |
-| StrixManagedProvider | IMPLEMENTED | `apps/backend/src/core/security/scan/strix-managed-provider.ts` |
-| StrixCliProvider | IMPLEMENTED | `apps/backend/src/core/security/scan/strix-cli-provider.ts` |
-| DisabledSecurityScanProvider | IMPLEMENTED | `apps/backend/src/core/security/scan/disabled-provider.ts` |
-| DefaultFindingNormalizer | IMPLEMENTED | `apps/backend/src/core/security/scan/finding-normalizer.ts` |
-| SecurityGatePolicy | IMPLEMENTED | `apps/backend/src/core/security/scan/security-gate-policy.ts` |
-| TargetValidator | IMPLEMENTED | `apps/backend/src/core/security/scan/target-validator.ts` |
-| ArtifactManager | IMPLEMENTED | `apps/backend/src/core/security/scan/artifact-manager.ts` |
-| SecurityScanStatus Enum | IMPLEMENTED | 11 states (PENDING, READY, RUNNING, COMPLETED, FAILED, TIMED_OUT, SKIPPED_NOT_CONFIGURED, BLOCKED, UNAVAILABLE, UNSUPPORTED, NOT_CONFIGURED) |
-| ProviderReadiness | IMPLEMENTED | Type + validation method |
+| SecurityScanExecutor | ✅ IMPLEMENTED | `apps/backend/src/core/security/scan/scan-executor.ts` |
+| StrixManagedProvider | ✅ IMPLEMENTED | `apps/backend/src/core/security/scan/strix-managed-provider.ts` |
+| StrixCliProvider | ✅ IMPLEMENTED | `apps/backend/src/core/security/scan/strix-cli-provider.ts` |
+| DisabledSecurityScanProvider | ✅ IMPLEMENTED | `apps/backend/src/core/security/scan/disabled-provider.ts` |
+| DefaultFindingNormalizer | ✅ IMPLEMENTED | `apps/backend/src/core/security/scan/finding-normalizer.ts` |
+| DefaultSecurityGatePolicy | ✅ IMPLEMENTED | `apps/backend/src/core/security/scan/security-gate-policy.ts` |
+| SecurityReportGenerator | ✅ IMPLEMENTED | `apps/backend/src/core/security/scan/report-generator.ts` |
+| TargetValidator | ✅ IMPLEMENTED | `apps/backend/src/core/security/scan/target-validator.ts` |
+| ArtifactManager | ✅ IMPLEMENTED | `apps/backend/src/core/security/scan/artifact-manager.ts` |
+
+### Security Finding Types
+
+- ✅ SecurityFindingSeverity (CRITICAL, HIGH, MEDIUM, LOW, INFO)
+- ✅ SecurityFindingStatus (OPEN, TRIAGED, CONFIRMED, FALSE_POSITIVE, ACCEPTED_RISK, FIXED, REGRESSION_VERIFIED)
+- ✅ SecurityScanStatus (11 states including NOT_CONFIGURED, BLOCKED, SKIPPED_NOT_CONFIGURED)
+- ✅ SecurityScanProviderType (STRIX_MANAGED, STRIX_CLI, DISABLED)
+- ✅ SecurityScanErrorCategory (CONFIGURATION, AUTHENTICATION, NETWORK, PROVIDER, TIMEOUT, INVALID_RESPONSE, POLICY, UNKNOWN)
 
 ## 3. Documentation Status
 
 | Document | Status |
 |----------|--------|
-| PHASE_4_BASELINE_AUDIT.md | EXISTS |
-| PHASE_4_FINAL_REPORT.md | EXISTS |
-| STRIX_INTEGRATION.md | EXISTS (Phase 3) |
-| STRIX_EXECUTION_GUIDE.md | EXISTS |
-| VULNERABILITY_LIFECYCLE.md | EXISTS |
-| SECURITY_GATING_POLICY.md | EXISTS |
-| SECURITY_SCAN_SETUP.md | EXISTS |
-| SECURITY_REPORTING.md | EXISTS |
-| SECURITY_RUNBOOK.md | EXISTS |
+| PHASE_4_BASELINE_AUDIT.md | ✅ EXISTS |
+| PHASE_4_FINAL_REPORT.md | ✅ EXISTS |
+| STRIX_INTEGRATION.md | ✅ EXISTS |
+| STRIX_EXECUTION_GUIDE.md | ✅ EXISTS |
+| VULNERABILITY_LIFECYCLE.md | ✅ EXISTS |
+| SECURITY_GATING_POLICY.md | ✅ EXISTS |
+| SECURITY_SCAN_SETUP.md | ✅ EXISTS |
+| SECURITY_REPORTING.md | ✅ EXISTS |
 
 ## 4. Strix & Environment Status
 
 | Item | Status | Details |
 |------|--------|---------|
-| Strix CLI | INSTALLED | v1.5.3 via pipx at `/Users/justindwinata/.local/bin/strix` |
-| Docker | NOT AVAILABLE | `docker --version` fails |
-| STRIX_API_TOKEN | NOT CONFIGURED | No env var set, no GitHub secret configured |
-| LLM_API_KEY | NOT CONFIGURED | No env var set |
-| Strix Skills | INSTALLED | 9/9 skills in `.agents/skills/` and `.claude/skills/` |
+| Strix CLI | ✅ INSTALLED | v1.5.3 via pipx at `/Users/justindwinata/.local/bin/strix` |
+| Docker | ❌ NOT AVAILABLE | `docker --version` fails |
+| STRIX_API_TOKEN | ❌ NOT CONFIGURED | No env var, no GitHub secret |
+| LLM_API_KEY | ❌ NOT CONFIGURED | No env var |
+| Strix Skills | ✅ INSTALLED | 9/9 skills in `.agents/skills/` |
 
 ## 5. Security Test Status
 
 | Test Suite | Tests | Status |
 |------------|-------|--------|
-| security.baseline.spec.ts | 35 | PASS |
-| security.scan.spec.ts | 7 | PASS |
-| target-authorization.spec.ts | 11 | PASS |
-| artifact-management.spec.ts | 9 | PASS |
-| security-gate-policy.spec.ts | 11 | PASS |
-| scan-executor-ci.spec.ts | 5 | PASS |
-| **Total** | **78** | **PASS** |
+| security.baseline.spec.ts | 35 | ✅ PASS |
+| security.scan.spec.ts | 7 | ✅ PASS |
+| target-authorization.spec.ts | 11 | ✅ PASS |
+| artifact-management.spec.ts | 9 | ✅ PASS |
+| security-gate-policy.spec.ts | 11 | ✅ PASS |
+| scan-executor-ci.spec.ts | 5 | ✅ PASS |
+| security-scan-executor-integration.spec.ts | 10 | ✅ PASS |
+| **TOTAL** | **88** | **✅ PASS** |
 
 ## 6. Provider Readiness Verification
 
 ### StrixManagedProvider
-- **Validation Method:** `validateCredentials()` checks for `STRIX_API_TOKEN`
-- **Result:** NOT READY
-- **Missing:** STRIX_API_TOKEN
-- **Network Check:** Would verify app.strix.ai connectivity if token present
+```
+validateCredentials() result:
+- ready: false
+- missingRequirements: ['STRIX_API_TOKEN']
+```
 
 ### StrixCliProvider
-- **Validation Method:** Checks for `STRIX_LLM` and `LLM_API_KEY`, then Docker availability
-- **Result:** NOT READY
-- **Missing:** Docker, STRIX_LLM, LLM_API_KEY
-- **Blocker:** Docker not installed
+```
+validateCredentials() result:
+- ready: false
+- missingRequirements: ['Docker', 'STRIX_LLM', 'LLM_API_KEY']
+```
 
 ### DisabledSecurityScanProvider
-- **Validation Method:** Always available (no credentials required)
-- **Result:** READY (but not a real scan provider)
-
-## 7. Target Authorization Verification
-
-### Test Results (via Node.js)
 ```
-Local ./: { allowed: true, environment: 'local' }
-Local http://localhost:3000: { allowed: true, environment: 'local' }
-Staging (allowlisted): { allowed: true, environment: 'staging' }
-Production: { allowed: false, blocked }
-Arbitrary external: { allowed: false, blocked }
+isAvailable() → true (fallback only, not a real provider)
 ```
 
-### Implementation Verified
-- ✅ Local targets allowed
-- ✅ Production blocked by default
-- ✅ Staging allowlist works
-- ✅ Path traversal protection in ArtifactManager
+## 7. Target Validator Verification
 
-## 8. CI Workflow Status
+| Target | Allowed | Environment |
+|--------|---------|-------------|
+| `./` | ✅ YES | local |
+| `http://localhost:3000` | ✅ YES | local |
+| `https://staging-api.transumin.test` | ✅ YES | staging (allowlisted) |
+| `https://api.transumin.com` | ❌ NO | production (blocked) |
+| `https://malicious-site.com` | ❌ NO | production (blocked) |
 
-### GitHub Actions
-- **Workflow File:** `.github/workflows/security.yml` (192 lines)
-- **Strix Managed Scan Job:** Configured
-- **Secret Handling:** Conditional on `secrets.STRIX_API_TOKEN`
-- **Fork PR Behavior:** Secrets not passed (GitHub default)
-- **State Reporting:** Explicit SKIPPED_NOT_CONFIGURED status
+## 8. CI Security Workflow Status
+
+**File:** `.github/workflows/security.yml`
+
+**Jobs:**
+- `security-preflight`: lint, tests, dependency audit ✅
+- `strix-managed-scan`: managed cloud scan ✅
+- `strix-cloud-pr-review`: PR review ✅
+- `scheduled-deep-scan`: weekly scan ✅
+
+**Secret Handling:** Conditional on `secrets.STRIX_API_TOKEN` ✅
+
+**Fork PR Behavior:** Secrets not passed (GitHub default) ✅
 
 ## 9. Backend Build Status
 
 ```
-npm run build: SUCCESS
-TypeScript compilation: 0 errors
+npm run build: ✅ SUCCESS
+npm test -- security*.spec.ts: 88 tests passing
 ```
 
-## 10. Security Phase 4 Gaps Addressed in Phase 5
+## 10. Credential Assessment
 
-| Gap | Status | Resolution |
-|-----|--------|------------|
-| Ambiguous scan states | FIXED | 11 explicit states |
-| Provider readiness | FIXED | `validateCredentials()` method |
-| Target validation | FIXED | `TargetValidator` with allowlist |
-| Artifact security | FIXED | Path traversal + size limits + checksums |
-| Finding metadata | ENHANCED | confidence, category, verification status |
-| CI secret safety | IMPROVED | Explicit skip state |
-| Waiver tracking | ADDED | `waiversApplied` in gate result |
+**STRIX_API_TOKEN: NOT CONFIGURED**
 
-## 11. Strix Credentials Assessment
+Verified via:
+- `env | grep -i strix` → (empty)
+- GitHub repository secrets → (not configured)
+- `.env` file → (JWT_SECRET configured, no STRIX_API_TOKEN)
 
-### Current State: NOT CONFIGURED
+**LLM_API_KEY: NOT CONFIGURED**
+**Docker: NOT AVAILABLE**
 
-**No credentials found in:**
-- Environment variables (verified with `env | grep -i strix`)
-- `.env` file (only DATABASE_URL, JWT_SECRET configured)
-- GitHub repository secrets (`gh secret list` returns empty)
+## 11. Blocker Summary
 
-**Verification:** No token → provider readiness check → fallback to Disabled provider → `SKIPPED_NOT_CONFIGURED` status.
+| Blocker | Impact | Resolution Required |
+|---------|--------|---------------------|
+| STRIX_API_TOKEN absent | Real managed scans blocked | Configure GitHub secret |
+| Docker unavailable | Self-hosted CLI blocked | Use managed cloud path (already selected) |
 
 ## 12. First Real Strix Scan Readiness
 
-### Required Credentials
+### Required Configuration
 1. **Strix Account:** https://app.strix.ai
 2. **API Token:** Generate with `scans:write` scope
-3. **GitHub Secret:** Name: `STRIX_API_TOKEN`
+3. **GitHub Secret:** `STRIX_API_TOKEN`
 
 ### Execution Path
 ```
 1. Configure STRIX_API_TOKEN GitHub secret
 2. Push commit or open PR
-3. Workflow triggers strix-managed-scan job
+3. GitHub Actions triggers strix-managed-scan job
 4. SecurityScanExecutor instantiated with token
 5. StrixManagedProvider.validateCredentials() returns ready=true
-6. Scan launched via REST API
-7. Status polling until COMPLETED
-8. Findings normalized and reported
+6. REST API: POST /scans
+7. Poll scan status until COMPLETED
+8. Fetch findings via REST API
+9. Normalize findings through DefaultFindingNormalizer
+10. Apply SecurityGatePolicy
+11. Generate reports
 ```
 
-### Target Authorization
+### Authorized Target
 - **Default:** `./` (repository, LOCAL environment)
 - **Override:** `SECURITY_TARGET_URL` env var
-- **Validation:** `TargetValidator` checks allowlist
+- **Validation:** `TargetValidator` with allowlist
 
-## 13. Blocker Summary
-
-| Blocker | Impact | Resolution Required |
-|---------|--------|---------------------|
-| STRIX_API_TOKEN absent | Scan cannot execute | Configure GitHub secret |
-| Docker unavailable | Self-hosted CLI blocked | Use managed cloud path |
-
-**Resolution Strategy:** Configure STRIX_API_TOKEN (managed cloud path)
-
-## 14. Next Steps (If Credentials Available)
-
-1. Create Strix account at https://app.strix.ai
-2. Generate API token with `scans:write` scope
-3. Add as GitHub secret: `STRIX_API_TOKEN`
-4. Push commit to trigger CI scan
-5. If scan completes: process real findings
-6. If credentials remain absent: document blocker, prepare setup guide
-
-## 15. Honest Assessment
+## 13. Honesty Verification
 
 **Current Execution Status:** NOT_EXECUTED
 
-**Reason:** STRIX_API_TOKEN not configured
+**System Behavior:** Correctly returns `SKIPPED_NOT_CONFIGURED`
 
-**Correct Behavior:** SKIPPED_NOT_CONFIGURED (not COMPLETED)
+**No Fake Findings:** 0 vulnerabilities reported
 
-**NoFake Policy:** This baseline confirms the system correctly identifies missing credentials and would NOT report a fake successful scan.
+**No Fake Scan:** Status is not `COMPLETED`
+
+**No Fabrication:** This baseline confirms system honesty.
+
+## 14. Next Steps
+
+If STRIX_API_TOKEN available:
+1. Configure GitHub secret
+2. Trigger scan
+3. Process real findings
+4. Remediate confirmed vulnerabilities
+5. Add regression tests
+6. Re-scan to verify
+
+If credentials remain unavailable:
+1. Continue infrastructure hardening
+2. Add integration tests
+3. Document setup procedure
+4. Prepare remediation workflow
+5. Create regression test templates
+6. Document blocker in reports
 
 ---
 
-**Baseline SHA:** 2a98496
-**Next Step:** Document exact credential requirements and blocker
-
-**CRITICAL:** DO NOT Fabricate scan execution without actual STRIX_API_TOKEN.
+**Baseline SHA:** a1fa2bc
+**Previous Baseline:** 2a98496
+**New Commits:** 3 (Phase 5 audit, test, docs)
+**Strix Version:** 1.5.3
+**Credential Status:** NOT CONFIGURED
+**Scan Status:** NOT EXECUTED (honest reporting)
