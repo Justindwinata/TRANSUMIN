@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
-import { ValidationService } from './validation.service';
+import { ValidationService } from '../src/core/validation/validation.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;
