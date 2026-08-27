@@ -1,0 +1,103 @@
+# TRANSUM-IN Curated Security Skills Manifest
+# Version: 1.0.0
+# Source Repository: https://github.com/costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills.git
+# Source Revision: 597a381a13ffd14c8c9623633dd4d3e9fd57717a
+# Retrieved Date: 2026-08-27
+# License: Apache-2.0
+
+manifest_version: 1.0.0
+target_project: TRANSUM-IN
+
+skills:
+  - name: conducting-api-security-testing
+    source_path: skills/conducting-api-security-testing
+    category: api-security
+    classification: APPROVED
+    usage:
+      - api-audit
+      - authorization-testing
+      - validation-review
+    restrictions:
+      - authorized-targets-only
+      - no-production-testing
+
+  - name: testing-api-security-with-owasp-top-10
+    source_path: skills/testing-api-security-with-owasp-top-10
+    category: api-security
+    classification: APPROVED
+    usage:
+      - owasp-api-top-10-assessment
+      - api-endpoint-fuzzing
+      - rate-limiting-validation
+    restrictions:
+      - authorized-targets-only
+      - no-production-testing
+
+  - name: testing-api-for-broken-object-level-authorization
+    source_path: skills/testing-api-for-broken-object-level-authorization
+    category: authorization
+    classification: APPROVED
+    usage:
+      - idor-testing
+      - bola-verification
+      - horizontal-privilege-escalation
+    restrictions:
+      - authorized-targets-only
+      - no-production-testing
+
+  - name: conducting-mobile-app-penetration-test
+    source_path: skills/conducting-mobile-app-penetration-test
+    category: mobile-security
+    classification: APPROVED
+    usage:
+      - flutter-security-review
+      - local-storage-audit
+      - api-traffic-inspection
+    restrictions:
+      - authorized-targets-only
+      - no-production-testing
+
+  - name: implementing-devsecops-security-scanning
+    source_path: skills/implementing-devsecops-security-scanning
+    category: devsecops
+    classification: APPROVED
+    usage:
+      - github-actions-integration
+      - sast-dast-sca-setup
+      - security-gate-enforcement
+    restrictions:
+      - pipeline-only
+      - no-destructive-scans
+
+  - name: implementing-supply-chain-security-with-in-toto
+    source_path: skills/implementing-supply-chain-security-with-in-toto
+    category: supply-chain
+    classification: APPROVED
+    usage:
+      - build-provenance
+      - container-signing
+      - sbom-verification
+    restrictions:
+      - build-environment-only
+
+  - name: implementing-vulnerability-management-with-greenbone
+    source_path: skills/implementing-vulnerability-management-with-greenbone
+    category: vulnerability-management
+    classification: APPROVED
+    usage:
+      - scan-automation
+      - finding-parsing
+      - vulnerability-prioritization
+    restrictions:
+      - staging-environments-only
+
+  - name: implementing-secret-scanning-with-gitleaks
+    source_path: skills/implementing-secret-scanning-with-gitleaks
+    category: secrets-management
+    classification: APPROVED
+    usage:
+      - secret-detection
+      - pre-commit-hooks
+      - ci-secrets-check
+    restrictions:
+      - repository-scope-only

@@ -121,7 +121,7 @@ export class GtfsIngestionPipeline {
           }
 
           for (const s of stops) {
-            if (s.parent_station && s.location_type === '1') {
+            if (s.location_type === '1') {
               const stationId = s.stop_id;
               const created = await tx.station.upsert({
                 where: { id: stationId },
@@ -183,6 +183,13 @@ export class GtfsIngestionPipeline {
             });
           }
           await tx.stop.createMany({ data: stopCreates, skipDuplicates: true });
+          for (const stop of stopCreates) {
+            if (!stop.stationId) continue;
+            await tx.stop.update({
+              where: { id: stop.id },
+              data: { stationId: stop.stationId },
+            });
+          }
         });
 
         await this.prisma.$transaction(async (tx) => {
