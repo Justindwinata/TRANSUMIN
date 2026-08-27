@@ -79,6 +79,8 @@ model DatasetVersion {
   calendarDates   CalendarDate[]
   shapesCount     Int      @default(0) @map("shapes_count")
   calendarDatesCount Int  @default(0) @map("calendar_dates_count")
+  sourceAdapterType String? @map("source_adapter_type")
+  provenanceJson  String?  @map("provenance_json")
 
   @@map("dataset_versions")
 }

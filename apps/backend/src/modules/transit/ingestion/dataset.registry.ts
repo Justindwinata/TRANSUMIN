@@ -30,9 +30,13 @@ export interface DatasetVersionMetadata {
     stopTimes: number;
     calendars: number;
     transfers: number;
+    shapes?: number;
+    calendarDates?: number;
   };
   validationResult: 'passed' | 'failed';
   status: 'downloaded' | 'validating' | 'validated' | 'failed' | 'active' | 'superseded';
+  sourceAdapterType?: string;
+  provenance?: Record<string, unknown>;
 }
 
 @Injectable()
@@ -94,6 +98,10 @@ export class DatasetRegistry {
         stopTimesCount: metadata.recordCounts.stopTimes,
         calendarsCount: metadata.recordCounts.calendars,
         transfersCount: metadata.recordCounts.transfers,
+        shapesCount: metadata.recordCounts.shapes ?? 0,
+        calendarDatesCount: metadata.recordCounts.calendarDates ?? 0,
+        sourceAdapterType: metadata.sourceAdapterType,
+        provenanceJson: metadata.provenance ? JSON.stringify(metadata.provenance) : null,
         validationResult: metadata.validationResult,
         status: metadata.status,
       },
