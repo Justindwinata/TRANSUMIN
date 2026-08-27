@@ -1,12 +1,12 @@
 export class NotificationDto {
-  id: string;
-  userId: string;
-  title: string;
-  body: string;
-  type: string;
-  severity: string;
-  isRead: boolean;
-  createdAt: string;
+  id!: string;
+  userId!: string;
+  title!: string;
+  body!: string;
+  type!: string;
+  severity!: string;
+  isRead!: boolean;
+  createdAt!: string;
 }
 
 export const notificationToDto = (row: {

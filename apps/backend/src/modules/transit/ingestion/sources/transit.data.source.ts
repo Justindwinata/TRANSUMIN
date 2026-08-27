@@ -1,4 +1,4 @@
-import { IngestionReport } from './gtfs.types';
+import { IngestionReport } from '../gtfs.types';
 
 export interface SourceMetadata {
   name: string;

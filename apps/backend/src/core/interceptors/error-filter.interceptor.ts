@@ -6,21 +6,14 @@ import { catchError } from 'rxjs/operators';
 export class ErrorFilterInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      catchError((error) => {
-        // Don't expose stack traces in production
-        // Log full error details for debugging
-        if (error instanceof Error) {
-          // Normalize error response
-          return throwError(() => ({
-            statusCode: error.statusCode || 500,
-            message: error.message || 'Internal server error',
-            error: error.name || 'Error',
-          }));
-        }
+      catchError((error: any) => {
+        const statusCode = error.statusCode || error.status || 500;
+        const message = error.message || 'Internal server error';
+        const errorName = error.name || 'Error';
         return throwError(() => ({
-          statusCode: 500,
-          message: 'Internal server error',
-          error: 'Error',
+          statusCode,
+          message,
+          error: errorName,
         }));
       }),
     );

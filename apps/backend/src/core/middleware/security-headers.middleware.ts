@@ -1,10 +1,21 @@
-import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+
+interface User {
+  id: string;
+  email: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+    }
+  }
+}
 
 @Injectable()
 export class SecurityHeadersMiddleware implements NestMiddleware {
-  private readonly logger = new Logger(SecurityHeadersMiddleware.name);
-
   use(req: Request, res: Response, next: NextFunction) {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');

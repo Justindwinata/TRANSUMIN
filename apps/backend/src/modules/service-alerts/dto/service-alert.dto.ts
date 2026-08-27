@@ -1,16 +1,16 @@
 export class ServiceAlertDto {
-  id: string;
-  title: string;
-  description: string;
-  startsAt: string;
-  endsAt: string | null;
-  severity: string;
-  status: string;
-  source: string;
+  id!: string;
+  title!: string;
+  description!: string;
+  startsAt!: string;
+  endsAt!: string | null;
+  severity!: string;
+  status!: string;
+  source!: string;
   operatorName?: string | null;
   affectedRoute?: string | null;
   affectedStop?: string | null;
-  createdAt: string;
+  createdAt!: string;
 }
 
 export const serviceAlertToDto = (row: {
