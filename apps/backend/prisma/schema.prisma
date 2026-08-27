@@ -77,6 +77,8 @@ model DatasetVersion {
   source          DataSource @relation(fields: [sourceId], references: [id])
   shapePoints     ShapePoint[]
   calendarDates   CalendarDate[]
+  shapesCount     Int      @default(0) @map("shapes_count")
+  calendarDatesCount Int  @default(0) @map("calendar_dates_count")
 
   @@map("dataset_versions")
 }
@@ -206,6 +208,7 @@ model CalendarDate {
   sourceDatasetId String?  @map("source_dataset_id")
   dataset         DatasetVersion? @relation(fields: [sourceDatasetId], references: [id])
 
+  @@unique([serviceId, date])
   @@index([serviceId])
   @@map("calendar_dates")
 }

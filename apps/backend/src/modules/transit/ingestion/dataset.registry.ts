@@ -108,6 +108,8 @@ export class DatasetRegistry {
     stopTimesCount?: number;
     calendarsCount?: number;
     transfersCount?: number;
+    shapesCount?: number;
+    calendarDatesCount?: number;
     validationResult?: 'passed' | 'failed';
     status?: 'downloaded' | 'validating' | 'validated' | 'failed' | 'active' | 'superseded';
   }) {

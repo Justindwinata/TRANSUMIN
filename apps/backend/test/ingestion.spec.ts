@@ -28,6 +28,8 @@ jest.mock('@prisma/client', () => {
       stopTime: { upsert: jest.fn().mockResolvedValue({}) },
       serviceCalendar: { upsert: jest.fn().mockResolvedValue({}) },
       transfer: { upsert: jest.fn().mockResolvedValue({}) },
+      shapePoint: { upsert: jest.fn().mockResolvedValue({}) },
+      calendarDate: { upsert: jest.fn().mockResolvedValue({}) },
       datasetVersion: { updateMany: jest.fn(), update: jest.fn() },
     })),
     $disconnect: jest.fn(),
@@ -55,7 +57,7 @@ describe('GtfsIngestionPipeline', () => {
   describe('valid GTFS ingestion', () => {
     it('should successfully parse, validate and run ingestion on valid fixtures', async () => {
       const fetchDir = path.join(__dirname, './fixtures/transjakarta');
-      const report = await pipeline.run({
+const report = await pipeline.run({
         sourceName: 'transjakarta',
         sourceUrl: 'https://gtfs.transjakarta.co.id/files/file_gtfs.zip',
         sourceLicense: 'CC BY 4.0',

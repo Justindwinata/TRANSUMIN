@@ -1,14 +1,17 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import * as crypto from 'crypto';
 import { PrismaClient } from '@prisma/client';
 import { CsvParser } from './parsers/csv.parser';
 import {
   GtfsAgency, GtfsRoute, GtfsStop, GtfsTrip,
-  GtfsStopTime, GtfsCalendar, GtfsTransfer, IngestionReport,
+  GtfsStopTime, GtfsCalendar, GtfsTransfer, GtfsShape, GtfsCalendarDate,
+  IngestionReport,
 } from './gtfs.types';
 import {
   normalizeAgency, normalizeRoute, normalizeStop, normalizeTrip,
   normalizeStopTime, normalizeCalendar, normalizeTransfer,
+  normalizeShapePoint, normalizeCalendarDate,
 } from './normalizers/gtfs.normalizer';
 import { GtfsValidator } from './validators/gtfs.validator';
 import { DatasetRegistry } from './dataset.registry';
@@ -38,18 +41,43 @@ export class GtfsIngestionPipeline {
     const registry = new DatasetRegistry(this.prisma);
     const fetchedAt = new Date();
     const validatedAt = new Date();
-    const checksum = `${options.sourceName}-${options.version}-${fetchedAt.getTime()}`;
 
-    // Create dataset version with provenance metadata
+    const agencies = this.parseFile(path.join(options.fetchDir, 'agency.txt')) as GtfsAgency[];
+    const routes = this.parseFile(path.join(options.fetchDir, 'routes.txt')) as GtfsRoute[];
+    const stops = this.parseFile(path.join(options.fetchDir, 'stops.txt')) as GtfsStop[];
+    const trips = this.parseFile(path.join(options.fetchDir, 'trips.txt')) as GtfsTrip[];
+    const stopTimes = this.parseFile(path.join(options.fetchDir, 'stop_times.txt')) as GtfsStopTime[];
+    const calendars = this.parseFile(path.join(options.fetchDir, 'calendar.txt')) as GtfsCalendar[];
+    const transfersFile = path.join(options.fetchDir, 'transfers.txt');
+    const transfers = fs.existsSync(transfersFile) ? (this.parseFile(transfersFile) as GtfsTransfer[]) : [];
+    const shapesFile = path.join(options.fetchDir, 'shapes.txt');
+    const shapes = fs.existsSync(shapesFile) ? (this.parseFile(shapesFile) as GtfsShape[]) : [];
+    const calendarDatesFile = path.join(options.fetchDir, 'calendar_dates.txt');
+    const calendarDates = fs.existsSync(calendarDatesFile)
+      ? (this.parseFile(calendarDatesFile) as GtfsCalendarDate[])
+      : [];
+
+    const checksum = this.computeChecksum({ agencies, routes, stops, trips, stopTimes, calendars, transfers, shapes, calendarDates });
+
     const recordCounts = {
-      agencies: 0,
-      routes: 0,
-      stops: 0,
-      trips: 0,
-      stopTimes: 0,
-      calendars: 0,
-      transfers: 0,
+      agencies: agencies.length,
+      routes: routes.length,
+      stops: stops.length,
+      trips: trips.length,
+      stopTimes: stopTimes.length,
+      calendars: calendars.length,
+      transfers: transfers.length,
+      shapes: shapes.length,
+      calendarDates: calendarDates.length,
     };
+
+    await registry.registerDataSource({
+      sourceName: options.sourceName,
+      sourceUrl: options.sourceUrl,
+      license: options.sourceLicense,
+      sourceType: 'gtfs',
+      sourceStatus: 'active',
+    });
 
     const dataset = await registry.createDatasetVersion({
       version: options.version,
@@ -63,16 +91,6 @@ export class GtfsIngestionPipeline {
     });
 
     try {
-      const agencies = this.parseFile(path.join(options.fetchDir, 'agency.txt')) as GtfsAgency[];
-      const routes = this.parseFile(path.join(options.fetchDir, 'routes.txt')) as GtfsRoute[];
-      const stops = this.parseFile(path.join(options.fetchDir, 'stops.txt')) as GtfsStop[];
-      const trips = this.parseFile(path.join(options.fetchDir, 'trips.txt')) as GtfsTrip[];
-      const stopTimes = this.parseFile(path.join(options.fetchDir, 'stop_times.txt')) as GtfsStopTime[];
-      const calendars = this.parseFile(path.join(options.fetchDir, 'calendar.txt')) as GtfsCalendar[];
-      const transfersFile = path.join(options.fetchDir, 'transfers.txt');
-      const transfers = fs.existsSync(transfersFile) ? (this.parseFile(transfersFile) as GtfsTransfer[]) : [];
-
-      // Build ID sets for orphan detection
       stops.forEach(s => this.stopIdSet.add(s.stop_id));
       routes.forEach(r => this.routeIdSet.add(r.route_id));
       agencies.forEach(a => this.agencyIdSet.add(a.agency_id ?? 'default'));
@@ -80,7 +98,6 @@ export class GtfsIngestionPipeline {
 
       if (!options.dryRun) {
         await this.prisma.$transaction(async (tx) => {
-          // Agencies
           for (const a of agencies) {
             const norm = normalizeAgency(a, options.sourceName, dataset.id);
             if (this.seenAgencies.has(norm.id)) { this.rejections.duplicateIds++; continue; }
@@ -92,7 +109,6 @@ export class GtfsIngestionPipeline {
             });
           }
 
-          // Routes
           for (const r of routes) {
             const agencyId = `${options.sourceName.toLowerCase()}-agency-${r.agency_id ?? 'default'}`;
             if (!this.agencyIdSet.has(r.agency_id ?? 'default')) { this.rejections.orphans++; continue; }
@@ -106,9 +122,8 @@ export class GtfsIngestionPipeline {
             });
           }
 
-          // Stops
           for (const s of stops) {
-            if (!GtfsValidator.validateCoordinates(s.stop_lat, s.stop_lon)) {
+            if (!GtfsValidator.validateCoordinates(parseFloat(s.stop_lat), parseFloat(s.stop_lon))) {
               this.rejections.invalidCoordinates++; continue;
             }
             const agencyId = `${options.sourceName.toLowerCase()}-agency-default`;
@@ -122,7 +137,6 @@ export class GtfsIngestionPipeline {
             });
           }
 
-          // Trips
           for (const t of trips) {
             if (!this.routeIdSet.has(t.route_id)) { this.rejections.orphans++; continue; }
             const norm = normalizeTrip(t, dataset.id);
@@ -133,7 +147,6 @@ export class GtfsIngestionPipeline {
             });
           }
 
-          // StopTimes
           for (const st of stopTimes) {
             if (!GtfsValidator.validateTime(st.arrival_time) || !GtfsValidator.validateTime(st.departure_time)) {
               this.rejections.invalidTimes++; continue;
@@ -148,7 +161,6 @@ export class GtfsIngestionPipeline {
             });
           }
 
-          // Calendars
           for (const c of calendars) {
             const norm = normalizeCalendar(c);
             await tx.serviceCalendar.upsert({
@@ -158,7 +170,6 @@ export class GtfsIngestionPipeline {
             });
           }
 
-          // Transfers
           for (const t of transfers) {
             if (!this.stopIdSet.has(t.from_stop_id) || !this.stopIdSet.has(t.to_stop_id)) { this.rejections.orphans++; continue; }
             const norm = normalizeTransfer(t, dataset.id);
@@ -168,9 +179,44 @@ export class GtfsIngestionPipeline {
               create: norm,
             });
           }
+
+          for (const sh of shapes) {
+            const norm = normalizeShapePoint(sh, dataset.id);
+            await tx.shapePoint.upsert({
+              where: { id: `${norm.shapeId}-${norm.ptSequence}` },
+              update: { ptLat: norm.ptLat, ptLon: norm.ptLon },
+              create: {
+                id: `${norm.shapeId}-${norm.ptSequence}`,
+                shapeId: norm.shapeId,
+                ptLat: norm.ptLat,
+                ptLon: norm.ptLon,
+                ptSequence: norm.ptSequence,
+                distTraveled: norm.distTraveled,
+                sourceDatasetId: dataset.id,
+              },
+            });
+          }
+
+          for (const cd of calendarDates) {
+            const norm = normalizeCalendarDate(cd, dataset.id);
+            await tx.calendarDate.upsert({
+              where: { serviceId_date: { serviceId: norm.serviceId, date: norm.date } },
+              update: { exceptionType: norm.exceptionType },
+              create: {
+                serviceId: norm.serviceId,
+                date: norm.date,
+                exceptionType: norm.exceptionType,
+                sourceDatasetId: dataset.id,
+              },
+            });
+          }
         });
 
-        // Update dataset version with actual record counts and validation result
+        const validationResult = GtfsValidator.validateAll(
+          agencies, routes, stops, trips, stopTimes, calendars,
+          transfers, shapes, calendarDates,
+        );
+
         await registry.updateDatasetVersion(dataset.id, {
           agenciesCount: this.seenAgencies.size,
           routesCount: this.seenRoutes.size,
@@ -179,31 +225,78 @@ export class GtfsIngestionPipeline {
           stopTimesCount: stopTimes.length,
           calendarsCount: calendars.length,
           transfersCount: transfers.length,
+          shapesCount: shapes.length,
+          calendarDatesCount: calendarDates.length,
           validationResult: 'passed',
           status: 'validated',
         });
 
         await registry.activateDataset(dataset.id);
+
+        return {
+          sourceName: options.sourceName,
+          version: options.version,
+          fetchedAt: fetchedAt.toISOString(),
+          recordsFetched: recordCounts,
+          recordsAccepted: {
+            agencies: this.seenAgencies.size,
+            routes: this.seenRoutes.size,
+            stops: this.seenStops.size,
+            trips: trips.length,
+            stopTimes: stopTimes.length,
+            calendars: calendars.length,
+            transfers: transfers.length,
+          },
+          rejections: this.rejections,
+          validationDetails: {
+            errors: validationResult.overall.errors,
+            warnings: validationResult.overall.warnings,
+            rejectedRecords: {
+              duplicateIds: this.rejections.duplicateIds,
+              invalidCoordinates: this.rejections.invalidCoordinates,
+              invalidTimes: this.rejections.invalidTimes,
+              orphans: this.rejections.orphans,
+              fieldCountMismatch: 0,
+            },
+          },
+          status: 'SUCCESS',
+        };
       }
+
+      const validationResult = GtfsValidator.validateAll(
+        agencies, routes, stops, trips, stopTimes, calendars,
+        transfers, shapes, calendarDates,
+      );
 
       return {
         sourceName: options.sourceName,
         version: options.version,
-        fetchedAt: new Date().toISOString(),
-        recordsFetched: {
-          agencies: agencies.length, routes: routes.length, stops: stops.length,
-          trips: trips.length, stopTimes: stopTimes.length, calendars: calendars.length, transfers: transfers.length,
-        },
+        fetchedAt: fetchedAt.toISOString(),
+        recordsFetched: recordCounts,
         recordsAccepted: {
-          agencies: this.seenAgencies.size, routes: this.seenRoutes.size, stops: this.seenStops.size,
-          trips: trips.length, stopTimes: stopTimes.length, calendars: calendars.length, transfers: transfers.length,
+          agencies: this.seenAgencies.size,
+          routes: this.seenRoutes.size,
+          stops: this.seenStops.size,
+          trips: trips.length,
+          stopTimes: stopTimes.length,
+          calendars: calendars.length,
+          transfers: transfers.length,
         },
         rejections: this.rejections,
+        validationDetails: {
+          errors: validationResult.overall.errors,
+          warnings: validationResult.overall.warnings,
+          rejectedRecords: {
+            duplicateIds: this.rejections.duplicateIds,
+            invalidCoordinates: this.rejections.invalidCoordinates,
+            invalidTimes: this.rejections.invalidTimes,
+            orphans: this.rejections.orphans,
+            fieldCountMismatch: 0,
+          },
+        },
         status: 'SUCCESS',
       };
     } catch (err) {
-      // Update dataset version to failed status
-      const registry = new DatasetRegistry(this.prisma);
       await registry.updateDatasetVersion(dataset.id, {
         validationResult: 'failed',
         status: 'failed',
@@ -212,8 +305,8 @@ export class GtfsIngestionPipeline {
       return {
         sourceName: options.sourceName,
         version: options.version,
-        fetchedAt: new Date().toISOString(),
-        recordsFetched: { agencies: 0, routes: 0, stops: 0, trips: 0, stopTimes: 0, calendars: 0, transfers: 0 },
+        fetchedAt: fetchedAt.toISOString(),
+        recordsFetched: recordCounts,
         recordsAccepted: { agencies: 0, routes: 0, stops: 0, trips: 0, stopTimes: 0, calendars: 0, transfers: 0 },
         rejections: this.rejections,
         status: 'FAILED',
@@ -225,5 +318,10 @@ export class GtfsIngestionPipeline {
   private parseFile(filePath: string): Record<string, any>[] {
     if (!fs.existsSync(filePath)) return [];
     return CsvParser.parse(filePath);
+  }
+
+  private computeChecksum(data: Record<string, unknown>): string {
+    const json = JSON.stringify(data, Object.keys(data).sort());
+    return crypto.createHash('sha256').update(json).digest('hex');
   }
 }

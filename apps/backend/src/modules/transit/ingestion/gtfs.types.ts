@@ -19,10 +19,11 @@ export interface GtfsRoute {
 export interface GtfsStop {
   stop_id: string;
   stop_name: string;
-  stop_lat: number;
-  stop_lon: number;
+  stop_lat: string;
+  stop_lon: string;
   parent_station?: string;
-  wheelchair_boarding?: number;
+  zone_id?: string;
+  wheelchair_boarding?: string;
 }
 
 export interface GtfsTrip {
@@ -30,7 +31,8 @@ export interface GtfsTrip {
   service_id: string;
   trip_id: string;
   trip_headsign?: string;
-  direction_id?: number;
+  direction_id?: string;
+  shape_id?: string;
 }
 
 export interface GtfsStopTime {
@@ -38,20 +40,20 @@ export interface GtfsStopTime {
   arrival_time: string;
   departure_time: string;
   stop_id: string;
-  stop_sequence: number;
-  pickup_type?: number;
-  drop_off_type?: number;
+  stop_sequence: string;
+  pickup_type?: string;
+  drop_off_type?: string;
 }
 
 export interface GtfsCalendar {
   service_id: string;
-  monday: number;
-  tuesday: number;
-  wednesday: number;
-  thursday: number;
-  friday: number;
-  saturday: number;
-  sunday: number;
+  monday: string;
+  tuesday: string;
+  wednesday: string;
+  thursday: string;
+  friday: string;
+  saturday: string;
+  sunday: string;
   start_date: string;
   end_date: string;
 }
@@ -59,8 +61,34 @@ export interface GtfsCalendar {
 export interface GtfsTransfer {
   from_stop_id: string;
   to_stop_id: string;
-  transfer_type: number;
-  min_transfer_time?: number;
+  transfer_type: string;
+  min_transfer_time?: string;
+}
+
+export interface GtfsShape {
+  shape_id: string;
+  shape_pt_lat: string;
+  shape_pt_lon: string;
+  shape_pt_sequence: string;
+  shape_dist_traveled?: string;
+}
+
+export interface GtfsCalendarDate {
+  service_id: string;
+  date: string;
+  exception_type: string;
+}
+
+export interface ValidationDetails {
+  errors: string[];
+  warnings: string[];
+  rejectedRecords: {
+    duplicateIds: number;
+    invalidCoordinates: number;
+    invalidTimes: number;
+    orphans: number;
+    fieldCountMismatch: number;
+  };
 }
 
 export interface IngestionReport {
@@ -75,6 +103,8 @@ export interface IngestionReport {
     stopTimes: number;
     calendars: number;
     transfers: number;
+    shapes: number;
+    calendarDates: number;
   };
   recordsAccepted: {
     agencies: number;
@@ -91,6 +121,7 @@ export interface IngestionReport {
     duplicateIds: number;
     invalidTimes: number;
   };
+  validationDetails?: ValidationDetails;
   status: 'SUCCESS' | 'FAILED';
   error?: string;
 }

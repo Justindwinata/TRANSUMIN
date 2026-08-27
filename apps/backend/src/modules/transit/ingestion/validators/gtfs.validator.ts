@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import {
   GtfsAgency,
   GtfsRoute,
@@ -8,7 +6,8 @@ import {
   GtfsStopTime,
   GtfsCalendar,
   GtfsTransfer,
-  IngestionReport,
+  GtfsShape,
+  GtfsCalendarDate,
 } from '../gtfs.types';
 
 export interface ValidationResult {
@@ -19,12 +18,11 @@ export interface ValidationResult {
 
 export class GtfsValidator {
   static validateCoordinates(lat: number, lon: number): boolean {
-    // Jabodetabek approximate bounding box: lat -7.0 to -5.8, lon 106.5 to 107.2
     return lat >= -7.5 && lat <= -5.5 && lon >= 106.0 && lon <= 107.8;
   }
 
   static validateTime(timeStr: string): boolean {
-    // GTFS time can exceed 24:00:00 (e.g. 25:30:00)
+    if (!timeStr || typeof timeStr !== 'string') return false;
     const parts = timeStr.split(':');
     if (parts.length !== 3) return false;
     const hours = parseInt(parts[0], 10);
@@ -70,10 +68,11 @@ export class GtfsValidator {
     if (!route.route_long_name || route.route_long_name.trim() === '') {
       warnings.push('Route long name is recommended');
     }
-    if (!route.route_type || isNaN(parseInt(route.route_type, 10))) {
+    const typeStr = route.route_type?.toString();
+    if (!route.route_type || !typeStr || isNaN(parseInt(typeStr, 10))) {
       errors.push('Route type is required and must be numeric');
     } else {
-      const type = parseInt(route.route_type, 10);
+      const type = parseInt(typeStr, 10);
       if (type < 0 || type > 7) {
         warnings.push(`Route type ${type} is non-standard`);
       }
@@ -86,7 +85,7 @@ export class GtfsValidator {
     };
   }
 
-  static validateStop(stop: GtfsStop, stopIdSet: Set<string>): ValidationResult {
+  static validateStop(stop: GtfsStop, _stopIdSet: Set<string>): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -114,7 +113,12 @@ export class GtfsValidator {
     };
   }
 
-  static validateTrip(trip: GtfsTrip, routeIdSet: Set<string>, serviceIdSet: Set<string>, shapeIdSet: Set<string>): ValidationResult {
+  static validateTrip(
+    trip: GtfsTrip,
+    routeIdSet: Set<string>,
+    serviceIdSet: Set<string>,
+    shapeIdSet: Set<string>,
+  ): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -134,7 +138,8 @@ export class GtfsValidator {
       warnings.push('Trip headsign is recommended');
     }
     if (trip.direction_id !== undefined && trip.direction_id !== null) {
-      const dir = parseInt(trip.direction_id, 10);
+      const dirStr = trip.direction_id.toString();
+      const dir = parseInt(dirStr, 10);
       if (isNaN(dir) || (dir !== 0 && dir !== 1)) {
         errors.push('Direction ID must be 0 or 1');
       }
@@ -147,7 +152,11 @@ export class GtfsValidator {
     };
   }
 
-  static validateStopTime(stopTime: GtfsStopTime, tripIdSet: Set<string>, stopIdSet: Set<string>): ValidationResult {
+  static validateStopTime(
+    stopTime: GtfsStopTime,
+    tripIdSet: Set<string>,
+    stopIdSet: Set<string>,
+  ): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -163,7 +172,8 @@ export class GtfsValidator {
     if (!stopTime.departure_time || !this.validateTime(stopTime.departure_time)) {
       errors.push('StopTime departure_time is required and must be valid HH:MM:SS');
     }
-    if (stopTime.stop_sequence === undefined || stopTime.stop_sequence === null || isNaN(parseInt(stopTime.stop_sequence, 10))) {
+    const seqStr = stopTime.stop_sequence?.toString();
+    if (!stopTime.stop_sequence || !seqStr || isNaN(parseInt(seqStr, 10))) {
       errors.push('StopTime stop_sequence is required and must be numeric');
     }
 
@@ -182,7 +192,7 @@ export class GtfsValidator {
       errors.push('Service ID is required');
     }
     ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].forEach(day => {
-      const val = calendar[day as keyof GtfsCalendar];
+      const val = calendar[day as keyof GtfsCalendar] as string;
       if (val === undefined || val === null || (val !== '0' && val !== '1')) {
         errors.push(`Calendar ${day} must be 0 or 1`);
       }
@@ -212,7 +222,8 @@ export class GtfsValidator {
       errors.push(`Transfer to_stop_id references unknown stop: ${transfer.to_stop_id}`);
     }
     if (transfer.transfer_type !== undefined && transfer.transfer_type !== null) {
-      const type = parseInt(transfer.transfer_type, 10);
+      const typeStr = transfer.transfer_type.toString();
+      const type = parseInt(typeStr, 10);
       if (isNaN(type) || type < 0 || type > 3) {
         errors.push('Transfer type must be 0, 1, 2, or 3');
       }
@@ -231,6 +242,69 @@ export class GtfsValidator {
     };
   }
 
+  static validateShapePoint(shape: GtfsShape): ValidationResult {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    if (!shape.shape_id || shape.shape_id.trim() === '') {
+      errors.push('Shape point shape_id is required');
+    }
+    const lat = parseFloat(shape.shape_pt_lat);
+    const lon = parseFloat(shape.shape_pt_lon);
+    if (isNaN(lat) || isNaN(lon)) {
+      errors.push('Shape point coordinates must be valid numbers');
+    } else if (!this.validateCoordinates(lat, lon)) {
+      warnings.push(`Shape point coordinates (${lat}, ${lon}) outside Jabodetabek bounds`);
+    }
+    const seqStr = shape.shape_pt_sequence.toString();
+    if (isNaN(parseInt(seqStr, 10))) {
+      errors.push('Shape point sequence must be numeric');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  }
+
+  static validateCalendarDate(date: GtfsCalendarDate): ValidationResult {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    if (!date.service_id || date.service_id.trim() === '') {
+      errors.push('Calendar date service_id is required');
+    }
+    if (!date.date || !/^\d{8}$/.test(date.date)) {
+      errors.push('Calendar date must be YYYYMMDD format');
+    } else {
+      const parsed = this.parseDate(date.date);
+      if (!parsed) {
+        errors.push(`Calendar date ${date.date} is invalid`);
+      }
+    }
+    const excTypeStr = date.exception_type.toString();
+    const excType = parseInt(excTypeStr, 10);
+    if (isNaN(excType) || excType < 1 || excType > 2) {
+      errors.push('Calendar date exception_type must be 1 (added) or 2 (removed)');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  }
+
+  static parseDate(yyyymmdd: string): Date | null {
+    if (!/^\d{8}$/.test(yyyymmdd)) return null;
+    const year = parseInt(yyyymmdd.slice(0, 4), 10);
+    const month = parseInt(yyyymmdd.slice(4, 6), 10);
+    const day = parseInt(yyyymmdd.slice(6, 8), 10);
+    if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+    return new Date(year, month - 1, day);
+  }
+
   static validateAll(
     agencies: GtfsAgency[],
     routes: GtfsRoute[],
@@ -239,7 +313,8 @@ export class GtfsValidator {
     stopTimes: GtfsStopTime[],
     calendars: GtfsCalendar[],
     transfers: GtfsTransfer[],
-    shapeIdSet: Set<string>
+    shapes: GtfsShape[] = [],
+    calendarDates: GtfsCalendarDate[] = [],
   ): {
     overall: ValidationResult;
     details: {
@@ -250,13 +325,18 @@ export class GtfsValidator {
       stopTimes: ValidationResult[];
       calendars: ValidationResult[];
       transfers: ValidationResult[];
+      shapes: ValidationResult[];
+      calendarDates: ValidationResult[];
     };
   } {
     const agencyIdSet = new Set(agencies.map(a => a.agency_id ?? 'default'));
     const routeIdSet = new Set(routes.map(r => r.route_id));
     const stopIdSet = new Set(stops.map(s => s.stop_id));
     const tripIdSet = new Set(trips.map(t => t.trip_id));
-    const serviceIdSet = new Set(calendars.map(c => c.service_id));
+    const serviceIdSet = new Set([
+      ...calendars.map(c => c.service_id),
+      ...calendarDates.map(d => d.service_id),
+    ]);
 
     const allErrors: string[] = [];
     const allWarnings: string[] = [];
@@ -264,13 +344,14 @@ export class GtfsValidator {
     const agencyResults = agencies.map(a => this.validateAgency(a));
     const routeResults = routes.map(r => this.validateRoute(r, agencyIdSet));
     const stopResults = stops.map(s => this.validateStop(s, stopIdSet));
-    const tripResults = trips.map(t => this.validateTrip(t, routeIdSet, serviceIdSet, shapeIdSet));
+    const tripResults = trips.map(t => this.validateTrip(t, routeIdSet, serviceIdSet, new Set(shapes.map(sh => sh.shape_id))));
     const stopTimeResults = stopTimes.map(st => this.validateStopTime(st, tripIdSet, stopIdSet));
     const calendarResults = calendars.map(c => this.validateCalendar(c));
     const transferResults = transfers.map(t => this.validateTransfer(t, stopIdSet));
+    const shapeResults = shapes.map(sh => this.validateShapePoint(sh));
+    const calendarDateResults = calendarDates.map(d => this.validateCalendarDate(d));
 
-    // Collect all errors and warnings
-    [...agencyResults, ...routeResults, ...stopResults, ...tripResults, ...stopTimeResults, ...calendarResults, ...transferResults]
+    [...agencyResults, ...routeResults, ...stopResults, ...tripResults, ...stopTimeResults, ...calendarResults, ...transferResults, ...shapeResults, ...calendarDateResults]
       .forEach(r => {
         allErrors.push(...r.errors);
         allWarnings.push(...r.warnings);
@@ -290,6 +371,8 @@ export class GtfsValidator {
         stopTimes: stopTimeResults,
         calendars: calendarResults,
         transfers: transferResults,
+        shapes: shapeResults,
+        calendarDates: calendarDateResults,
       },
     };
   }
