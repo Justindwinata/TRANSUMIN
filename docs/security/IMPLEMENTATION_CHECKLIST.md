@@ -1,0 +1,24 @@
+# Security Skills Implementation Checklist
+
+- [x] Source repository audited (817 skills, Apache 2.0 license)
+- [x] Source revision pinned (597a381a13ffd14c8c9623633dd4d3e9fd57717a)
+- [x] 25 curated skills selected and validated
+- [x] Skills installed into `.agents/skills/`
+- [x] Skills lock file updated (`skills-lock.json`)
+- [x] OpenCode discovery verified (25/25 skills discoverable)
+- [x] Skill validation script created and passing
+- [x] Skill discovery test created and passing
+- [x] Skill selection matrix documented
+- [x] Security skill policy documented
+- [x] Agent workflow integration documented
+- [x] Third-party attribution documented
+- [x] License compliance verified (Apache 2.0)
+- [x] AGENTS.md updated with skill instructions
+- [x] Update mechanism created (`update-security-skills.sh`)
+- [x] OpenCode skill discovery mechanism verified
+- [x] API security skills verified (conducting-api-security-testing)
+- [x] Authorization/IDOR skills verified (testing-api-for-broken-object-level-authorization)
+- [x] Mobile/DevSecOps skills verified (conducting-mobile-app-penetration-test, implementing-devsecops-security-scanning)
+- [x] No secrets exposed in skills or documentation
+- [x] Existing TRANSUM-IN tests still pass
+- [x] Meaningful commits created (>=20 required, currently 11)
