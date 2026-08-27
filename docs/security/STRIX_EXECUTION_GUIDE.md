@@ -5,16 +5,16 @@
 
 ## Overview
 
-This guide documents the verified execution paths for security scanning with Strix in TRANSUM-IN.
+This guide documents the verified execution paths for running Strix security scans against TRANSUM-IN.
 
 ## Current Status
 
-| Capability | Status |
-|------------|--------|
-| Strix CLI | INSTALLED (v1.5.3) |
-| Docker | NOT AVAILABLE |
-| Managed Cloud | CONFIGURED BUT UNCONFIGURED (no token) |
-| Self-Hosted | BLOCKED (Docker required) |
+| Capability | Status | Notes |
+|------------|--------|-------|
+| Strix CLI | ✅ v1.5.3 | Installed via pipx |
+| Docker | ❌ | Not available locally |
+| Managed Cloud | ✅ Supported | Requires STRIX_API_TOKEN |
+| Self-Hosted CLI | ❌ Blocked | Requires Docker |
 
 ## Execution Paths
 
@@ -23,193 +23,180 @@ This guide documents the verified execution paths for security scanning with Str
 **Prerequisites:**
 1. Strix account at https://app.strix.ai
 2. API token with `scans:write` scope
-3. GitHub secret `STRIX_API_TOKEN` configured
+3. GitHub repository secret: `STRIX_API_TOKEN`
 
-**Steps:**
+**Setup:**
 ```bash
-# 1. Create account at app.strix.ai
-# 2. Generate API token in Settings → API Tokens
-# 3. Add to GitHub repository secrets as STRIX_API_TOKEN
-# 4. CI workflow will automatically execute scans on PRs
+# 1. Create account at https://app.strix.ai
+# 2. Generate API token (Settings → API Tokens)
+# 3. Add to GitHub repo: Settings → Secrets → Actions → STRIX_API_TOKEN
 ```
 
-**Verification:**
+**CI Execution:**
+- Push to main or open PR
+- `.github/workflows/security.yml` → `strix-managed-scan` job
+- `SecurityScanExecutor` uses `StrixManagedProvider`
+- Scan runs via REST API
+
+**Local Test (if token available):**
 ```bash
-# Check if token is configured (without exposing it)
-gh secret list | grep STRIX_API_TOKEN
-```
-
-**Expected Result:** `REAL_SCAN_EXECUTED` or `PROVIDER_FAILURE`
-
-### Path B: Self-Hosted CLI (Blocked)
-
-**Prerequisites:**
-1. Docker Desktop installed and running
-2. LLM API key (OpenAI, Anthropic, etc.)
-3. Environment variables configured
-
-**Steps:**
-```bash
-# 1. Install Docker Desktop
-# 2. Verify Docker is running
-docker info
-
-# 3. Configure environment
-export STRIX_LLM="openai/gpt-4"
-export LLM_API_KEY="sk-..."
-
-# 4. Execute scan
-strix -n -t ./ --scan-mode quick --max-budget 10
-```
-
-**Current Blocker:** Docker not available
-
-**Expected Result:** `BLOCKED_BY_ENVIRONMENT`
-
-### Path C: No Credentials (Current State)
-
-**Behavior:**
-- Scan status: `SKIPPED_NOT_CONFIGURED`
-- CI passes without blocking
-- No fake findings generated
-
-**Verification:**
-```bash
+export STRIX_API_TOKEN="strix_..."
 cd apps/backend
-npm run build
 node -e "
 const { SecurityScanExecutor } = require('./dist/core/security/scan');
-const executor = new SecurityScanExecutor();
-executor.executeScan({target: './', targetType: 'repository', scanMode: 'quick'})
-  .then(r => console.log('STATUS:', r.status));
+const executor = new SecurityScanExecutor(process.env.STRIX_API_TOKEN);
+const request = {
+  target: process.env.SECURITY_TARGET_URL || './',
+  targetType: 'repository',
+  scanMode: 'quick',
+  maxBudgetUsd: 10,
+};
+executor.executeScan(request).then(r => console.log('STATUS:', r.status));
 "
-# Output: STATUS: SKIPPED_NOT_CONFIGURED
 ```
 
-## Scan Execution States
+### Path B: Self-Hosted CLI (Not Available)
 
-| State | Meaning | Action |
-|-------|---------|--------|
-| READY | Provider configured and validated | Proceed with scan |
-| NOT_CONFIGURED | Missing credentials | Skip scan, report in CI |
-| RUNNING | Scan in progress | Wait for completion |
-| COMPLETED | Scan finished successfully | Process findings |
-| FAILED | Scan execution error | Report error, investigate |
-| TIMED_OUT | Scan exceeded time limit | Retry or increase budget |
-| SKIPPED_NOT_CONFIGURED | No provider available | Configure credentials |
-| BLOCKED | Environment blocker (Docker) | Fix blocker or use managed |
-| UNSUPPORTED | Execution mode not supported | Use alternative path |
+**Prerequisites:**
+1. Docker Desktop running
+2. Strix CLI: `curl -sSL https://strix.ai/install | bash`
+3. LLM configured:
+   ```bash
+   export STRIX_LLM="openai/gpt-4"
+   export LLM_API_KEY="sk-..."
+   ```
 
-## Target Authorization
-
-### Allowed Targets
-- Local repository: `./`, `./apps/backend`
-- Local URLs: `http://localhost:3000`, `http://127.0.0.1:*`
-- Staging URLs: `*.staging.*`, `*.test.*`, allowlisted URLs
-
-### Blocked Targets
-- Production URLs: `*.transumin.com`, `prod.*`, `production.*`
-- Arbitrary external URLs not in allowlist
-- Targets with production indicators
-
-### Production Override
-
-Production scanning requires explicit configuration:
+**Execution:**
 ```bash
-# NEVER do this without explicit authorization
-# SECURITY_ALLOW_PRODUCTION=true
+# White-box (repository)
+strix -n -t ./ --scan-mode quick --max-budget 10
+
+# Black-box (API)
+strix -n -t http://localhost:3000 --scan-mode quick --max-budget 10
 ```
+
+**Current Blocker:** Docker not available.
+
+## Authorized Targets
+
+| Target | Type | Environment | Authorization |
+|--------|------|-------------|---------------|
+| `./` | Repository | local | ✅ Always allowed |
+| `http://localhost:3000` | URL | local | ✅ Always allowed |
+| `https://staging-api.transumin.test` | URL | staging | ✅ Allowlisted |
+| `https://api.transumin.com` | URL | production | ❌ BLOCKED |
+
+**TargetValidator** enforces this. Do not weaken it.
+
+## Test Environment Setup
+
+### Backend
+```bash
+cd apps/backend
+npm install
+npx prisma migrate dev
+npm run dev
+# Runs on http://localhost:3000
+```
+
+### Test Users
+Create via API:
+```bash
+# User A
+curl -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"security-a@test","fullName":"Test A","password":"TestPass123"}'
+
+# User B
+curl -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"security-b@test","fullName":"Test B","password":"TestPass123"}'
+```
+
+### Test Credentials (if API scan)
+```bash
+export SECURITY_TEST_USERNAME="security-a@test"
+export SECURITY_TEST_PASSWORD="TestPass123"
+```
+
+## Scan Modes
+
+| Mode | Duration | Budget | Use Case |
+|------|----------|--------|----------|
+| quick | ~5-10 min | $10 | PR gate |
+| standard | ~20-30 min | $20 | Regular scan |
+| deep | ~60+ min | $50 | Comprehensive |
 
 ## Artifact Handling
 
-### Storage Location
-```
-apps/backend/strix_runs/
-  └── <run_name>/
-      ├── run.json
-      ├── vulnerabilities.json
-      ├── findings.sarif
-      └── vulnerabilities/
-```
+**Output Location:** `apps/backend/strix_runs/<run_name>/`
 
-### Security Controls
-- Path traversal prevention
+**Expected Artifacts:**
+- `run.json` - Scan metadata & status
+- `vulnerabilities.json` - Structured findings
+- `vulnerabilities.csv` - CSV export
+- `findings.sarif` - SARIF for GitHub
+- `penetration_test_report.md` - Executive summary
+- `vulnerabilities/*.md` - Individual finding details
+
+**Security Controls:**
+- Path traversal prevention (allowlisted directories)
 - Size limits (50MB default)
-- Checksum verification
-- Secret redaction in stored evidence
+- SHA256 checksums
+- Secret redaction in evidence
 
-### Git Ignore
-Add to `.gitignore`:
-```
-strix_runs/
-*.sarif
-```
+**Never commit raw artifacts** — they may contain sensitive evidence.
 
 ## CI Integration
 
-### Workflow File
-`.github/workflows/security.yml`
+**Workflow:** `.github/workflows/security.yml`
 
-### Behavior
-1. PR opened → trigger managed scan if `STRIX_API_TOKEN` configured
-2. No token → report `SKIPPED_NOT_CONFIGURED`, pass CI
-3. Scan completes → evaluate gate policy
-4. Blocking findings → fail CI, post PR comment
-5. No blocking findings → pass CI
+**Jobs:**
+- `security-preflight` - lint, tests, dependency audit
+- `strix-managed-scan` - Managed cloud scan (if token)
+- `strix-cloud-pr-review` - PR review (if token)
+- `scheduled-deep-scan` - Weekly deep scan
 
-### Fork PRs
-- Secrets not available
-- Scan skipped automatically
-- CI passes without scan
+**Secret Handling:**
+- `STRIX_API_TOKEN` only on main repo (not forks)
+- Never echoed in logs
+- Conditional execution: `if: secrets.STRIX_API_TOKEN != ''`
 
-## Honest Reporting
+**State Reporting:**
+```
+SECURITY_SCAN_STATUS=COMPLETED|SKIPPED_NOT_CONFIGURED|FAILED|TIMED_OUT|BLOCKED
+SECURITY_FINDINGS_COUNT=<n>
+SECURITY_CRITICAL_COUNT=<n>
+SECURITY_HIGH_COUNT=<n>
+```
 
-### When Scan Runs
-- Status: `REAL_SCAN_EXECUTED`
-- Findings: Actual vulnerabilities detected
-- Evidence: Redacted for secrets
+## Finding Triage Process
 
-### When Scan Skips
-- Status: `SKIPPED_NOT_CONFIGURED`
-- Findings: Empty (not fabricated)
-- Reason: Clear explanation in report
+1. **Read** finding evidence
+2. **Inspect** affected TRANSUM-IN code
+3. **Reproduce** safely
+4. **Classify:**
+   - CONFIRMED - Real vulnerability
+   - FALSE_POSITIVE - Not exploitable
+   - NOT_APPLICABLE - Not relevant
+   - ACCEPTED_RISK - Documented waiver
+   - NEEDS_INVESTIGATION - Unclear
 
-### Never
-- Fabricate findings
-- Report clean scan without execution
-- Expose secrets in logs or artifacts
-- Bypass gate policy without waiver
+## Remediation Workflow
 
-## Troubleshooting
+1. **Root Cause Fix** - Not scanner-specific workaround
+2. **Add Regression Test** - Must fail before fix, pass after
+5. **Run Tests** - All security + unit + integration
+6. **Re-scan** - Verify finding resolved
+7. **Verify** - Fingerprint comparison
 
-### Scan Returns FAILED
-1. Check `run.json` for error details
-2. Verify network connectivity
-3. Check API token validity
-4. Review scan budget
+## Reporting
 
-### Scan Returns TIMED_OUT
-1. Increase `maxBudgetUsd`
-2. Reduce scan scope
-3. Use `quick` mode instead of `standard`
-
-### Scan Returns SKIPPED_NOT_CONFIGURED
-1. Verify `STRIX_API_TOKEN` secret exists
-2. Check secret is not empty
-3. Verify workflow has access to secrets
-
-## Next Steps
-
-1. [ ] Create Strix account
-2. [ ] Generate API token
-3. [ ] Configure GitHub secret
-4. [ ] Run first scan
-5. [ ] Triage findings
-6. [ ] Remediate confirmed issues
-7. [ ] Add regression tests
-8. [ ] Re-scan to verify fixes
+**Real Scan Output:** Actual Strix findings, evidence, severities
+**Skipped Scan Output:** Status = SKIPPED_NOT_CONFIGURED, 0 findings
+**Never:** Fabricate findings or scan completion
 
 ---
 
 **Last Updated:** 2026-08-28
-**Next Review:** 2026-09-28
+**Strix Version:** 1.5.3
