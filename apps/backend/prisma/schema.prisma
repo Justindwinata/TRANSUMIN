@@ -75,6 +75,8 @@ model DatasetVersion {
   calendarsCount  Int      @default(0) @map("calendars_count")
   transfersCount  Int      @default(0) @map("transfers_count")
   source          DataSource @relation(fields: [sourceId], references: [id])
+  shapePoints     ShapePoint[]
+  calendarDates   CalendarDate[]
 
   @@map("dataset_versions")
 }
@@ -180,6 +182,32 @@ model Transfer {
   minTransferTime Int?     @map("min_transfer_time")
 
   @@map("transfers")
+}
+
+model ShapePoint {
+  id              String   @id @default(uuid())
+  shapeId         String   @map("shape_id")
+  ptLat           Float    @map("pt_lat")
+  ptLon           Float    @map("pt_lon")
+  ptSequence      Int      @map("pt_sequence")
+  distTraveled    Float?   @map("dist_traveled")
+  sourceDatasetId String?  @map("source_dataset_id")
+  dataset         DatasetVersion? @relation(fields: [sourceDatasetId], references: [id])
+
+  @@index([shapeId])
+  @@map("shape_points")
+}
+
+model CalendarDate {
+  id              String   @id @default(uuid())
+  serviceId       String   @map("service_id")
+  date            DateTime @map("date")
+  exceptionType   Int      @map("exception_type")
+  sourceDatasetId String?  @map("source_dataset_id")
+  dataset         DatasetVersion? @relation(fields: [sourceDatasetId], references: [id])
+
+  @@index([serviceId])
+  @@map("calendar_dates")
 }
 
 model SavedPlace {
