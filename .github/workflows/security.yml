@@ -44,7 +44,7 @@ jobs:
         run: npm audit --audit-level=moderate
         continue-on-error: true
 
-  strix-scan:
+  strix-managed-scan:
     runs-on: ubuntu-latest
     needs: security-preflight
     if: github.event_name == 'pull_request' || github.event_name == 'push'
@@ -53,34 +53,58 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Strix
-        run: curl -sSL https://strix.ai/install | bash
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: apps/backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: apps/backend
+        run: npm ci
+
+      - name: Run Strix Managed Scan
+        if: ${{ secrets.STRIX_API_TOKEN != '' }}
+        env:
+          STRIX_API_TOKEN: ${{ secrets.STRIX_API_TOKEN }}
+        run: |
+          cd apps/backend
+          node -e "
+            const { SecurityScanExecutor } = require('./dist/core/security/scan');
+            const executor = new SecurityScanExecutor(process.env.STRIX_API_TOKEN);
+            const request = {
+              target: process.env.SECURITY_TARGET_URL || './',
+              targetType: 'repository',
+              scanMode: 'quick',
+              maxBudgetUsd: 10,
+            };
+            executor.executeScan(request).then(result => {
+              console.log('SECURITY_SCAN_STATUS=' + result.status);
+              console.log('SECURITY_FINDINGS_COUNT=' + result.findings.length);
+              console.log('SECURITY_CRITICAL_COUNT=' + result.findings.filter(f => f.severity === 'CRITICAL').length);
+              console.log('SECURITY_HIGH_COUNT=' + result.findings.filter(f => f.severity === 'HIGH').length);
+              console.log('SECURITY_MEDIUM_COUNT=' + result.findings.filter(f => f.severity === 'MEDIUM').length);
+              process.exit(result.status === 'COMPLETED' ? 0 : 1);
+            }).catch(e => {
+              console.error('SECURITY_SCAN_ERROR=' + e.message);
+              process.exit(1);
+            });
+          "
         continue-on-error: true
 
-      - name: Run Strix Security Scan
-        if: ${{ env.STRIX_LLM != '' && env.LLM_API_KEY != '' }}
-        env:
-          STRIX_LLM: ${{ secrets.STRIX_LLM }}
-          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+      - name: Scan Skipped - Not Configured
+        if: secrets.STRIX_API_TOKEN == ''
         run: |
-          strix -n -t ./ --scan-mode quick --max-budget 10 || true
-          
-          if [ -f "strix_runs" ]; then
-            run_json=$(ls -t strix_runs/*/run.json 2>/dev/null | head -1)
-            if [ -n "$run_json" ]; then
-              status=$(cat "$run_json" | jq -r .status 2>/dev/null || echo "unknown")
-              if [ "$status" != "completed" ]; then
-                echo "Strix scan did not complete (status: $status)" >&2
-                exit 1
-              fi
-            fi
-          fi
+          echo "SECURITY_SCAN_STATUS=SKIPPED_NOT_CONFIGURED"
+          echo "SECURITY_SCAN_STATUS=SKIPPED_NOT_CONFIGURED" >> $GITHUB_OUTPUT
+          echo "Security scan skipped: STRIX_API_TOKEN secret not configured"
 
       - name: Upload SARIF
         if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: strix_runs
+          sarif_file: apps/backend/strix_runs
         continue-on-error: true
 
       - name: Upload scan artifacts
@@ -88,7 +112,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: strix-scan-results
-          path: strix_runs/
+          path: apps/backend/strix_runs/
           retention-days: 30
         continue-on-error: true
 
@@ -115,21 +139,54 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Strix
-        run: curl -sSL https://strix.ai/install | bash
-        continue-on-error: true
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: apps/backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: apps/backend
+        run: npm ci
 
       - name: Run Deep Security Scan
-        if: ${{ env.STRIX_LLM != '' && env.LLM_API_KEY != '' }}
+        if: ${{ secrets.STRIX_API_TOKEN != '' }}
         env:
-          STRIX_LLM: ${{ secrets.STRIX_LLM }}
-          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
-        run: strix -n -t ./ --scan-mode standard --max-budget 30
+          STRIX_API_TOKEN: ${{ secrets.STRIX_API_TOKEN }}
+        run: |
+          cd apps/backend
+          node -e "
+            const { SecurityScanExecutor } = require('./dist/core/security/scan');
+            const executor = new SecurityScanExecutor(process.env.STRIX_API_TOKEN);
+            const request = {
+              target: './',
+              targetType: 'repository',
+              scanMode: 'standard',
+              maxBudgetUsd: 30,
+            };
+            executor.executeScan(request).then(result => {
+              console.log('SECURITY_SCAN_STATUS=' + result.status);
+              console.log('SECURITY_FINDINGS_COUNT=' + result.findings.length);
+              process.exit(result.status === 'COMPLETED' ? 0 : 1);
+            }).catch(e => {
+              console.error('SECURITY_SCAN_ERROR=' + e.message);
+              process.exit(1);
+            });
+          "
+        continue-on-error: true
+
+      - name: Scan Skipped - Not Configured
+        if: secrets.STRIX_API_TOKEN == ''
+        run: |
+          echo "SECURITY_SCAN_STATUS=SKIPPED_NOT_CONFIGURED"
+          echo "Security scan skipped: STRIX_API_TOKEN secret not configured"
 
       - name: Upload scan artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: strix-weekly-scan-results
-          path: strix_runs/
+          path: apps/backend/strix_runs/
           retention-days: 90
+        continue-on-error: true
