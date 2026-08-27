@@ -14,6 +14,8 @@ export class DefaultFindingNormalizer implements SecurityFindingNormalizer {
     const id = this.extractString(finding, 'id') || this.generateId();
     const title = this.extractString(finding, 'title') || this.extractString(finding, 'name') || 'Untitled Finding';
     const severity = this.extractSeverity(finding);
+    const confidence = this.extractConfidence(finding);
+    const category = this.extractString(finding, 'category') || this.extractString(finding, 'type') || 'UNKNOWN';
     const description = this.extractString(finding, 'description') || this.extractString(finding, 'detail') || '';
     const affectedFile = this.extractString(finding, 'file') || this.extractString(finding, 'path');
     const affectedEndpoint = this.extractString(finding, 'endpoint') || this.extractString(finding, 'url');
@@ -21,9 +23,11 @@ export class DefaultFindingNormalizer implements SecurityFindingNormalizer {
     const reproductionContext = this.extractString(finding, 'reproduction') || this.extractString(finding, 'steps');
     const remediationRecommendation = this.extractString(finding, 'remediation') || this.extractString(finding, 'fix');
     const affectedComponent = this.extractString(finding, 'component') || this.extractString(finding, 'module');
+    const remediationReference = this.extractString(finding, 'remediationReference');
+    const waiverReference = this.extractString(finding, 'waiverReference');
 
     const fingerprint = this.generateFingerprint({
-      sourceTool,
+      sourceProvider: sourceTool,
       title,
       severity,
       affectedFile,
@@ -35,6 +39,9 @@ export class DefaultFindingNormalizer implements SecurityFindingNormalizer {
     const now = new Date();
     const firstSeen = this.extractDate(finding, 'firstSeen') || now;
     const lastSeen = this.extractDate(finding, 'lastSeen') || now;
+
+    const redactedEvidence = this.redactSecrets(evidence);
+    const redactedReproduction = this.redactSecrets(reproductionContext);
 
     const metadata: Record<string, unknown> = { ...finding };
     delete metadata.id;
@@ -58,21 +65,32 @@ export class DefaultFindingNormalizer implements SecurityFindingNormalizer {
     delete metadata.module;
     delete metadata.firstSeen;
     delete metadata.lastSeen;
+    delete metadata.category;
+    delete metadata.type;
+    delete metadata.confidence;
+    delete metadata.remediationReference;
+    delete metadata.waiverReference;
 
     return {
       id,
       fingerprint,
-      sourceTool,
+      sourceProvider: sourceTool,
       title,
       severity,
+      confidence,
+      category,
       status: SecurityFindingStatus.OPEN,
       description,
       affectedComponent,
       affectedFile,
       affectedEndpoint,
-      evidence: this.redactSecrets(evidence),
-      reproductionContext: this.redactSecrets(reproductionContext),
+      evidence: redactedEvidence,
+      redactedEvidence,
+      reproductionContext: redactedReproduction,
       remediationRecommendation,
+      remediationReference,
+      waiverReference,
+      verificationStatus: 'UNVERIFIED',
       firstSeen,
       lastSeen,
       metadata,
@@ -81,7 +99,7 @@ export class DefaultFindingNormalizer implements SecurityFindingNormalizer {
 
   generateFingerprint(finding: Partial<SecurityFinding>): string {
     const parts = [
-      finding.sourceTool || 'unknown',
+      finding.sourceProvider || 'unknown',
       finding.severity || 'unknown',
       finding.affectedComponent || finding.affectedFile || finding.affectedEndpoint || 'unknown',
       this.normalizeEvidence(finding.evidence || ''),
@@ -122,6 +140,7 @@ export class DefaultFindingNormalizer implements SecurityFindingNormalizer {
       lastSeen,
       status: this.mergeStatus(existing.status, newer.status),
       evidence: existing.evidence || newer.evidence,
+      redactedEvidence: existing.redactedEvidence || newer.redactedEvidence,
       reproductionContext: existing.reproductionContext || newer.reproductionContext,
       metadata: { ...existing.metadata, ...newer.metadata },
     };
@@ -147,6 +166,17 @@ export class DefaultFindingNormalizer implements SecurityFindingNormalizer {
   private extractString(obj: Record<string, unknown>, key: string): string | undefined {
     const val = obj[key];
     return typeof val === 'string' ? val : undefined;
+  }
+
+  private extractConfidence(obj: Record<string, unknown>): 'HIGH' | 'MEDIUM' | 'LOW' {
+    const val = obj.confidence;
+    if (typeof val === 'string') {
+      const upper = val.toUpperCase();
+      if (['HIGH', 'MEDIUM', 'LOW'].includes(upper)) {
+        return upper as 'HIGH' | 'MEDIUM' | 'LOW';
+      }
+    }
+    return 'MEDIUM';
   }
 
   private extractSeverity(obj: Record<string, unknown>): SecurityFindingSeverity {

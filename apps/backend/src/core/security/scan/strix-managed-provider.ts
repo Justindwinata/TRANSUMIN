@@ -1,4 +1,13 @@
-import { SecurityScanProvider, SecurityScanProviderType, SecurityScanRequest, SecurityScanResult, SecurityScanStatus } from './types';
+import {
+  ProviderReadiness,
+  SecurityScanErrorCategory,
+  SecurityScanProvider,
+  SecurityScanProviderType,
+  SecurityScanRequest,
+  SecurityScanResult,
+  SecurityScanStatus,
+  SecurityTargetEnvironment,
+} from './types';
 import { DefaultFindingNormalizer } from './finding-normalizer';
 
 export class StrixManagedProvider implements SecurityScanProvider {
@@ -16,15 +25,66 @@ export class StrixManagedProvider implements SecurityScanProvider {
     return !!this.apiToken;
   }
 
+  async validateCredentials(): Promise<ProviderReadiness> {
+    if (!this.apiToken) {
+      return {
+        ready: false,
+        provider: this.type,
+        missingRequirements: ['STRIX_API_TOKEN'],
+      };
+    }
+
+    try {
+      const resp = await fetch(`${this.apiBase}/health`, {
+        headers: { Authorization: `Bearer ${this.apiToken}` },
+      });
+
+      if (resp.ok) {
+        return { ready: true, provider: this.type, providerVersion: '1.0' };
+      } else {
+        return {
+          ready: false,
+          provider: this.type,
+          reason: `API returned ${resp.status}`,
+          missingRequirements: ['Valid STRIX_API_TOKEN'],
+        };
+      }
+    } catch (error: any) {
+      return {
+        ready: false,
+        provider: this.type,
+        reason: error.message,
+        missingRequirements: ['Network connectivity to app.strix.ai'],
+      };
+    }
+  }
+
   async executeScan(request: SecurityScanRequest): Promise<SecurityScanResult> {
+    const startedAt = new Date();
+
     if (!this.apiToken) {
       return {
         scanId: `managed-${Date.now()}`,
         provider: this.type,
         status: SecurityScanStatus.SKIPPED_NOT_CONFIGURED,
-        startedAt: new Date(),
+        startedAt,
+        completedAt: startedAt,
         findings: [],
-        metadata: { scanMode: request.scanMode, target: request.target },
+        metadata: {
+          targetIdentifier: request.target,
+          targetEnvironment: SecurityTargetEnvironment.LOCAL,
+          startedAt,
+          completedAt: startedAt,
+          findingCount: 0,
+          criticalCount: 0,
+          highCount: 0,
+          mediumCount: 0,
+          lowCount: 0,
+          infoCount: 0,
+          artifactLocations: [],
+          errorCategory: SecurityScanErrorCategory.CONFIGURATION,
+          errorDetails: 'STRIX_API_TOKEN not configured',
+        },
       };
     }
 
@@ -32,25 +92,55 @@ export class StrixManagedProvider implements SecurityScanProvider {
       const scanId = await this.launchScan(request);
       const status = await this.pollScanCompletion(scanId);
       const findings = await this.fetchScanFindings(scanId);
+      const normalized = this.normalizeFindings(findings);
 
       return {
         scanId,
         provider: this.type,
         status,
-        startedAt: new Date(),
+        startedAt,
         completedAt: new Date(),
-        findings: this.normalizeFindings(findings),
-        metadata: { scanMode: request.scanMode, target: request.target, budgetUsd: request.maxBudgetUsd },
+        findings: normalized,
+        metadata: {
+          targetIdentifier: request.target,
+          targetEnvironment: SecurityTargetEnvironment.LOCAL,
+          startedAt,
+          completedAt: new Date(),
+          durationMs: Date.now() - startedAt.getTime(),
+          findingCount: normalized.length,
+          criticalCount: normalized.filter(f => f.severity === 'CRITICAL').length,
+          highCount: normalized.filter(f => f.severity === 'HIGH').length,
+          mediumCount: normalized.filter(f => f.severity === 'MEDIUM').length,
+          lowCount: normalized.filter(f => f.severity === 'LOW').length,
+          infoCount: normalized.filter(f => f.severity === 'INFO').length,
+          artifactLocations: [`${this.apiBase}/scans/${scanId}`],
+        },
       };
     } catch (error: any) {
+      const errorCategory = error.message.includes('timeout')
+        ? SecurityScanErrorCategory.TIMEOUT
+        : SecurityScanErrorCategory.PROVIDER;
+
       return {
         scanId: `managed-${Date.now()}`,
         provider: this.type,
         status: SecurityScanStatus.FAILED,
-        startedAt: new Date(),
+        startedAt,
         findings: [],
-        metadata: { scanMode: request.scanMode, target: request.target },
-        error: error.message,
+        metadata: {
+          targetIdentifier: request.target,
+          targetEnvironment: SecurityTargetEnvironment.LOCAL,
+          startedAt,
+          findingCount: 0,
+          criticalCount: 0,
+          highCount: 0,
+          mediumCount: 0,
+          lowCount: 0,
+          infoCount: 0,
+          artifactLocations: [],
+          errorCategory,
+          errorDetails: error.message,
+        },
       };
     }
   }
@@ -80,7 +170,7 @@ export class StrixManagedProvider implements SecurityScanProvider {
       throw new Error(`Failed to launch scan: ${resp.statusText}`);
     }
 
-    const data = await resp.json() as { scan_id?: string; id?: string };
+    const data = (await resp.json()) as { scan_id?: string; id?: string };
     return data.scan_id || data.id || '';
   }
 
@@ -97,7 +187,7 @@ export class StrixManagedProvider implements SecurityScanProvider {
         throw new Error(`Failed to poll scan: ${resp.statusText}`);
       }
 
-      const data = await resp.json() as { status?: string };
+      const data = (await resp.json()) as { status?: string };
       const status = data.status?.toUpperCase();
 
       if (status === 'COMPLETED') return SecurityScanStatus.COMPLETED;
@@ -106,7 +196,7 @@ export class StrixManagedProvider implements SecurityScanProvider {
       await new Promise((resolve) => setTimeout(resolve, pollIntervalMs));
     }
 
-    return SecurityScanStatus.FAILED;
+    return SecurityScanStatus.TIMED_OUT;
   }
 
   private async fetchScanFindings(scanId: string): Promise<unknown[]> {
@@ -119,7 +209,7 @@ export class StrixManagedProvider implements SecurityScanProvider {
         return [];
       }
 
-      const data = await resp.json() as { findings?: unknown[] };
+      const data = (await resp.json()) as { findings?: unknown[] };
       return data.findings || [];
     } catch {
       return [];

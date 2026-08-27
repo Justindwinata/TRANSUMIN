@@ -80,7 +80,7 @@ export class SecurityReportGenerator {
     return {
       id: finding.id,
       fingerprint: finding.fingerprint,
-      sourceTool: finding.sourceTool,
+      sourceProvider: finding.sourceProvider,
       title: finding.title,
       severity: finding.severity,
       status: finding.status,

@@ -61,6 +61,6 @@ export class DefaultSecurityGatePolicy implements SecurityGatePolicy {
     const passed = blockingFindings.length === 0;
     const reason = passed ? 'No blocking findings' : `${blockingFindings.length} blocking finding(s) detected`;
 
-    return { passed, blockingFindings, warningFindings, infoFindings, reason };
+    return { passed, blockingFindings, warningFindings, infoFindings, reason, waiversApplied: [] };
   }
 }

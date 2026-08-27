@@ -6,3 +6,5 @@ export * from './strix-managed-provider';
 export * from './scan-executor';
 export * from './security-gate-policy';
 export * from './report-generator';
+export * from './target-validator';
+export * from './artifact-manager';

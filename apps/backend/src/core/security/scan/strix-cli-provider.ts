@@ -1,4 +1,13 @@
-import { SecurityScanProvider, SecurityScanProviderType, SecurityScanRequest, SecurityScanResult, SecurityScanStatus } from './types';
+import {
+  ProviderReadiness,
+  SecurityScanErrorCategory,
+  SecurityScanProvider,
+  SecurityScanProviderType,
+  SecurityScanRequest,
+  SecurityScanResult,
+  SecurityScanStatus,
+  SecurityTargetEnvironment,
+} from './types';
 import { DefaultFindingNormalizer } from './finding-normalizer';
 import { exec } from 'child_process';
 import { promisify } from 'util';
@@ -21,7 +30,26 @@ export class StrixCliProvider implements SecurityScanProvider {
     }
   }
 
+  async validateCredentials(): Promise<ProviderReadiness> {
+    const missing = [];
+    if (!process.env.STRIX_LLM) missing.push('STRIX_LLM');
+    if (!process.env.LLM_API_KEY) missing.push('LLM_API_KEY');
+    
+    if (missing.length > 0) {
+      return { ready: false, provider: this.type, missingRequirements: missing };
+    }
+
+    // Check Docker
+    try {
+      await execAsync('docker info');
+      return { ready: true, provider: this.type };
+    } catch {
+      return { ready: false, provider: this.type, reason: 'Docker not available' };
+    }
+  }
+
   async executeScan(request: SecurityScanRequest): Promise<SecurityScanResult> {
+    const startedAt = new Date();
     const runName = `scan_${Date.now()}`;
     const scanDir = path.join('strix_runs', runName);
 
@@ -42,23 +70,32 @@ export class StrixCliProvider implements SecurityScanProvider {
       try {
         rawFindings = JSON.parse(await fs.readFile(findingsPath, 'utf8'));
       } catch {
-        // No findings file might mean no findings or scan failure
+        // No findings
       }
 
       const status = runData.status === 'completed' ? SecurityScanStatus.COMPLETED : SecurityScanStatus.FAILED;
+      const findings = this.normalizeFindings(rawFindings);
 
       return {
         scanId: runName,
         provider: this.type,
         status,
-        startedAt: new Date(runData.startedAt),
+        startedAt,
         completedAt: new Date(),
-        findings: this.normalizeFindings(rawFindings),
+        findings,
         metadata: {
-          scanMode: request.scanMode,
-          target: request.target,
-          budgetUsd: request.maxBudgetUsd,
-          rawOutputPath: scanDir,
+          targetIdentifier: request.target,
+          targetEnvironment: SecurityTargetEnvironment.LOCAL,
+          startedAt,
+          completedAt: new Date(),
+          durationMs: (Date.now() - startedAt.getTime()),
+          findingCount: findings.length,
+          criticalCount: findings.filter(f => f.severity === 'CRITICAL').length,
+          highCount: findings.filter(f => f.severity === 'HIGH').length,
+          mediumCount: findings.filter(f => f.severity === 'MEDIUM').length,
+          lowCount: findings.filter(f => f.severity === 'LOW').length,
+          infoCount: findings.filter(f => f.severity === 'INFO').length,
+          artifactLocations: [scanDir],
         },
       };
     } catch (error: any) {
@@ -66,10 +103,22 @@ export class StrixCliProvider implements SecurityScanProvider {
         scanId: runName,
         provider: this.type,
         status: SecurityScanStatus.FAILED,
-        startedAt: new Date(),
+        startedAt,
         findings: [],
-        metadata: { scanMode: request.scanMode, target: request.target },
-        error: error.message,
+        metadata: {
+          targetIdentifier: request.target,
+          targetEnvironment: SecurityTargetEnvironment.LOCAL,
+          startedAt,
+          findingCount: 0,
+          criticalCount: 0,
+          highCount: 0,
+          mediumCount: 0,
+          lowCount: 0,
+          infoCount: 0,
+          artifactLocations: [],
+          errorCategory: SecurityScanErrorCategory.PROVIDER,
+          errorDetails: error.message,
+        },
       };
     }
   }
