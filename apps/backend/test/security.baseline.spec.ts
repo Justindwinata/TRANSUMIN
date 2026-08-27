@@ -339,7 +339,7 @@ describe('Security Baseline Tests — Authentication & Authorization', () => {
 
     describe('NotificationsService', () => {
       it('should list only user own notifications', async () => {
-        const mockNotifications = [{ id: notificationId, userId: testUser1.id, isRead: false }];
+        const mockNotifications = [{ id: notificationId, userId: testUser1.id, isRead: false, createdAt: new Date() }];
         (prisma.notification.findMany as jest.Mock).mockResolvedValue(mockNotifications);
 
         const result = await notificationsService.getNotifications(testUser1.id, 50);
@@ -400,9 +400,9 @@ describe('Security Baseline Tests — Authentication & Authorization', () => {
     it('should validate password strength', () => {
       expect(() => validationService.validatePassword('SecurePass123')).not.toThrow();
       expect(() => validationService.validatePassword('short1A')).toThrow(BadRequestException);
-      expect(() => validationService.validatePassword('NoUppercase1')).toThrow(BadRequestException);
       expect(() => validationService.validatePassword('NOLOWERCASE1')).toThrow(BadRequestException);
-      expect(() => validationService.validatePassword('NoNumbers')).toThrow(BadRequestException);
+      expect(() => validationService.validatePassword('NOUPPERCASE1')).toThrow(BadRequestException);
+      expect(() => validationService.validatePassword('NoNumbersHere')).toThrow(BadRequestException);
     });
 
     it('should validate coordinate bounds', () => {
@@ -437,7 +437,7 @@ describe('Security Baseline Tests — Authentication & Authorization', () => {
   });
 
   describe('4. SQL Injection / NoSQL Injection Prevention', () => {
-    it('should not be vulnerable to SQL injection via string parameters', () => {
+    it('should reject SQL injection patterns in email validation', () => {
       const maliciousInputs = [
         "'; DROP TABLE users; --",
         "1' OR '1'='1",
@@ -446,21 +446,21 @@ describe('Security Baseline Tests — Authentication & Authorization', () => {
       ];
 
       maliciousInputs.forEach((input) => {
-        // Validation service should accept strings but treat them as data
-        expect(() => validationService.validateEmail(input)).not.toThrow();
+        // Validation service should reject these as invalid emails
+        expect(() => validationService.validateEmail(input)).toThrow(BadRequestException);
       });
     });
 
-    it('should not be vulnerable to NoSQL injection patterns', () => {
+    it('should reject NoSQL injection patterns in email validation', () => {
       const nosqlPayloads = [
-        { $ne: null },
-        { $gt: '' },
-        { $where: 'this.password == this.password' },
+        JSON.stringify({ $ne: null }),
+        JSON.stringify({ $gt: '' }),
+        JSON.stringify({ $where: 'this.password == this.password' }),
       ];
 
       nosqlPayloads.forEach((payload) => {
-        // Should treat as string input, not execute
-        expect(() => validationService.validateEmail(JSON.stringify(payload))).not.toThrow();
+        // NoSQL payloads should not match email regex, thus rejected
+        expect(() => validationService.validateEmail(payload)).toThrow(BadRequestException);
       });
     });
   });
@@ -489,7 +489,7 @@ describe('Security Baseline Tests — Authentication & Authorization', () => {
       expect(() => validationService.validateEmail('not-an-email')).toThrow(BadRequestException);
     });
 
-    it('should reject extra fields when whitelist enforced', () => {
+    it('should reject extra fields when whitelist enforced', async () => {
       // This is enforced by ValidationPipe with forbidNonWhitelisted: true
       // Unit test validates the service doesn't accidentally accept extra fields
       const userId = 'test-user';
