@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "node dist/main.cjs",
-    "build": "tsc -p tsconfig.build.json && cp dist/main.js dist/main.cjs",
+    "start": "node dist/main.js",
+    "build": "tsc -p tsconfig.build.json",
     "dev": "ts-node-dev --respawn src/main.ts",
     "lint": "eslint src",
     "transit:seed": "ts-node-dev --respawn prisma/seed.ts",
@@ -16,7 +16,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "engines": {
     "node": ">=22"
   },
