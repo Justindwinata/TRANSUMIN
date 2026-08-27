@@ -73,4 +73,3 @@ describe('Artifact Management & Security Tests', () => {
     });
   });
 });
-EOF
