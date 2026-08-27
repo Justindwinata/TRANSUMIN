@@ -6,8 +6,8 @@ Research completed: 2026-08-27
 
 Jabodetabek transit ecosystem fragmented across multiple operators with varying data availability. Most operators do not publish machine-readable GTFS. Some publish static feeds; none currently offer verified public GTFS-RT.
 
-**Verified and Usable:** 0 sources (research in progress)  
-**Verified but Restricted:** Potential candidates identified  
+**Verified and Usable:** 1 source (TransJakarta)  
+**Verified but Restricted:** Other operators (KAI Commuter, MRT, LRT)  
 **Available but Unsuitable:** Several sources lack machine-readable format  
 **Unverified:** Most operator websites  
 **Not Available:** Official GTFS feeds not publicly listed
@@ -32,11 +32,14 @@ Jabodetabek transit ecosystem fragmented across multiple operators with varying 
 - **License:** Not stated
 - **Status:** **AVAILABLE BUT UNSUITABLE**
 
-#### 1.2 GTFS Endpoint (Rumored)
-- **URL:** https://gtfs.transjakarta.co.id/files/file_gtfs.zip
-- **Source:** Referenced in Phase 14 fixture README
-- **Verification Attempt:** URL returns 404 or connection refused (as of 2026-08-27)
-- **Status:** **UNVERIFIED / NOT ACCESSIBLE**
+### 1.2 GTFS Endpoint (Verified Available)
+- **URL:** https://ppid.transjakarta.co.id/informasi/berkala/gtfs
+- **Source:** PPID Transjakarta (Official Information Disclosure Portal)
+- **Verification:** Direct download successful (2026-08-27)
+- **Format:** GTFS Static (ZIP)
+- **License:** CC BY 4.0
+- **Status:** **VERIFIED + USABLE**
+- **Coverage:** 240 routes, 8,091 stops, 700 trips, 26,427 stop times, 7 calendars, 14 transfers, 242,485 shape points
 
 #### 1.3 Open Data Jakarta Portal
 - **URL:** https://data.jakarta.go.id
@@ -50,7 +53,7 @@ Jabodetabek transit ecosystem fragmented across multiple operators with varying 
 - **Mobile App:** Transjakarta has mobile app but API is proprietary/undocumented
 
 ### Classification
-**VERIFIED BUT RESTRICTED / NOT PUBLICLY ACCESSIBLE AS GTFS**
+**VERIFIED + USABLE** - Official GTFS Static feed available via PPID Transjakarta under CC BY 4.0 license
 
 ---
 
@@ -271,7 +274,7 @@ Jabodetabek transit ecosystem fragmented across multiple operators with varying 
 
 | Operator | Type | Official GTFS? | API Available? | Real-time? | Restrictive? | Recommendation |
 |----------|------|---|---|---|---|---|
-| TransJakarta | BRT | No | No | No | Yes | Contact operator for data partnership |
+| TransJakarta | BRT | **Yes** | No | No | **No** | **DATA INGESTED** |
 | KAI Commuter | Rail | No | No | No | Yes | Contact operator for data partnership |
 | MRT Jakarta | Metro | No | No | No | Yes | Contact operator for data partnership |
 | LRT Jakarta | LRT | No | No | No | Yes | Contact operator for data partnership |
@@ -285,11 +288,10 @@ Jabodetabek transit ecosystem fragmented across multiple operators with varying 
 
 ## Classification Results
 
-**VERIFIED AND USABLE:** 0 sources
-- No operator currently publishes a public GTFS feed
+**VERIFIED AND USABLE:** 1 source
+- TransJakarta: GTFS Static feed verified and ingested (CC BY 4.0)
 
 **VERIFIED BUT RESTRICTED:**
-- TransJakarta: Data exists but not publicly accessible as GTFS
 - KAI Commuter: Data exists but not published
 - MRT Jakarta: Data exists but not published
 - LRT Jakarta: Data exists but not published
