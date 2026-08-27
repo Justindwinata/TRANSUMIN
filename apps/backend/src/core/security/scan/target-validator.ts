@@ -24,16 +24,7 @@ export class TargetValidator {
 
     const trimmed = target.trim();
 
-    // Check for production indicators or unapproved external domains
-    if (this.isProductionTarget(trimmed)) {
-      return {
-        allowed: false,
-        environment: SecurityTargetEnvironment.PRODUCTION,
-        reason: 'Production targets are blocked by default for security scans',
-      };
-    }
-
-    // Local targets
+    // Local targets (checked first to avoid false positives)
     if (
       trimmed === './' ||
       trimmed.startsWith('./') ||
@@ -58,6 +49,15 @@ export class TargetValidator {
       };
     }
 
+    // Check for production indicators or unapproved external domains
+    if (this.isProductionTarget(trimmed)) {
+      return {
+        allowed: false,
+        environment: SecurityTargetEnvironment.PRODUCTION,
+        reason: 'Production targets are blocked by default for security scans',
+      };
+    }
+
     // Default: block unknown external URLs
     return {
       allowed: false,
@@ -70,7 +70,7 @@ export class TargetValidator {
     const lower = target.toLowerCase();
     const prodKeywords = ['prod.', 'production', 'api.transumin.com', 'transumin.com'];
     for (const kw of prodKeywords) {
-      if (lower.includes(kw) && !lower.includes('staging') && !lower.includes('test')) {
+      if (lower.includes(kw)) {
         return true;
       }
     }
@@ -79,7 +79,10 @@ export class TargetValidator {
 
   private isStagingTarget(target: string): boolean {
     const lower = target.toLowerCase();
-    if (lower.includes('staging') || lower.includes('test') || lower.includes('dev')) {
+    if (lower.includes('staging') || lower.includes('dev')) {
+      return true;
+    }
+    if (lower.includes('test') && !lower.includes('prod.')) {
       return true;
     }
     return this.allowedStagingUrls.some((url) => lower.startsWith(url.toLowerCase()));
