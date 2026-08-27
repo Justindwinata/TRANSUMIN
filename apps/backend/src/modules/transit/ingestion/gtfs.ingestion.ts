@@ -97,8 +97,10 @@ export class GtfsIngestionPipeline {
       trips.forEach(t => this.tripIdSet.add(t.trip_id));
 
       if (!options.dryRun) {
+        const agencyIdMap = new Map<string, string>();
+        const stationMap = new Map<string, string>();
+
         await this.prisma.$transaction(async (tx) => {
-          const agencyIdMap = new Map<string, string>();
           for (const a of agencies) {
             const norm = normalizeAgency(a, options.sourceName, dataset.id);
             if (this.seenAgencies.has(norm.id)) { this.rejections.duplicateIds++; continue; }
@@ -118,7 +120,6 @@ export class GtfsIngestionPipeline {
             agencyIdMap.set(a.agency_id ?? 'default', created.id);
           }
 
-          const stationMap = new Map<string, string>();
           for (const s of stops) {
             if (s.parent_station && s.location_type === '1') {
               const stationId = s.stop_id;
@@ -135,30 +136,34 @@ export class GtfsIngestionPipeline {
               stationMap.set(stationId, created.id);
             }
           }
+        });
 
+        const mappedAgencyId = agencyIdMap.get('default') || Array.from(agencyIdMap.values())[0];
+        
+        await this.prisma.$transaction(async (tx) => {
+          const routeCreates = [];
           for (const r of routes) {
-            const mappedAgencyId = agencyIdMap.get(r.agency_id ?? 'default');
-            if (!mappedAgencyId) { this.rejections.orphans++; continue; }
+            const mappedAgencyIdRoute = agencyIdMap.get(r.agency_id ?? 'default');
+            if (!mappedAgencyIdRoute) { this.rejections.orphans++; continue; }
             if (!this.agencyIdSet.has(r.agency_id ?? 'default')) { this.rejections.orphans++; continue; }
-            const norm = normalizeRoute(r, mappedAgencyId, r.route_type, dataset.id);
+            const norm = normalizeRoute(r, mappedAgencyIdRoute, r.route_type, dataset.id);
             if (this.seenRoutes.has(r.route_id)) { this.rejections.duplicateIds++; continue; }
             this.seenRoutes.add(r.route_id);
-            await tx.route.upsert({
-              where: { id: r.route_id },
-              update: { shortName: norm.shortName, longName: norm.longName, routeType: norm.routeType, serviceType: norm.serviceType, color: norm.color, agencyId: norm.agencyId },
-              create: {
-                id: r.route_id,
-                agencyId: norm.agencyId,
-                shortName: norm.shortName,
-                longName: norm.longName,
-                routeType: norm.routeType,
-                serviceType: norm.serviceType,
-                color: norm.color,
-              },
+            routeCreates.push({
+              id: r.route_id,
+              agencyId: norm.agencyId,
+              shortName: norm.shortName,
+              longName: norm.longName,
+              routeType: norm.routeType,
+              serviceType: norm.serviceType,
+              color: norm.color,
             });
           }
+          await tx.route.createMany({ data: routeCreates, skipDuplicates: true });
+        });
 
-          const mappedAgencyId = agencyIdMap.get('default') || Array.from(agencyIdMap.values())[0];
+        await this.prisma.$transaction(async (tx) => {
+          const stopCreates = [];
           for (const s of stops) {
             if (!GtfsValidator.validateCoordinates(parseFloat(s.stop_lat), parseFloat(s.stop_lon))) {
               this.rejections.invalidCoordinates++; continue;
@@ -168,36 +173,36 @@ export class GtfsIngestionPipeline {
             if (this.seenStops.has(norm.id)) { this.rejections.duplicateIds++; continue; }
             this.seenStops.add(norm.id);
             const stationId = norm.stationId && stationMap.has(norm.stationId) ? stationMap.get(norm.stationId) : undefined;
-            await tx.stop.upsert({
-              where: { id: norm.id },
-              update: { name: norm.name, lat: norm.lat, lon: norm.lon },
-              create: {
-                id: norm.id,
-                agencyId: norm.agencyId,
-                name: norm.name,
-                lat: norm.lat,
-                lon: norm.lon,
-                stationId: stationId,
-              },
+            stopCreates.push({
+              id: norm.id,
+              agencyId: norm.agencyId,
+              name: norm.name,
+              lat: norm.lat,
+              lon: norm.lon,
+              stationId: stationId,
             });
           }
+          await tx.stop.createMany({ data: stopCreates, skipDuplicates: true });
+        });
 
+        await this.prisma.$transaction(async (tx) => {
+          const tripCreates = [];
           for (const t of trips) {
             if (!this.routeIdSet.has(t.route_id)) { this.rejections.orphans++; continue; }
             const norm = normalizeTrip(t, dataset.id);
-            await tx.trip.upsert({
-              where: { id: norm.id },
-              update: { headsign: norm.headsign, directionId: norm.directionId },
-              create: {
-                id: norm.id,
-                routeId: norm.routeId,
-                serviceId: norm.serviceId,
-                directionId: norm.directionId,
-                headsign: norm.headsign,
-              },
+            tripCreates.push({
+              id: norm.id,
+              routeId: norm.routeId,
+              serviceId: norm.serviceId,
+              directionId: norm.directionId,
+              headsign: norm.headsign,
             });
           }
+          await tx.trip.createMany({ data: tripCreates, skipDuplicates: true });
+        });
 
+        await this.prisma.$transaction(async (tx) => {
+          const stopTimeCreates = [];
           for (const st of stopTimes) {
             if (!GtfsValidator.validateTime(st.arrival_time) || !GtfsValidator.validateTime(st.departure_time)) {
               this.rejections.invalidTimes++; continue;
@@ -205,66 +210,88 @@ export class GtfsIngestionPipeline {
             if (!this.tripIdSet.has(st.trip_id)) { this.rejections.orphans++; continue; }
             if (!this.stopIdSet.has(st.stop_id)) { this.rejections.orphans++; continue; }
             const norm = normalizeStopTime(st);
-            await tx.stopTime.upsert({
-              where: { tripId_stopSequence: { tripId: norm.tripId, stopSequence: norm.stopSequence } },
-              update: { arrivalTime: norm.arrivalTime, departureTime: norm.departureTime, stopId: norm.stopId },
-              create: norm,
+            stopTimeCreates.push({
+              tripId: norm.tripId,
+              stopId: norm.stopId,
+              arrivalTime: norm.arrivalTime,
+              departureTime: norm.departureTime,
+              stopSequence: norm.stopSequence,
             });
           }
+          await tx.stopTime.createMany({ data: stopTimeCreates, skipDuplicates: true });
+        });
 
+        await this.prisma.$transaction(async (tx) => {
+          const calendarCreates = [];
           for (const c of calendars) {
             const norm = normalizeCalendar(c);
-            await tx.serviceCalendar.upsert({
-              where: { serviceId: norm.serviceId },
-              update: { ...norm, startDate: norm.startDate, endDate: norm.endDate },
-              create: norm,
-            });
+            calendarCreates.push(norm);
           }
+          await tx.serviceCalendar.createMany({ data: calendarCreates, skipDuplicates: true });
+        });
 
+        await this.prisma.$transaction(async (tx) => {
+          const transferCreates = [];
           for (const t of transfers) {
             if (!this.stopIdSet.has(t.from_stop_id) || !this.stopIdSet.has(t.to_stop_id)) { this.rejections.orphans++; continue; }
             const norm = normalizeTransfer(t, dataset.id);
-            await tx.transfer.upsert({
-              where: { id: norm.id },
-              update: { transferType: norm.transferType, minTransferTime: norm.minTransferTime },
-              create: {
-                id: norm.id,
-                fromStopId: norm.fromStopId,
-                toStopId: norm.toStopId,
-                transferType: norm.transferType,
-                minTransferTime: norm.minTransferTime,
-              },
+            transferCreates.push({
+              id: norm.id,
+              fromStopId: norm.fromStopId,
+              toStopId: norm.toStopId,
+              transferType: norm.transferType,
+              minTransferTime: norm.minTransferTime,
             });
           }
+          await tx.transfer.createMany({ data: transferCreates, skipDuplicates: true });
+        });
 
+        await this.prisma.$transaction(async (tx) => {
+          const shapeCreates = [];
           for (const sh of shapes) {
             const norm = normalizeShapePoint(sh, dataset.id);
-            await tx.shapePoint.upsert({
-              where: { id: `${norm.shapeId}-${norm.ptSequence}` },
-              update: { ptLat: norm.ptLat, ptLon: norm.ptLon },
-              create: {
-                id: `${norm.shapeId}-${norm.ptSequence}`,
-                shapeId: norm.shapeId,
-                ptLat: norm.ptLat,
-                ptLon: norm.ptLon,
-                ptSequence: norm.ptSequence,
-                distTraveled: norm.distTraveled,
-              },
+            shapeCreates.push({
+              id: `${norm.shapeId}-${norm.ptSequence}`,
+              shapeId: norm.shapeId,
+              ptLat: norm.ptLat,
+              ptLon: norm.ptLon,
+              ptSequence: norm.ptSequence,
+              distTraveled: norm.distTraveled,
             });
           }
+        });
 
+        const shapeCreates = [];
+        for (const sh of shapes) {
+          const norm = normalizeShapePoint(sh, dataset.id);
+          shapeCreates.push({
+            id: `${norm.shapeId}-${norm.ptSequence}`,
+            shapeId: norm.shapeId,
+            ptLat: norm.ptLat,
+            ptLon: norm.ptLon,
+            ptSequence: norm.ptSequence,
+            distTraveled: norm.distTraveled,
+          });
+          if (shapeCreates.length >= 10000) {
+            await this.prisma.shapePoint.createMany({ data: shapeCreates, skipDuplicates: true });
+            shapeCreates.length = 0;
+          }
+        }
+        if (shapeCreates.length > 0) {
+          await this.prisma.shapePoint.createMany({ data: shapeCreates, skipDuplicates: true });
+        }
+
+        await this.prisma.$transaction(async (tx) => {
+          const calendarDateCreates = [];
           for (const cd of calendarDates) {
             const norm = normalizeCalendarDate(cd, dataset.id);
-            await tx.calendarDate.upsert({
-              where: { serviceId_date: { serviceId: norm.serviceId, date: norm.date } },
-              update: { exceptionType: norm.exceptionType },
-              create: {
-                serviceId: norm.serviceId,
-                date: norm.date,
-                exceptionType: norm.exceptionType,
-              },
+            calendarDateCreates.push({
+              serviceId: norm.serviceId,
+              date: norm.date,
+              exceptionType: norm.exceptionType,
             });
           }
+          await tx.calendarDate.createMany({ data: calendarDateCreates, skipDuplicates: true });
         });
 
         const validationResult = GtfsValidator.validateAll(
