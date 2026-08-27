@@ -1,0 +1,71 @@
+name: Data Ingestion Validation
+
+on:
+  pull_request:
+    paths:
+      - 'apps/backend/src/modules/transit/ingestion/**'
+      - 'apps/backend/prisma/schema.prisma'
+  workflow_dispatch:
+
+jobs:
+  validate-ingestion:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: justindwinata
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: transumin
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: apps/backend/package-lock.json
+
+      - name: Install dependencies
+        run: cd apps/backend && npm ci
+
+      - name: Generate Prisma Client
+        run: cd apps/backend && npx prisma generate
+
+      - name: Run Migrations
+        run: cd apps/backend && npx prisma migrate deploy
+        env:
+          DATABASE_URL: postgresql://justindwinata:postgres@localhost:5432/transumin
+
+      - name: Run Ingestion Tests (Dry Run)
+        run: |
+          cd apps/backend
+          # Test with reference fixtures
+          npx tsx src/modules/transit/ingestion/cli/ingest.ts \
+            --source transjakarta \
+            --version test-fixture \
+            --fetch-dir test/fixtures/transjakarta \
+            --url "file://test/fixtures/transjakarta" \
+            --license "Reference" \
+            --dry-run
+        env:
+          DATABASE_URL: postgresql://justindwinata:postgres@localhost:5432/transumin
+
+      - name: Run Unit Tests
+        run: cd apps/backend && npm test -- --testPathPattern="ingestion"
+        env:
+          DATABASE_URL: postgresql://justindwinata:postgres@localhost:5432/transumin
+
+      - name: Run Graph Tests
+        run: cd apps/backend && npm test -- --testPathPattern="graph"
+        env:
+          DATABASE_URL: postgresql://justindwinata:postgres@localhost:5432/transumin
