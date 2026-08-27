@@ -1,0 +1,3 @@
+trip_id,arrival_time,departure_time,stop_id,stop_sequence
+TRIP-MRT-01,06:00:00,06:00:00,STOP-MRT-LB,1
+TRIP-MRT-01,06:10:00,06:10:00,STOP-MRT-BHI,2

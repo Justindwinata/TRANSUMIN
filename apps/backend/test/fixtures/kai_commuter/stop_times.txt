@@ -1,0 +1,2 @@
+trip_id,arrival_time,departure_time,stop_id,stop_sequence
+TRIP-KAI-01,06:00:00,06:05:00,STOP-KAI-BOG,1

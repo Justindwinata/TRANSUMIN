@@ -1,0 +1,3 @@
+stop_id,stop_name,stop_lat,stop_lon
+STOP-LRTJ-P2,Pegangsaan Dua,-6.1557,106.9152
+STOP-LRTJ-VEL,Velodrome,-6.1913,106.8856

@@ -1,0 +1,2 @@
+trip_id,route_id,service_id,trip_headsign,direction_id
+TRIP-MRT-01,MRT-1,DAILY,Lebah Putih - Bunderan HI,0

@@ -1,0 +1,2 @@
+from_stop_id,to_stop_id,transfer_type,min_transfer_time
+STOP-MRT-LB,STOP-MRT-BHI,0,300

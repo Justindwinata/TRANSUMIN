@@ -1,0 +1,2 @@
+stop_id,stop_name,stop_lat,stop_lon
+STOP-KAI-BOG,Bogor Station,-6.5982,106.7972

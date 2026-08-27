@@ -1,0 +1,3 @@
+stop_id,stop_name,stop_lat,stop_lon
+STOP-MRT-LB,Lebah Putih Station,-6.2242,106.8206
+STOP-MRT-BHI,Bunderan HI Station,-6.2274,106.8063
