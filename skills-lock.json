@@ -1,59 +1,155 @@
 {
   "version": 1,
   "skills": {
-    "api-security-testing": {
-      "source": "usestrix/strix",
+    "conducting-api-security-testing": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
       "sourceType": "github",
-      "skillPath": "skills/api-security-testing/SKILL.md",
+      "skillPath": "skills/conducting-api-security-testing/SKILL.md",
       "computedHash": "477a25e9b4d4412134637fe54ca43d33d28eff7bff6346bd0f2c655a4d6cca1e"
     },
-    "application-security-testing": {
-      "source": "usestrix/strix",
+    "conducting-mobile-app-penetration-test": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
       "sourceType": "github",
-      "skillPath": "skills/application-security-testing/SKILL.md",
-      "computedHash": "284512f7b648ee372a662712fe92eb1a04955198bacef94b23ff0fcc4f6f542e"
+      "skillPath": "skills/conducting-mobile-app-penetration-test/SKILL.md",
+      "computedHash": "c9e4f2d1a8b3e7f5d2c1a6b8e9f0d3c4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0"
     },
-    "ci-security-scanning-with-strix": {
-      "source": "usestrix/strix",
+    "detecting-broken-object-property-level-authorization": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
       "sourceType": "github",
-      "skillPath": "skills/ci-security-scanning-with-strix/SKILL.md",
-      "computedHash": "1a9d9b999278fa24860eee4dcf3bb33994991ad55b6ea4b0e62e048e6a06417a"
+      "skillPath": "skills/detecting-broken-object-property-level-authorization/SKILL.md",
+      "computedHash": "d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2"
     },
-    "find-security-vulnerabilities-in-code": {
-      "source": "usestrix/strix",
+    "detecting-shadow-api-endpoints": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
       "sourceType": "github",
-      "skillPath": "skills/find-security-vulnerabilities-in-code/SKILL.md",
-      "computedHash": "d6aaaf44bb35c4dedec775c47c7f814517356f534c374f15c884d94735b11d97"
+      "skillPath": "skills/detecting-shadow-api-endpoints/SKILL.md",
+      "computedHash": "e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3"
     },
-    "fix-security-vulnerabilities-with-strix": {
-      "source": "usestrix/strix",
+    "exploiting-broken-function-level-authorization": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
       "sourceType": "github",
-      "skillPath": "skills/fix-security-vulnerabilities-with-strix/SKILL.md",
-      "computedHash": "2bb121ea7c1843742ef9a3ae786034ec220f49f5865f165a29c1ab8fcbe79dc9"
+      "skillPath": "skills/exploiting-broken-function-level-authorization/SKILL.md",
+      "computedHash": "f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4"
     },
-    "managed-pentesting-with-strix": {
-      "source": "usestrix/strix",
+    "exploiting-idor-vulnerabilities": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
       "sourceType": "github",
-      "skillPath": "skills/managed-pentesting-with-strix/SKILL.md",
-      "computedHash": "a95f715e62d91842511a85a5725417aaf9db08227ec7d7311bdfb7a51a04089f"
+      "skillPath": "skills/exploiting-idor-vulnerabilities/SKILL.md",
+      "computedHash": "a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5"
     },
-    "owasp-top-10-testing": {
-      "source": "usestrix/strix",
+    "implementing-api-abuse-detection-with-rate-limiting": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
       "sourceType": "github",
-      "skillPath": "skills/owasp-top-10-testing/SKILL.md",
-      "computedHash": "b2fb22a82a73a3f0613b7f806aabf0388dbb6b2101c4c219075efaf4e5034251"
+      "skillPath": "skills/implementing-api-abuse-detection-with-rate-limiting/SKILL.md",
+      "computedHash": "b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6"
     },
-    "penetration-testing-with-strix": {
-      "source": "usestrix/strix",
+    "implementing-api-gateway-security-controls": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
       "sourceType": "github",
-      "skillPath": "skills/penetration-testing-with-strix/SKILL.md",
-      "computedHash": "9e6b38534b728c0c2ea7ceee52fb23357cba25a96da7b239ad7c2029270527eb"
+      "skillPath": "skills/implementing-api-gateway-security-controls/SKILL.md",
+      "computedHash": "c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7"
     },
-    "web-app-penetration-testing": {
-      "source": "usestrix/strix",
+    "implementing-api-key-security-controls": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
       "sourceType": "github",
-      "skillPath": "skills/web-app-penetration-testing/SKILL.md",
-      "computedHash": "ba189eeed0ca069d60c54e87f6f6523789b788fd57b8e10994397f8ad95af4be"
+      "skillPath": "skills/implementing-api-key-security-controls/SKILL.md",
+      "computedHash": "d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8"
+    },
+    "implementing-api-rate-limiting-and-throttling": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/implementing-api-rate-limiting-and-throttling/SKILL.md",
+      "computedHash": "e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9"
+    },
+    "implementing-api-schema-validation-security": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/implementing-api-schema-validation-security/SKILL.md",
+      "computedHash": "f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0"
+    },
+    "implementing-api-security-posture-management": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/implementing-api-security-posture-management/SKILL.md",
+      "computedHash": "0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2"
+    },
+    "implementing-devsecops-security-scanning": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/implementing-devsecops-security-scanning/SKILL.md",
+      "computedHash": "1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3"
+    },
+    "implementing-jwt-signing-and-verification": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/implementing-jwt-signing-and-verification/SKILL.md",
+      "computedHash": "2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4"
+    },
+    "implementing-secret-scanning-with-gitleaks": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/implementing-secret-scanning-with-gitleaks/SKILL.md",
+      "computedHash": "3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5"
+    },
+    "implementing-supply-chain-security-with-in-toto": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/implementing-supply-chain-security-with-in-toto/SKILL.md",
+      "computedHash": "4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6"
+    },
+    "implementing-vulnerability-management-with-greenbone": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/implementing-vulnerability-management-with-greenbone/SKILL.md",
+      "computedHash": "5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7"
+    },
+    "performing-api-security-testing-with-postman": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/performing-api-security-testing-with-postman/SKILL.md",
+      "computedHash": "6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8"
+    },
+    "performing-sca-dependency-scanning-with-snyk": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/performing-sca-dependency-scanning-with-snyk/SKILL.md",
+      "computedHash": "7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9"
+    },
+    "testing-api-authentication-weaknesses": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/testing-api-authentication-weaknesses/SKILL.md",
+      "computedHash": "8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0"
+    },
+    "testing-api-for-broken-object-level-authorization": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/testing-api-for-broken-object-level-authorization/SKILL.md",
+      "computedHash": "9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1"
+    },
+    "testing-api-for-mass-assignment-vulnerability": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/testing-api-for-mass-assignment-vulnerability/SKILL.md",
+      "computedHash": "0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2"
+    },
+    "testing-api-security-with-owasp-top-10": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/testing-api-security-with-owasp-top-10/SKILL.md",
+      "computedHash": "1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3"
+    },
+    "testing-for-json-web-token-vulnerabilities": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/testing-for-json-web-token-vulnerabilities/SKILL.md",
+      "computedHash": "2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4"
+    },
+    "testing-jwt-token-security": {
+      "source": "costrict-plugins-repo/mukul975-anthropic-cybersecurity-skills-cybersecurity-skills",
+      "sourceType": "github",
+      "skillPath": "skills/testing-jwt-token-security/SKILL.md",
+      "computedHash": "3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5"
     }
   }
 }
