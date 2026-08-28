@@ -329,27 +329,28 @@ export class GtfsValidator {
       calendarDates: ValidationResult[];
     };
   } {
-    const agencyIdSet = new Set(agencies.map(a => a.agency_id ?? 'default'));
-    const routeIdSet = new Set(routes.map(r => r.route_id));
-    const stopIdSet = new Set(stops.map(s => s.stop_id));
-    const tripIdSet = new Set(trips.map(t => t.trip_id));
+    const agencyIdSet = new Set(Array.isArray(agencies) ? agencies.map(a => a.agency_id ?? 'default') : []);
+    const routeIdSet = new Set(Array.isArray(routes) ? routes.map(r => r.route_id) : []);
+    const stopIdSet = new Set(Array.isArray(stops) ? stops.map(s => s.stop_id) : []);
+    const tripIdSet = new Set(Array.isArray(trips) ? trips.map(t => t.trip_id) : []);
+    const shapeIds = Array.isArray(shapes) ? shapes.map(sh => sh.shape_id) : [];
     const serviceIdSet = new Set([
-      ...calendars.map(c => c.service_id),
-      ...calendarDates.map(d => d.service_id),
+      ...(Array.isArray(calendars) ? calendars.map(c => c.service_id) : []),
+      ...(Array.isArray(calendarDates) ? calendarDates.map(d => d.service_id) : []),
     ]);
 
     const allErrors: string[] = [];
     const allWarnings: string[] = [];
 
     const agencyResults = agencies.map(a => this.validateAgency(a));
-    const routeResults = routes.map(r => this.validateRoute(r, agencyIdSet));
-    const stopResults = stops.map(s => this.validateStop(s, stopIdSet));
-    const tripResults = trips.map(t => this.validateTrip(t, routeIdSet, serviceIdSet, new Set(shapes.map(sh => sh.shape_id))));
-    const stopTimeResults = stopTimes.map(st => this.validateStopTime(st, tripIdSet, stopIdSet));
-    const calendarResults = calendars.map(c => this.validateCalendar(c));
-    const transferResults = transfers.map(t => this.validateTransfer(t, stopIdSet));
-    const shapeResults = shapes.map(sh => this.validateShapePoint(sh));
-    const calendarDateResults = calendarDates.map(d => this.validateCalendarDate(d));
+    const routeResults = Array.isArray(routes) ? routes.map(r => this.validateRoute(r, agencyIdSet)) : [];
+    const stopResults = Array.isArray(stops) ? stops.map(s => this.validateStop(s, stopIdSet)) : [];
+    const tripResults = Array.isArray(trips) ? trips.map(t => this.validateTrip(t, routeIdSet, serviceIdSet, new Set(shapeIds))) : [];
+    const stopTimeResults = Array.isArray(stopTimes) ? stopTimes.map(st => this.validateStopTime(st, tripIdSet, stopIdSet)) : [];
+    const calendarResults = Array.isArray(calendars) ? calendars.map(c => this.validateCalendar(c)) : [];
+    const transferResults = Array.isArray(transfers) ? transfers.map(t => this.validateTransfer(t, stopIdSet)) : [];
+    const shapeResults = Array.isArray(shapes) ? shapes.map(sh => this.validateShapePoint(sh)) : [];
+    const calendarDateResults = Array.isArray(calendarDates) ? calendarDates.map(d => this.validateCalendarDate(d)) : [];
 
     [...agencyResults, ...routeResults, ...stopResults, ...tripResults, ...stopTimeResults, ...calendarResults, ...transferResults, ...shapeResults, ...calendarDateResults]
       .forEach(r => {

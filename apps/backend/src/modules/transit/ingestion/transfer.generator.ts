@@ -113,7 +113,7 @@ export class TransferGenerator {
     toStops: Array<{ id: string; name: string; lat: number; lon: number; agencyId: string }>,
     options: TransferGenerationOptions,
   ): Promise<number> {
-    const { maxWalkDistanceMeters, minTransferTimeSeconds, maxTransfersPerStop, source } = options;
+    const { maxWalkDistanceMeters = 300, minTransferTimeSeconds = 300, maxTransfersPerStop = 3, source = 'proximity' } = options;
     let count = 0;
 
     for (const fromStop of fromStops) {
@@ -182,7 +182,7 @@ export class TransferGenerator {
     return count;
   }
 
-  async generateIntraOperatorTransfersFromShape(): Promise<number> {
+  async generateIntraOperatorTransfersFromShape(maxWalkDistanceMeters: number = 300): Promise<number> {
     const shapes = await this.prisma.shapePoint.findMany({
       select: { shapeId: true, ptLat: true, ptLon: true, ptSequence: true },
       orderBy: [{ shapeId: 'asc' }, { ptSequence: 'asc' }],
@@ -207,7 +207,7 @@ export class TransferGenerator {
       for (let i = 0; i < stops.length; i++) {
         for (let j = i + 1; j < stops.length; j++) {
           const dist = haversineDistance(stops[i].lat, stops[i].lon, stops[j].lat, stops[j].lon);
-          if (dist > 500) continue;
+          if (dist > maxWalkDistanceMeters) continue;
 
           const existing = await this.prisma.transfer.findFirst({
             where: {
